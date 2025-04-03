@@ -3,6 +3,7 @@ package com.Rev.RevStay.models;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -35,8 +36,8 @@ public class Hotel {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     //The contraRelation with users for get the favorite table
-    @ManyToMany(mappedBy = "hotels", cascade = CascadeType.ALL)
-    private Set<User> users;
+    @ManyToMany(mappedBy = "favoriteHotels")
+    private Set<User> usersWhoFavorited = new HashSet<>();
 
     public Hotel() {
     }

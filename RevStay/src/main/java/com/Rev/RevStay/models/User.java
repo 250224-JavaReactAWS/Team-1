@@ -2,6 +2,7 @@ package com.Rev.RevStay.models;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -32,7 +33,8 @@ public class User {
             name = "favorites",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "hotel_id")
-    ) private Set<Hotel> hotels;
+    )
+    private Set<Hotel> favoriteHotels = new HashSet<>();
 
 
     public User() {}
