@@ -1,7 +1,5 @@
 package com.Rev.RevStay.models;
 
-<<<<<<< HEAD
-
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -69,7 +67,3 @@ public class Room {
     }
 }
 
-=======
-public class Room {
-}
->>>>>>> 66a79f04c83f5a2ef293ca41626fab6d31749a7d
