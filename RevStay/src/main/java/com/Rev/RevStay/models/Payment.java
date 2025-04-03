@@ -14,7 +14,7 @@ public class Payment {
     private int paymentId;
 
     //Make the relations between the tables bookings and users
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "book_id", nullable = false)
     private Booking booking;
 
@@ -29,7 +29,7 @@ public class Payment {
     private String paymentMethod;
 
     @Enumerated(EnumType.STRING)  // Save the ENUM as String in the DB
-    @Column(name = "payment_status", length = 20, nullable = false)
+    @Column(nullable = false)
     private PaymentStatus paymentStatus = PaymentStatus.PENDING;
 
     @Column(name = "created_at", nullable = false, updatable = false)
