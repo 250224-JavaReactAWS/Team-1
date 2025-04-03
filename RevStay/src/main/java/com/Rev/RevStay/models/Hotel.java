@@ -1,5 +1,6 @@
 package com.Rev.RevStay.models;
 
+<<<<<<< HEAD
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -94,4 +95,7 @@ public class Hotel {
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
+=======
+public class Hotel {
+>>>>>>> 66a79f04c83f5a2ef293ca41626fab6d31749a7d
 }
