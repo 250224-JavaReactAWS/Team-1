@@ -27,6 +27,9 @@ public class Hotel {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(nullable = false)
+    private List<String> amenities;
+
     private String priceRange;
 
     @ElementCollection
