@@ -22,7 +22,7 @@ public class Booking {
 
     @ManyToOne
     @JoinColumn(name = "room_id", nullable = false)
-    private Hotel room;
+    private Room room;
 
     @Column(name = "check_in", nullable = false, updatable = false)
     private LocalDateTime checkIn;
@@ -32,10 +32,10 @@ public class Booking {
 
     @Column(nullable = false)
     private int guests;
-    
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String status;
+    private bookingStatus status;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -67,11 +67,11 @@ public class Booking {
         this.hotel = hotel;
     }
 
-    public Hotel getRoom() {
+    public Room getRoom() {
         return room;
     }
 
-    public void setRoom(Hotel room) {
+    public void setRoom(Room room) {
         this.room = room;
     }
 
@@ -99,11 +99,11 @@ public class Booking {
         this.guests = guests;
     }
 
-    public String getStatus() {
+    public bookingStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(bookingStatus status) {
         this.status = status;
     }
 
