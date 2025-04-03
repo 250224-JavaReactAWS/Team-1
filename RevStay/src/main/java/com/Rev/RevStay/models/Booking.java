@@ -35,7 +35,7 @@ public class Booking {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private bookingStatus status;
+    private BookingStatus status;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -99,11 +99,11 @@ public class Booking {
         this.guests = guests;
     }
 
-    public bookingStatus getStatus() {
+    public BookingStatus getStatus() {
         return status;
     }
 
-    public void setStatus(bookingStatus status) {
+    public void setStatus(BookingStatus status) {
         this.status = status;
     }
 
@@ -116,7 +116,7 @@ public class Booking {
     }
 }
 
-enum bookingStatus{
+enum BookingStatus {
     PENDING, CONFIRMED, CANCELLED
 }
 
