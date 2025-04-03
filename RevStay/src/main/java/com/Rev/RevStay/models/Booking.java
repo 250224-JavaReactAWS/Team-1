@@ -10,7 +10,7 @@ public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int bookingid;
+    private int bookId;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -32,7 +32,8 @@ public class Booking {
 
     @Column(nullable = false)
     private int guests;
-
+    
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private String status;
 
@@ -42,12 +43,12 @@ public class Booking {
     public Booking() {
     }
 
-    public int getBookingid() {
-        return bookingid;
+    public int getBookId() {
+        return bookId;
     }
 
-    public void setBookingid(int bookingid) {
-        this.bookingid = bookingid;
+    public void setBookId(int bookId) {
+        this.bookId = bookId;
     }
 
     public User getUser() {
@@ -113,6 +114,10 @@ public class Booking {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+}
+
+enum bookingStatus{
+    PENDING, CONFIRMED, CANCELLED
 }
 
 
