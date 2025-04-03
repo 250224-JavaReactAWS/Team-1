@@ -2,6 +2,8 @@ package com.Rev.RevStay.models;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -22,7 +24,33 @@ public class User {
     @Column(nullable = false)
     private UserType userType;
 
+    //This is the relation of favorites in the table
+    //user and hotel for mark the favorites hotels per user
+
+    @ManyToMany
+    @JoinTable(
+            name = "favorites",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "hotel_id")
+    ) private Set<Hotel> hotels;
+
+
     public User() {}
+
+    public User(Long userId, String passwordHash, String email, String fullName, UserType userType) {
+        this.userId = userId;
+        this.passwordHash = passwordHash;
+        this.email = email;
+        this.fullName = fullName;
+        this.userType = userType;
+    }
+
+    public User(String email, String passwordHash, String fullName, UserType userType) {
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.fullName = fullName;
+        this.userType = userType;
+    }
 
     public Long getUserId() {
         return userId;

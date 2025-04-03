@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "hotels")
@@ -32,6 +33,10 @@ public class Hotel {
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    //The contraRelation with users for get the favorite table
+    @ManyToMany(mappedBy = "hotels", cascade = CascadeType.ALL)
+    private Set<User> users;
 
     public Hotel() {
     }
