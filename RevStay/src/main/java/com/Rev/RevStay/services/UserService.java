@@ -2,8 +2,10 @@ package com.Rev.RevStay.services;
 
 import com.Rev.RevStay.exceptions.GenericException;
 import com.Rev.RevStay.models.User;
+import com.Rev.RevStay.models.UserType;
 import com.Rev.RevStay.repos.UserDAO;
 import com.Rev.RevStay.util.PasswordUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,6 +53,33 @@ public class UserService {
         return Optional.of(userDAO.save(userToBeRegistered));
     }
 
+    //registration of Hotel Owner
+    public Optional<User> registerOwner(User ownerToBeRegistered){
+
+        Optional<User> potentialOwner = userDAO.findUserByEmail(ownerToBeRegistered.getEmail());
+
+        if (potentialOwner.isPresent()) {
+            throw new GenericException("Email: " + ownerToBeRegistered.getEmail() + " is already taken!");
+        }
+
+        if (!ownerToBeRegistered.getEmail().matches(EMAIL_PATTERN)) {
+            throw new GenericException("The email must be like Example@domainExamle.com");
+        }
+
+        if (!ownerToBeRegistered.getPasswordHash().matches(PASSWORD_PATTERN)) {
+            throw new GenericException("Invalid Password. Must be at least 8 characters" +
+                    "and need to contain at least one uppercase and lowercase letter " );
+        }
+
+        String hashPassword = PasswordUtil.hashPassword(ownerToBeRegistered.getPasswordHash());
+
+        ownerToBeRegistered.setPasswordHash(hashPassword);
+
+        ownerToBeRegistered.setUserType(UserType.OWNER);
+
+        return Optional.of(userDAO.save(ownerToBeRegistered));
+    }
+
     //TODO Login User
     public Optional<User> login(User userCredentials) {
         Optional<User> user = userDAO.findUserByEmail(userCredentials.getEmail());
@@ -70,3 +99,4 @@ public class UserService {
     }
 
 }
+
