@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long roomId;
+    private int roomId;
 
     @ManyToOne
     @JoinColumn(name = "hotel_id", nullable = false)
@@ -17,6 +17,9 @@ public class Room {
 
     @Column(nullable = false)
     private String roomType;
+
+    @Column
+    private String description;
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
@@ -26,11 +29,11 @@ public class Room {
 
     public Room() {}
 
-    public Long getRoomId() {
+    public int getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(Long roomId) {
+    public void setRoomId(int roomId) {
         this.roomId = roomId;
     }
 
@@ -64,6 +67,14 @@ public class Room {
 
     public void setMaxGuests(int maxGuests) {
         this.maxGuests = maxGuests;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
 
