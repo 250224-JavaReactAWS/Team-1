@@ -15,7 +15,7 @@ public class ReviewService {
     public ReviewService(ReviewDao reviewDao) { this.reviewDao = reviewDao; }
 
     //TODO Get Review By ID
-    Optional<Review> reviewById(int reviewId){return reviewDao.findById(reviewId);}
+    public Optional<Review> reviewById(int reviewId){return reviewDao.findById(reviewId);}
 
     //TODO Get Reviews By HotelId
     public List<Review> getReviewsByHotelId(int hotelId){
@@ -28,7 +28,7 @@ public class ReviewService {
     }
 
     //TODO Get Review By User and Hotel Id
-    public Review getReviewByUserAndHotelId(int hotelId, int userId){
-        return reviewDao.getReviewByHotelIdAndUserId(hotelId, userId);
+    public Optional<Review> getReviewByUserAndHotelId(int hotelId, int userId){
+        return Optional.of(reviewDao.getReviewByHotelIdAndUserId(hotelId, userId));
     }
 }
