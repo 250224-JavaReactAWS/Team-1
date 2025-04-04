@@ -1,4 +1,7 @@
 package com.Rev.RevStay.repos;
 
-public interface HotelDAO {
+import com.Rev.RevStay.models.Hotel;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface HotelDAO extends JpaRepository<Hotel, Integer> {
 }
