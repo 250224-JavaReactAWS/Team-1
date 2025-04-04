@@ -95,6 +95,3 @@ public class User {
     }
 
 }
-enum UserType {
-    USER, OWNER
-}
