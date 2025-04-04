@@ -1,6 +1,5 @@
 package com.Rev.RevStay.controllers;
 
-import com.Rev.RevStay.models.Hotel;
 import com.Rev.RevStay.models.Review;
 import com.Rev.RevStay.services.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;

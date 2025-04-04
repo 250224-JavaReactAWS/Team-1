@@ -1,6 +1,5 @@
 package com.Rev.RevStay.services;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -28,33 +27,35 @@ public class BookingService {
         this.roomDAO = roomDAO;
     }
 
-    public Optional<Booking> makeReservation(Hotel hotel, LocalDateTime checkInDate, LocalDateTime checkOutDate, Room roomType, int numberOfGuests) {
-        // Logic to make a hotel reservation
-        if (hotel == null || checkInDate == null || checkOutDate == null || roomType == null || numberOfGuests <= 0) {
+    public Optional<Booking> makeReservation(Booking booking) {
+        // Validate booking details
+        if (booking.getHotel() == null || booking.getCheckIn() == null || 
+            booking.getCheckOut() == null || booking.getRoom() == null || 
+            booking.getGuests() <= 0) {
             throw new IllegalArgumentException("Invalid reservation details provided.");
         }
 
         // Check room availability
-        if (!isRoomAvailable(hotel, checkInDate, checkOutDate, roomType)) {
+        if (!isRoomAvailable(booking.getHotel(), booking.getCheckIn(), 
+                             booking.getCheckOut(), booking.getRoom().getRoomId())) {
             throw new IllegalStateException("No rooms of the specified type are available for the given dates at the specified hotel.");
         }
 
         // Add hotel and room details to the reservation
-        String hotelDetails = getHotelDetails(hotel);
-        String roomDetails = getRoomDetails(hotel, roomType);
+        String hotelDetails = getHotelDetails(booking.getHotel());
+        String roomDetails = getRoomDetails(booking.getHotel(), booking.getRoom());
 
         if (hotelDetails == null || roomDetails == null) {
             throw new IllegalStateException("Hotel or room details could not be retrieved.");
         }
 
         // Call the DAO to handle database operations
-        return bookingDAO.saveReservation(hotel, checkInDate, checkOutDate, roomType, numberOfGuests);
-        
+        return Optional.of(bookingDAO.save(booking));
     }
 
-    public boolean isRoomAvailable(Hotel hotel, LocalDateTime checkInDate, LocalDateTime checkOutDate, Room roomType) {
+    public boolean isRoomAvailable(Hotel hotel, LocalDateTime checkInDate, LocalDateTime checkOutDate, int roomId) {
         // Call the DAO to check room availability
-        return roomDAO.checkRoomAvailability(hotel, checkInDate, checkOutDate, roomType);
+        return bookingDAO.isRoomAvailable(hotel.getHotelId(), checkInDate, checkOutDate, roomId);
     }
 
     private String getHotelDetails(Hotel hotel) {

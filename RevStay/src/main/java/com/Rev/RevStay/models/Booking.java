@@ -24,10 +24,10 @@ public class Booking {
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
 
-    @Column(name = "check_in", nullable = false, updatable = false)
+    @Column(name = "check_in", nullable = false)
     private LocalDateTime checkIn;
 
-    @Column(name = "check_out", nullable = false, updatable = false)
+    @Column(name = "check_out", nullable = false)
     private LocalDateTime checkOut;
 
     @Column(nullable = false)
