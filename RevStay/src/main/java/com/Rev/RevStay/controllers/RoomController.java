@@ -1,6 +1,7 @@
 package com.Rev.RevStay.controllers;
 
 import com.Rev.RevStay.models.Room;
+import com.Rev.RevStay.models.User;
 import com.Rev.RevStay.services.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,17 +26,17 @@ public class RoomController {
 
     // Create a new Room
     @PostMapping
-    public ResponseEntity<Room> registerRoom(@RequestBody Room room) {
-        Optional<Room> createdRoom = roomService.register(room);
+    public ResponseEntity<Room> registerRoom(@RequestBody Room room, @RequestAttribute User owner) {
+        Optional<Room> createdRoom = roomService.register(room, owner);
         return createdRoom.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     // Delete Room
     @DeleteMapping("/{roomId}")
-    public ResponseEntity<Void> deleteRoom(@PathVariable int roomId) {
+    public ResponseEntity<Void> deleteRoom(@PathVariable int roomId, @RequestAttribute User owner) {
         try {
-            roomService.deleteRoom(roomId);
+            roomService.deleteRoom(roomId, owner);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
@@ -44,8 +45,8 @@ public class RoomController {
 
     // Update Room
     @PutMapping("/{roomId}")
-    public ResponseEntity<Room> updateRoom(@PathVariable int roomId, @RequestBody Room updatedRoom) {
-        Optional<Room> updated = roomService.updateRoom(roomId, updatedRoom);
+    public ResponseEntity<Room> updateRoom(@PathVariable int roomId, @RequestBody Room updatedRoom, @RequestAttribute User owner) {
+        Optional<Room> updated = roomService.updateRoom(roomId, updatedRoom, owner);
         return updated.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
