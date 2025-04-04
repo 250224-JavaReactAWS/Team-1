@@ -12,7 +12,7 @@ import java.util.Set;
 public class Hotel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long hotelId;
+    private int hotelId;
 
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
@@ -45,11 +45,11 @@ public class Hotel {
     public Hotel() {
     }
 
-    public Long getHotelId() {
+    public int getHotelId() {
         return hotelId;
     }
 
-    public void setHotelId(Long hotelId) {
+    public void setHotelId(int hotelId) {
         this.hotelId = hotelId;
     }
 

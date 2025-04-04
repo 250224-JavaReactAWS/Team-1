@@ -10,7 +10,7 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private int userId;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -39,7 +39,7 @@ public class User {
 
     public User() {}
 
-    public User(Long userId, String passwordHash, String email, String fullName, UserType userType) {
+    public User(int userId, String passwordHash, String email, String fullName, UserType userType) {
         this.userId = userId;
         this.passwordHash = passwordHash;
         this.email = email;
@@ -54,11 +54,11 @@ public class User {
         this.userType = userType;
     }
 
-    public Long getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
