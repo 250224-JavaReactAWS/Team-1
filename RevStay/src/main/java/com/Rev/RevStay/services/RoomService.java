@@ -1,7 +1,6 @@
 package com.Rev.RevStay.services;
 
 import com.Rev.RevStay.exceptions.GenericException;
-import com.Rev.RevStay.models.Hotel;
 import com.Rev.RevStay.models.Room;
 
 import com.Rev.RevStay.repos.HotelDAO;
