@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -83,6 +84,11 @@ public class RoomService {
         }
 
         return Optional.of(roomDAO.save(existingRoom));
+    }
+
+    //TODO Get Rooms By Hotel Id
+    public List<Room> getRoomsByHotelId(int hotelId){
+        return roomDAO.getRoomsByHotelId(hotelId);
     }
 
 }

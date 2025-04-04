@@ -20,5 +20,4 @@ public class HotelService {
 
     //TODO Get HotelById
     public Optional<Hotel> getById(int hotelId){ return hotelDAO.findById(hotelId);}
-    
 }

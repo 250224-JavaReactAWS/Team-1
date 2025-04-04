@@ -44,6 +44,10 @@ public class UserService {
                     "and need to contain at least one uppercase and lowercase letter " );
         }
 
+        String HashPassword = PasswordUtil.hashPassword(userToBeRegistered.getPasswordHash());
+
+        userToBeRegistered.setPasswordHash(HashPassword);
+
         return Optional.of(userDAO.save(userToBeRegistered));
     }
 
