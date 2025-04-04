@@ -1,11 +1,15 @@
 package com.Rev.RevStay.services;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.Rev.RevStay.models.Booking;
 import com.Rev.RevStay.models.Hotel;
+import com.Rev.RevStay.models.Room;
 import com.Rev.RevStay.repos.BookingDAO;
 import com.Rev.RevStay.repos.RoomDAO;
 
@@ -24,7 +28,7 @@ public class BookingService {
         this.roomDAO = roomDAO;
     }
 
-    public void makeReservation(Hotel hotel, Date checkInDate, Date checkOutDate, String roomType, int numberOfGuests) {
+    public Optional<Booking> makeReservation(Hotel hotel, LocalDateTime checkInDate, LocalDateTime checkOutDate, Room roomType, int numberOfGuests) {
         // Logic to make a hotel reservation
         if (hotel == null || checkInDate == null || checkOutDate == null || roomType == null || numberOfGuests <= 0) {
             throw new IllegalArgumentException("Invalid reservation details provided.");
@@ -44,10 +48,11 @@ public class BookingService {
         }
 
         // Call the DAO to handle database operations
-        bookingDAO.saveReservation(hotel, checkInDate, checkOutDate, roomType, numberOfGuests);
+        return bookingDAO.saveReservation(hotel, checkInDate, checkOutDate, roomType, numberOfGuests);
+        
     }
 
-    public boolean isRoomAvailable(Hotel hotel, Date checkInDate, Date checkOutDate, String roomType) {
+    public boolean isRoomAvailable(Hotel hotel, LocalDateTime checkInDate, LocalDateTime checkOutDate, Room roomType) {
         // Call the DAO to check room availability
         return roomDAO.checkRoomAvailability(hotel, checkInDate, checkOutDate, roomType);
     }
@@ -57,7 +62,7 @@ public class BookingService {
         return "Hotel details for " + hotel;
     }
 
-    private String getRoomDetails(Hotel hotel, String roomType) {
+    private String getRoomDetails(Hotel hotel, Room roomType) {
         // Logic to fetch room details (stubbed for now)
         return "Room details for " + roomType + " in " + hotel;
     }

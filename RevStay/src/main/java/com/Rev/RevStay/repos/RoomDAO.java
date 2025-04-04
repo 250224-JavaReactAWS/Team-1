@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface RoomDAO extends JpaRepository<Room, Integer> {
@@ -20,8 +21,8 @@ public interface RoomDAO extends JpaRepository<Room, Integer> {
            "AND r.id NOT IN (SELECT b.room.id FROM Booking b WHERE " +
            "(b.checkInDate <= :checkOutDate AND b.checkOutDate >= :checkInDate))")
     boolean checkRoomAvailability(@Param("hotelName") Hotel hotel, 
-                                  @Param("checkInDate") Date checkInDate, 
-                                  @Param("checkOutDate") Date checkOutDate, 
-                                  @Param("roomType") String roomType);
+                                  @Param("checkInDate") LocalDateTime checkInDate, 
+                                  @Param("checkOutDate") LocalDateTime checkOutDate, 
+                                  @Param("roomType") Room roomType);
 
 }

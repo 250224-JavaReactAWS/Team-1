@@ -29,8 +29,9 @@ public class UserService {
 
 
     @Autowired
-    public UserService(UserDAO userDAO) {
+    public UserService(UserDAO userDAO, HotelDAO hotelDAO) {
         this.userDAO = userDAO;
+        this.hotelDAO = hotelDAO;
     }
 
     //TODO Register new user
