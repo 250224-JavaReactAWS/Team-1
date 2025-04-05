@@ -1,6 +1,5 @@
 package com.Rev.RevStay.controllers;
 
-import com.Rev.RevStay.models.Hotel;
 import com.Rev.RevStay.models.User;
 import com.Rev.RevStay.services.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -49,7 +47,7 @@ public class UserController {
         return null;
     }
 
-    @PostMapping("register-owner")
+    /*@PostMapping("register/owner")
     public ResponseEntity<User> registerOwnerHandler(@RequestBody User user, @RequestBody Hotel hotel){
         Optional<Map<String, Object>> newUserMap = userService.registerOwner(user, hotel);
 
@@ -60,6 +58,6 @@ public class UserController {
         }
 
         return ResponseEntity.badRequest().build();
-    }
+    }*/
 
 }

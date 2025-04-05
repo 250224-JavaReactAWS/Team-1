@@ -1,18 +1,23 @@
 package com.Rev.RevStay.controllers;
 
+import com.Rev.RevStay.exceptions.GenericException;
 import com.Rev.RevStay.models.Hotel;
-import com.Rev.RevStay.models.User;
 import com.Rev.RevStay.services.HotelService;
 import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +28,7 @@ import java.util.Optional;
 public class HotelController {
 
     private final HotelService hotelService;
+    private final Logger logger = LoggerFactory.getLogger(HotelController.class);
 
     @Autowired
     public HotelController(HotelService hotelService) {
@@ -52,5 +58,21 @@ public class HotelController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PutMapping("/register")
+    public ResponseEntity<Hotel> registerHotel(@RequestBody Hotel hotelToBeRegistered, HttpSession session){
+
+        if (!"OWNER".equals(session.getAttribute("role"))) {
+            ResponseEntity.status(403).build();
+            throw new GenericException("User does not have the OWNER role.");
+        }
+        
+        Optional<Hotel> newHotel = hotelService.createHotel(hotelToBeRegistered, (Integer) session.getAttribute("userId"));
+
+        newHotel.ifPresent(value -> logger.info("Hotel created with Id: {}", value.getHotelId()));
+
+        return newHotel.map(value -> new ResponseEntity<>(value, HttpStatus.CREATED))
+                .orElseGet(() -> ResponseEntity.badRequest().build() );
+        
+    }
 
 }

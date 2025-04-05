@@ -1,7 +1,6 @@
 package com.Rev.RevStay.services;
 
 import com.Rev.RevStay.exceptions.GenericException;
-import com.Rev.RevStay.models.Hotel;
 import com.Rev.RevStay.models.User;
 import com.Rev.RevStay.models.UserType;
 import com.Rev.RevStay.repos.HotelDAO;
@@ -12,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -62,7 +59,7 @@ public class UserService {
     }
 
     //registration of an Hotel Owner and Hotel details
-    public Optional<Map<String, Object>> registerOwner(User ownerToBeRegistered, Hotel hotelToBeRegistered) {
+    /*public Optional<User> registerOwner(User ownerToBeRegistered, Hotel hotelToBeRegistered) {
 
         Optional<User> potentialOwner = userDAO.findUserByEmail(ownerToBeRegistered.getEmail());
 
@@ -85,22 +82,10 @@ public class UserService {
 
         ownerToBeRegistered.setUserType(UserType.OWNER);
 
-        Optional<Hotel> potentialHotel = hotelDAO.findHotelByName(hotelToBeRegistered.getName());
 
-        if (potentialHotel.isPresent()) {
-            throw new GenericException("Hotel with name: " + hotelToBeRegistered.getName() + " already exists!");
-        }
+        return Optional.of(userDAO.save(ownerToBeRegistered));
 
-        Hotel savedHotel = hotelDAO.save(hotelToBeRegistered);
-
-        User savedOwner = userDAO.save(ownerToBeRegistered);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("user", savedOwner);
-        response.put("hotel", savedHotel);
-
-        return Optional.of(response);
-    }
+    }*/
 
     //TODO Login User
     public Optional<User> login(User userCredentials) {
