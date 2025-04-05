@@ -40,7 +40,7 @@ public class BookingController {
     @PutMapping("/{bookingId}/status")
     public ResponseEntity<Booking> updateBookingStatus(@PathVariable Long bookingId, @RequestParam String status, HttpSession session) {
 
-        Booking updatedBooking = bookingService.updateBookingStatus(bookingId, status, (Integer) session.getAttribute("userId")
+        Booking updatedBooking = bookingService.updateBookingStatus(bookingId, status, (Integer) session.getAttribute("userId"));
         return ResponseEntity.ok(updatedBooking);
     }
 }
