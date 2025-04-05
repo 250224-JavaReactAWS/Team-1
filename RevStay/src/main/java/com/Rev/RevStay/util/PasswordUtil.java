@@ -8,7 +8,7 @@ public class PasswordUtil {
         return BCrypt.hashpw(password, BCrypt.gensalt(12));
     }
 
-    public static boolean checkPassword(String storedHash,String password ) {
+    public static boolean checkPassword(String password, String storedHash) {
         return BCrypt.checkpw(password, storedHash);
     }
 }
