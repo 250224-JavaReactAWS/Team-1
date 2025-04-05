@@ -1,5 +1,6 @@
 package com.Rev.RevStay.controllers;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,8 +38,9 @@ public class BookingController {
 
     //update booking status
     @PutMapping("/{bookingId}/status")
-    public ResponseEntity<Booking> updateBookingStatus(@PathVariable Long bookingId, @RequestParam String status) {
-        Booking updatedBooking = bookingService.updateBookingStatus(bookingId, status);
+    public ResponseEntity<Booking> updateBookingStatus(@PathVariable Long bookingId, @RequestParam String status, HttpSession session) {
+
+        Booking updatedBooking = bookingService.updateBookingStatus(bookingId, status, (Integer) session.getAttribute("userId"));
         return ResponseEntity.ok(updatedBooking);
     }
 }
