@@ -1,10 +1,8 @@
 package com.Rev.RevStay.services;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
-import com.Rev.RevStay.exceptions.GenericException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -68,19 +66,5 @@ public class BookingService {
     private String getRoomDetails(Hotel hotel, Room roomType) {
         // Logic to fetch room details (stubbed for now)
         return "Room details for " + roomType + " in " + hotel;
-    }
-    public List<Booking> getBookingsByUser(Long userId) {
-        return bookingDAO.findByUserId(userId);
-    }
-
-    public Booking updateBookingStatus(Long bookingId, String status) {
-        Optional<Booking> bookingOptional = bookingDAO.findById(bookingId);
-        if (bookingOptional.isPresent()) {
-            Booking booking = bookingOptional.get();
-            booking.setStatus(status);
-            return bookingDAO.save(booking);
-        } else {
-            throw new GenericException("Booking not found with id: " + bookingId);
-        }
     }
 }
