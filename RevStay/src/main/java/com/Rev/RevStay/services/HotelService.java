@@ -1,5 +1,6 @@
 package com.Rev.RevStay.services;
 
+import com.Rev.RevStay.exceptions.GenericException;
 import com.Rev.RevStay.models.Hotel;
 import com.Rev.RevStay.models.User;
 import com.Rev.RevStay.repos.HotelDAO;
@@ -61,5 +62,23 @@ public class HotelService {
         } else {
             throw new IllegalArgumentException("Hotel with ID " + hotelId + " does not exist.");
         }
+    }
+
+    public Optional<Hotel> createHotel(Hotel hotel, int userId){
+        Optional<Hotel> potentialHotel = hotelDAO.findHotelByName(hotel.getName());
+
+        if (potentialHotel.isPresent()) {
+            throw new GenericException("Hotel with name: " + hotel.getName() + " already exists!");
+        }
+
+        Optional<User> owner = userDAO.findById(userId);
+
+        if (owner.isPresent()) {
+            hotel.setOwner(owner.get());
+        }else{
+            throw new IllegalArgumentException("No owner found with id: " + userId);
+        }
+
+       return Optional.of(hotelDAO.save(hotel));
     }
 }
