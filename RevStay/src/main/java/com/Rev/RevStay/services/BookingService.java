@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.Rev.RevStay.exceptions.GenericException;
+import com.Rev.RevStay.models.BookingStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -77,7 +78,7 @@ public class BookingService {
         Optional<Booking> bookingOptional = bookingDAO.findById(bookingId);
         if (bookingOptional.isPresent()) {
             Booking booking = bookingOptional.get();
-            booking.setStatus(status);
+            //booking.setStatus(BookingStatus.values(status));
             return bookingDAO.save(booking);
         } else {
             throw new GenericException("Booking not found with id: " + bookingId);
