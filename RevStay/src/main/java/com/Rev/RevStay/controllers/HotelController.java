@@ -1,11 +1,16 @@
 package com.Rev.RevStay.controllers;
 
 import com.Rev.RevStay.models.Hotel;
+import com.Rev.RevStay.models.User;
 import com.Rev.RevStay.services.HotelService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,6 +40,15 @@ public class HotelController {
 
         //Return 404 Not Found
         return hotel.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    // Update hotel
+    @PutMapping("/{hotelId}")
+    public ResponseEntity<Hotel> updateHotel(@PathVariable int hotelId, @RequestBody Hotel updatedHotel, HttpSession session) {
+        Optional<Hotel> updated = Optional.of(hotelService.updateHotel(hotelId, (Integer) session.getAttribute("userId"), updatedHotel));
+        
+        return updated.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 

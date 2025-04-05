@@ -1,7 +1,9 @@
 package com.Rev.RevStay.controllers;
 
 import com.Rev.RevStay.models.Room;
+import com.Rev.RevStay.models.User;
 import com.Rev.RevStay.services.RoomService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,17 +27,17 @@ public class RoomController {
 
     // Create a new Room
     @PostMapping
-    public ResponseEntity<Room> registerRoom(@RequestBody Room room) {
-        Optional<Room> createdRoom = roomService.register(room);
+    public ResponseEntity<Room> registerRoom(@RequestBody Room room, HttpSession session) {
+        Optional<Room> createdRoom = roomService.register(room, (Integer) session.getAttribute("userId"));
         return createdRoom.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     // Delete Room
     @DeleteMapping("/{roomId}")
-    public ResponseEntity<Void> deleteRoom(@PathVariable int roomId) {
+    public ResponseEntity<Void> deleteRoom(@PathVariable int roomId, HttpSession session) {
         try {
-            roomService.deleteRoom(roomId);
+            roomService.deleteRoom(roomId, (Integer) session.getAttribute("userId"));
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
@@ -44,8 +46,8 @@ public class RoomController {
 
     // Update Room
     @PutMapping("/{roomId}")
-    public ResponseEntity<Room> updateRoom(@PathVariable int roomId, @RequestBody Room updatedRoom) {
-        Optional<Room> updated = roomService.updateRoom(roomId, updatedRoom);
+    public ResponseEntity<Room> updateRoom(@PathVariable int roomId, @RequestBody Room updatedRoom, HttpSession session) {
+        Optional<Room> updated = roomService.updateRoom(roomId, updatedRoom, (Integer) session.getAttribute("userId"));
         return updated.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

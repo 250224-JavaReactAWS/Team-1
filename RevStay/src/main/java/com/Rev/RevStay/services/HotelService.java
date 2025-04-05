@@ -1,7 +1,9 @@
 package com.Rev.RevStay.services;
 
 import com.Rev.RevStay.models.Hotel;
+import com.Rev.RevStay.models.User;
 import com.Rev.RevStay.repos.HotelDAO;
+import com.Rev.RevStay.repos.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,13 +13,53 @@ import java.util.Optional;
 @Service
 public class HotelService {
     private final HotelDAO hotelDAO;
+    private final UserDAO userDAO;
 
     @Autowired
-    public HotelService(HotelDAO hotelDAO) { this.hotelDAO = hotelDAO; }
+    public HotelService(HotelDAO hotelDAO, UserDAO userDAO) { this.hotelDAO = hotelDAO;
+        this.userDAO = userDAO;
+    }
 
-    //TODO Get All hotels
-    public List<Hotel> getAllHotels(){ return hotelDAO.findAll();}
+    // Get all hotels
+    public List<Hotel> getAllHotels() {
+        return hotelDAO.findAll();
+    }
 
-    //TODO Get HotelById
-    public Optional<Hotel> getById(int hotelId){ return hotelDAO.findById(hotelId);}
+    // Get hotel by ID
+    public Optional<Hotel> getById(int hotelId) {
+        return hotelDAO.findById(hotelId);
+    }
+
+    // Update an existing hotel
+    public Hotel updateHotel(int hotelId, int ownerId, Hotel updatedHotel) {
+        Optional<Hotel> existingHotel = hotelDAO.findById(hotelId);
+        Optional<User> owner = userDAO.findById(ownerId);
+
+        if (existingHotel.isPresent() && owner.isPresent()) {
+            if (existingHotel.get().getOwner() == owner.get()) {
+                updatedHotel.setHotelId(hotelId);
+                return hotelDAO.save(updatedHotel);
+            } else {
+                throw new IllegalArgumentException("Owner ID does not match the hotel's owner ID.");
+            }
+        } else {
+            throw new IllegalArgumentException("Hotel with ID " + hotelId + " does not exist.");
+        }
+    }
+
+    // Delete a hotel by ID
+    public void deleteHotel(int hotelId, int ownerId) {
+        Optional<Hotel> existingHotel = hotelDAO.findById(hotelId);
+        Optional<User> owner = userDAO.findById(ownerId);
+
+        if (existingHotel.isPresent() && owner.isPresent()) {
+            if (existingHotel.get().getOwner() == owner.get()) {
+                hotelDAO.deleteById(hotelId);
+            } else {
+                throw new IllegalArgumentException("Owner ID does not match the hotel's owner ID.");
+            }
+        } else {
+            throw new IllegalArgumentException("Hotel with ID " + hotelId + " does not exist.");
+        }
+    }
 }
