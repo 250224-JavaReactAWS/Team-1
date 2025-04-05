@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.Rev.RevStay.exceptions.GenericException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -73,11 +74,30 @@ public class BookingService {
         return bookingDAO.findByUserId(userId);
     }
 
-    public Booking updateBookingStatus(Long bookingId, String status) {
+    public Booking updateBookingStatus(Long bookingId, String status, Integer userId) {
         Optional<Booking> bookingOptional = bookingDAO.findById(bookingId);
+
+        boolean validStatus = status.equals("cancelled") || status.equals("completed");
+        if(!validStatus) {
+            throw new GenericException("Invalid status: " + status);
+        }
+
+
+        //TODO check if the user is the owner of the booking with the id in session
+
         if (bookingOptional.isPresent()) {
             Booking booking = bookingOptional.get();
-            booking.setStatus(status);
+            if(bookingOptional.get().getUserId()==(int)(userId)) {
+                if (status.equals("cancelled")) {
+                    booking.setStatusCancelled();
+
+                }
+            }else if((int)(userId)==booking.getHotel().getOwner().getUserId()) {
+                if (status.equals("completed")) {
+                    booking.setStatusCompleted();
+                }
+            }
+            //booking.setStatus(status);
             return bookingDAO.save(booking);
         } else {
             throw new GenericException("Booking not found with id: " + bookingId);
