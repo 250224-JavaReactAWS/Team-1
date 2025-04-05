@@ -73,11 +73,31 @@ public class BookingService {
         return bookingDAO.findByUserId(userId);
     }
 
-    public Booking updateBookingStatus(Long bookingId, String status) {
+    public Booking updateBookingStatus(Long bookingId, String status, Integer userId) {
         Optional<Booking> bookingOptional = bookingDAO.findById(bookingId);
+
+        boolean validStatus = status.equals("cancelled") || status.equals("completed");
+        if(!validStatus) {
+            throw new GenericException("Invalid status: " + status);
+        }
+
+
+        //TODO check if the user is the owner of the booking with the id in session
+
         if (bookingOptional.isPresent()) {
             Booking booking = bookingOptional.get();
-            //booking.setStatus(BookingStatus.values(status));
+
+            if(bookingOptional.get().getUserId()==(int)(userId)) {
+                if (status.equals("cancelled")) {
+                    booking.setStatusCancelled();
+
+                }
+            }else if((int)(userId)==booking.getHotel().getOwner().getUserId()) {
+                if (status.equals("completed")) {
+                    booking.setStatusCompleted();
+                }
+            }
+
             return bookingDAO.save(booking);
         } else {
             throw new GenericException("Booking not found with id: " + bookingId);

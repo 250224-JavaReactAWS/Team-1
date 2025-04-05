@@ -114,6 +114,18 @@ public class Booking {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
+    public int getUserId() {return user.getUserId();
+    }
+
+    public void setStatusCompleted() {
+        status = BookingStatus.CONFIRMED;
+    }
+
+    public void setStatusCancelled() {
+        status = BookingStatus.CANCELLED;
+    }
+
 }
 
 
