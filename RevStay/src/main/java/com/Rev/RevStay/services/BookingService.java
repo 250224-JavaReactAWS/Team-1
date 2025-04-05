@@ -87,6 +87,7 @@ public class BookingService {
 
         if (bookingOptional.isPresent()) {
             Booking booking = bookingOptional.get();
+
             if(bookingOptional.get().getUserId()==(int)(userId)) {
                 if (status.equals("cancelled")) {
                     booking.setStatusCancelled();
@@ -97,7 +98,7 @@ public class BookingService {
                     booking.setStatusCompleted();
                 }
             }
-            //booking.setStatus(status);
+
             return bookingDAO.save(booking);
         } else {
             throw new GenericException("Booking not found with id: " + bookingId);

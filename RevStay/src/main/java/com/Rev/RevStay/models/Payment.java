@@ -68,8 +68,3 @@ public class Payment {
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }
 
-enum PaymentStatus {
-    PENDING,
-    COMPLETED,
-    FAILED
-}

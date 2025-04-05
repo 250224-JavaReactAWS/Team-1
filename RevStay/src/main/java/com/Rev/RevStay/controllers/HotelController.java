@@ -3,6 +3,7 @@ package com.Rev.RevStay.controllers;
 import com.Rev.RevStay.models.Hotel;
 import com.Rev.RevStay.models.User;
 import com.Rev.RevStay.services.HotelService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,8 +45,8 @@ public class HotelController {
 
     // Update hotel
     @PutMapping("/{hotelId}")
-    public ResponseEntity<Hotel> updateHotel(@PathVariable int hotelId, @RequestAttribute User owner,  @RequestBody Hotel updatedHotel) {
-        Optional<Hotel> updated = Optional.of(hotelService.updateHotel(hotelId, owner, updatedHotel));
+    public ResponseEntity<Hotel> updateHotel(@PathVariable int hotelId, @RequestBody Hotel updatedHotel, HttpSession session) {
+        Optional<Hotel> updated = Optional.of(hotelService.updateHotel(hotelId, (Integer) session.getAttribute("userId"), updatedHotel));
         
         return updated.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());

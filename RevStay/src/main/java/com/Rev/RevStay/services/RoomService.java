@@ -6,6 +6,7 @@ import com.Rev.RevStay.models.Room;
 import com.Rev.RevStay.models.User;
 import com.Rev.RevStay.repos.HotelDAO;
 import com.Rev.RevStay.repos.RoomDAO;
+import com.Rev.RevStay.repos.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,14 +21,17 @@ import java.util.Optional;
 public class RoomService {
     private final RoomDAO roomDAO;
     private final HotelDAO hotelDAO;
+    private final UserDAO userDAO;
+
 
     @Autowired
-    public RoomService(RoomDAO roomDAO, HotelDAO hotelDAO) { this.roomDAO = roomDAO;
+    public RoomService(RoomDAO roomDAO, HotelDAO hotelDAO, UserDAO userDAO) { this.roomDAO = roomDAO;
         this.hotelDAO = hotelDAO;
+        this.userDAO = userDAO;
     }
 
     //TODO Register New ROOM
-    public Optional<Room> register(Room roomToBeCreate, User owner){
+    public Optional<Room> register(Room roomToBeCreate, int ownerId){
 
         if (roomToBeCreate.getHotel() == null || roomToBeCreate.getHotel().getHotelId() == 0) {
             throw new GenericException("Hotel information is required");
@@ -43,61 +47,62 @@ public class RoomService {
             throw new GenericException("The number of guests must be at least one");
         }
 
-        if (roomToBeCreate.getHotel().getOwner().equals(owner)) {
-            return Optional.of(roomDAO.save(roomToBeCreate));
-        } else {
-            throw new GenericException("You are not authorized to register rooms in this Hotel.");
+        Optional<User> owner = userDAO.findById(ownerId);
+        if (owner.isPresent()){
+            if (roomToBeCreate.getHotel().getOwner() == owner.get()) {
+                return Optional.of(roomDAO.save(roomToBeCreate));
+            } else {
+                throw new GenericException("You are not authorized to register rooms in this Hotel.");
+            }
         }
-
+        return Optional.empty();
     }
 
     //TODO Delete ROOM
-    public void deleteRoom(int roomId, User owner){
+    public void deleteRoom(int roomId, int ownerId){
         Room roomToBeDelete = roomDAO.findById(roomId)
                 .orElseThrow(() -> new GenericException("Room not found"));
-
-        if (roomToBeDelete.getHotel().getOwner().equals(owner)) {
-            roomDAO.delete(roomToBeDelete);
-        } else {
-            throw new GenericException("You are not authorized to modify this room.");
+        Optional<User> owner = userDAO.findById(ownerId);
+        if (owner.isPresent()){
+            if (roomToBeDelete.getHotel().getOwner() == owner.get()) {
+                roomDAO.delete(roomToBeDelete);
+            } else {
+                throw new GenericException("You are not authorized to delete this room.");
+            }
         }
     }
 
     // TODO Update ROOM
-    public Optional<Room> updateRoom(int roomId, Room updatedRoom, User owner) {
+    public Optional<Room> updateRoom(int roomId, Room updatedRoom, int ownerId) {
         Room existingRoom = roomDAO.findById(roomId)
                 .orElseThrow(() -> new GenericException("Room not found"));
+        Optional<User> owner = userDAO.findById(ownerId);
+        if (owner.isPresent()){
+            if (existingRoom.getHotel().getOwner() == owner.get()) {
 
-        if (existingRoom.getHotel().getOwner().equals(owner)) {
-            // The hotel is not the same ??
-            if (updatedRoom.getHotel() != null) {
-                int hotelId = updatedRoom.getHotel().getHotelId();
-                if (!hotelDAO.existsById(hotelId)) {
-                    throw new GenericException("The hotel doesn't exist");
+                if (updatedRoom.getPrice() != null && updatedRoom.getPrice().compareTo(BigDecimal.ZERO) > 0) {
+                    existingRoom.setPrice(updatedRoom.getPrice());
                 }
-                existingRoom.setHotel(updatedRoom.getHotel());
-            }
 
-            if (updatedRoom.getPrice() != null && updatedRoom.getPrice().compareTo(BigDecimal.ZERO) > 0) {
-                existingRoom.setPrice(updatedRoom.getPrice());
-            }
+                if (updatedRoom.getMaxGuests() > 0) {
+                    existingRoom.setMaxGuests(updatedRoom.getMaxGuests());
+                }
 
-            if (updatedRoom.getMaxGuests() > 0) {
-                existingRoom.setMaxGuests(updatedRoom.getMaxGuests());
-            }
+                if (updatedRoom.getDescription() != null) {
+                    existingRoom.setDescription(updatedRoom.getDescription());
+                }
 
-            if (updatedRoom.getDescription() != null) {
-                existingRoom.setDescription(updatedRoom.getDescription());
-            }
+                if (updatedRoom.getRoomType() != null) {
+                    existingRoom.setRoomType(updatedRoom.getRoomType());
+                }
 
-            if (updatedRoom.getRoomType() != null) {
-                existingRoom.setRoomType(updatedRoom.getRoomType());
-            }
+                return Optional.of(roomDAO.save(existingRoom));
 
-            return Optional.of(roomDAO.save(existingRoom));
-        } else {
-            throw new GenericException("You are not authorized to modify this room.");
+            } else {
+                throw new GenericException("You are not authorized to modify this room.");
+            }
         }
+        return Optional.empty();
     }
 
     //TODO Get Rooms By Hotel Id

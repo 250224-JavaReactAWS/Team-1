@@ -47,11 +47,11 @@ public class User {
         this.userType = userType;
     }
 
-    public User(String email, String passwordHash, String fullName, UserType userType) {
+    public User(String email, String passwordHash, String fullName) {
         this.email = email;
         this.passwordHash = passwordHash;
         this.fullName = fullName;
-        this.userType = userType;
+        this.userType = UserType.USER;
     }
 
     public int getUserId() {
