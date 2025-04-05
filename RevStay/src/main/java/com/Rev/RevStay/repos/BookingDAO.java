@@ -3,6 +3,7 @@ package com.Rev.RevStay.repos;
 import com.Rev.RevStay.models.Booking;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,4 +23,9 @@ public interface BookingDAO extends JpaRepository<Booking, Integer> {
                             @Param("checkIn") LocalDateTime checkIn, 
                             @Param("checkOut") LocalDateTime checkOut, 
                             @Param("room_id") int room_id);
+    @Query("SELECT b FROM Booking b WHERE b.user.id = :userId")
+    List<Booking> findByUserId(Long userId);
+
+    @Query("SELECT b FROM Booking b WHERE b.id = :bookingId")
+    Optional<Booking> findById(Long bookingId);
 }
