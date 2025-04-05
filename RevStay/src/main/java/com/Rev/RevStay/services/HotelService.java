@@ -3,6 +3,7 @@ package com.Rev.RevStay.services;
 import com.Rev.RevStay.models.Hotel;
 import com.Rev.RevStay.models.User;
 import com.Rev.RevStay.repos.HotelDAO;
+import com.Rev.RevStay.repos.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +13,12 @@ import java.util.Optional;
 @Service
 public class HotelService {
     private final HotelDAO hotelDAO;
+    private final UserDAO userDAO;
 
     @Autowired
-    public HotelService(HotelDAO hotelDAO) { this.hotelDAO = hotelDAO; }
+    public HotelService(HotelDAO hotelDAO, UserDAO userDAO) { this.hotelDAO = hotelDAO;
+        this.userDAO = userDAO;
+    }
 
     // Get all hotels
     public List<Hotel> getAllHotels() {
@@ -27,10 +31,12 @@ public class HotelService {
     }
 
     // Update an existing hotel
-    public Hotel updateHotel(int hotelId,User owner, Hotel updatedHotel) {
+    public Hotel updateHotel(int hotelId, int ownerId, Hotel updatedHotel) {
         Optional<Hotel> existingHotel = hotelDAO.findById(hotelId);
-        if (existingHotel.isPresent()) {
-            if (existingHotel.get().getOwner() == owner) {
+        Optional<User> owner = userDAO.findById(ownerId);
+
+        if (existingHotel.isPresent() && owner.isPresent()) {
+            if (existingHotel.get().getOwner() == owner.get()) {
                 updatedHotel.setHotelId(hotelId);
                 return hotelDAO.save(updatedHotel);
             } else {
@@ -42,10 +48,12 @@ public class HotelService {
     }
 
     // Delete a hotel by ID
-    public void deleteHotel(int hotelId, User owner) {
+    public void deleteHotel(int hotelId, int ownerId) {
         Optional<Hotel> existingHotel = hotelDAO.findById(hotelId);
-        if (existingHotel.isPresent()) {
-            if (existingHotel.get().getOwner() == owner) {
+        Optional<User> owner = userDAO.findById(ownerId);
+
+        if (existingHotel.isPresent() && owner.isPresent()) {
+            if (existingHotel.get().getOwner() == owner.get()) {
                 hotelDAO.deleteById(hotelId);
             } else {
                 throw new IllegalArgumentException("Owner ID does not match the hotel's owner ID.");
