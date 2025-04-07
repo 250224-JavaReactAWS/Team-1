@@ -31,7 +31,7 @@ public class UserService {
         this.hotelDAO = hotelDAO;
     }
 
-    //TODO Register new user
+    //Register new user
     public Optional<User> register(User userToBeRegistered){
 
         Optional<User> potentialUser = userDAO.findUserByEmail(userToBeRegistered.getEmail());
@@ -87,7 +87,7 @@ public class UserService {
 
     }*/
 
-    //TODO Login User
+    //Login User
     public Optional<User> login(User userCredentials) {
         Optional<User> user = userDAO.findUserByEmail(userCredentials.getEmail());
         User userToLogin;
