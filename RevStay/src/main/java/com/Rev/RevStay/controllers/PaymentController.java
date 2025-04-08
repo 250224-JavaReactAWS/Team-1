@@ -1,6 +1,5 @@
 package com.Rev.RevStay.controllers;
 
-import com.Rev.RevStay.services.HotelService;
 import com.Rev.RevStay.services.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
