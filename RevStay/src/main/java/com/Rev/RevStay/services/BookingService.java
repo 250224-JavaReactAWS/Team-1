@@ -74,12 +74,12 @@ public class BookingService {
         return bookingDAO.findByUserId(userId);
     }
 
-    public Booking updateBookingStatus(Long bookingId, BookingStatus cancelled, Integer userId) {
+    public Booking updateBookingStatus(Long bookingId, BookingStatus status, Integer userId) {
         Optional<Booking> bookingOptional = bookingDAO.findById(bookingId);
 
-        boolean validStatus = cancelled.equals("cancelled") || cancelled.equals("completed");
+        boolean validStatus = status.toString().equals("CANCELLED") || status.toString().equals("COMPLETED");
         if(!validStatus) {
-            throw new GenericException("Invalid status: " + cancelled);
+            throw new GenericException("Invalid status: " + status);
         }
 
 
@@ -89,12 +89,12 @@ public class BookingService {
             Booking booking = bookingOptional.get();
 
             if(bookingOptional.get().getUserId()==(int)(userId)) {
-                if (cancelled.equals("cancelled")) {
+                if (status.toString().equals("CANCELLED")) {
                     booking.setStatusCancelled();
 
                 }
             }else if((int)(userId)==booking.getHotel().getOwner().getUserId()) {
-                if (cancelled.equals("completed")) {
+                if (status.toString().equals("COMPLETED")) {
                     booking.setStatusCompleted();
                 }
             }
