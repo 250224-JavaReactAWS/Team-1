@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.Rev.RevStay.models.Booking;
+import com.Rev.RevStay.models.BookingStatus;
 import com.Rev.RevStay.models.Hotel;
 import com.Rev.RevStay.models.Room;
 import com.Rev.RevStay.repos.BookingDAO;
@@ -73,12 +74,12 @@ public class BookingService {
         return bookingDAO.findByUserId(userId);
     }
 
-    public Booking updateBookingStatus(Long bookingId, String status, Integer userId) {
+    public Booking updateBookingStatus(Long bookingId, BookingStatus cancelled, Integer userId) {
         Optional<Booking> bookingOptional = bookingDAO.findById(bookingId);
 
-        boolean validStatus = status.equals("cancelled") || status.equals("completed");
+        boolean validStatus = cancelled.equals("cancelled") || cancelled.equals("completed");
         if(!validStatus) {
-            throw new GenericException("Invalid status: " + status);
+            throw new GenericException("Invalid status: " + cancelled);
         }
 
 
@@ -88,19 +89,19 @@ public class BookingService {
             Booking booking = bookingOptional.get();
 
             if(bookingOptional.get().getUserId()==(int)(userId)) {
-                if (status.equals("cancelled")) {
+                if (cancelled.equals("cancelled")) {
                     booking.setStatusCancelled();
 
                 }
             }else if((int)(userId)==booking.getHotel().getOwner().getUserId()) {
-                if (status.equals("completed")) {
+                if (cancelled.equals("completed")) {
                     booking.setStatusCompleted();
                 }
             }
 
             return bookingDAO.save(booking);
         } else {
-            throw new GenericException("Booking not found with id: " + bookingId);
+            throw new GenericException("Booking not found with id: ");
         }
     }
 }
