@@ -54,6 +54,14 @@ public class User {
         this.userType = UserType.USER;
     }
 
+    public User(int userId2) {
+        //TODO Auto-generated constructor stub
+    }
+
+    public User(String string, String string2) {
+        //TODO Auto-generated constructor stub
+    }
+
     public int getUserId() {
         return userId;
     }

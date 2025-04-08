@@ -9,6 +9,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.Rev.RevStay.models.Booking;
+import com.Rev.RevStay.models.BookingStatus;
 import com.Rev.RevStay.services.BookingService;
 
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class BookingController {
     @PutMapping("/{bookingId}/status")
     public ResponseEntity<Booking> updateBookingStatus(@PathVariable Long bookingId, @RequestParam String status, HttpSession session) {
 
-        Booking updatedBooking = bookingService.updateBookingStatus(bookingId, status, (Integer) session.getAttribute("userId"));
+        Booking updatedBooking = bookingService.updateBookingStatus(bookingId, BookingStatus.PENDING, (Integer) session.getAttribute("userId"));
         return ResponseEntity.ok(updatedBooking);
     }
 }
