@@ -3,6 +3,8 @@ package com.Rev.RevStay.controllers;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,14 +36,27 @@ public class BookingController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Booking>> getBookingsByUser(@PathVariable Long userId) {
         List<Booking> bookings = bookingService.getBookingsByUser(userId);
+
+        //Check in the bookings if the checkOut pass, set the status for booking as completed
+        LocalDateTime today = LocalDateTime.now();
+        for (Booking booking : bookings){
+            //Check the Date
+            if (booking.getCheckOut() != null && booking.getCheckOut().isBefore(today)){
+                //The checkOut date pass
+                if (booking.getStatus() != BookingStatus.COMPLETED){
+                    bookingService.updateBookingStatus(booking.getBookId(), BookingStatus.COMPLETED, userId.intValue());
+                }
+            }
+        }
+
         return ResponseEntity.ok(bookings);
     }
 
     //update booking status
     @PutMapping("/{bookingId}/status")
-    public ResponseEntity<Booking> updateBookingStatus(@PathVariable Long bookingId, @RequestParam String status, HttpSession session) {
+    public ResponseEntity<Booking> updateBookingStatus(@PathVariable Long bookingId, @RequestParam BookingStatus bookingStatus, HttpSession session) {
 
-        Booking updatedBooking = bookingService.updateBookingStatus(bookingId, BookingStatus.PENDING, (Integer) session.getAttribute("userId"));
+        Booking updatedBooking = bookingService.updateBookingStatus(bookingId, bookingStatus, (Integer) session.getAttribute("userId"));
         return ResponseEntity.ok(updatedBooking);
     }
 }
