@@ -70,9 +70,12 @@ public class BookingService {
         // Logic to fetch room details (stubbed for now)
         return "Room details for " + roomType + " in " + hotel;
     }
+
     public List<Booking> getBookingsByUser(int userId) {
         return bookingDAO.findByUserId(userId);
     }
+
+    public List<Booking> getBookingsByHotelId(int hotelId){ return  bookingDAO.findByHotelId(hotelId); }
 
     public Booking updateBookingStatus(int bookingId, BookingStatus status, Integer userId) {
         Optional<Booking> bookingOptional = bookingDAO.findById(bookingId);
