@@ -33,7 +33,7 @@ public class UserController {
         return newUser.map(value -> new ResponseEntity<>(value, HttpStatus.CREATED))
                 .orElseGet(() -> ResponseEntity.badRequest().build() );
     }
-
+    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("login")
     public User loginHandler(@RequestBody User userCredentials, HttpSession session){
         Optional<User> userLogged = userService.login(userCredentials);
