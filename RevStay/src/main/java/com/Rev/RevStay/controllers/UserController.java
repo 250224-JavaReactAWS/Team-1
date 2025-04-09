@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("users")
-
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class UserController {
 
     private final UserService userService;
@@ -35,7 +35,7 @@ public class UserController {
         return newUser.map(value -> new ResponseEntity<>(value, HttpStatus.CREATED))
                 .orElseGet(() -> ResponseEntity.badRequest().build() );
     }
-    @CrossOrigin(origins = "http://localhost:5173")
+
     @PostMapping("login")
     public UserDTO loginHandler(@RequestBody User userCredentials, HttpSession session){
         Optional<UserDTO> userLogged = userService.login(userCredentials);
