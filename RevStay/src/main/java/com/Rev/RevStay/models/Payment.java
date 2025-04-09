@@ -14,12 +14,12 @@ public class Payment {
     private int paymentId;
 
     //Make the relations between the tables bookings and users
-    @OneToOne
-    @JoinColumn(name = "book_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "bookId", nullable = false)
     private Booking booking;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "userId", nullable = false)
     private User user;
 
     @Column(nullable = false, precision = 10, scale = 2)

@@ -75,7 +75,7 @@ public class BookingService {
         return bookingDAO.findByUserId(userId);
     }
 
-    public List<Booking> getBookingsByHotelId(int hotelId){ return  bookingDAO.findByHotelId(hotelId); }
+    public List<Booking> getBookingsByHotelId(int hotelId){ return  bookingDAO.findByHotel_HotelId(hotelId); }
 
     public Booking updateBookingStatus(int bookingId, BookingStatus status, Integer userId) {
         Optional<Booking> bookingOptional = bookingDAO.findById(bookingId);
