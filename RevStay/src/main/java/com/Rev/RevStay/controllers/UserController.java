@@ -1,5 +1,6 @@
 package com.Rev.RevStay.controllers;
 
+import com.Rev.RevStay.DTOS.UserDTO;
 import com.Rev.RevStay.models.User;
 import com.Rev.RevStay.models.UserType;
 import com.Rev.RevStay.services.UserService;
@@ -36,8 +37,8 @@ public class UserController {
     }
 
     @PostMapping("login")
-    public User loginHandler(@RequestBody User userCredentials, HttpSession session){
-        Optional<User> userLogged = userService.login(userCredentials);
+    public UserDTO loginHandler(@RequestBody User userCredentials, HttpSession session){
+        Optional<UserDTO> userLogged = userService.login(userCredentials);
 
         if(userLogged.isPresent()) {
             session.setAttribute("userId", userLogged.get().getUserId());

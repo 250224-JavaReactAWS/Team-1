@@ -1,5 +1,6 @@
 package com.Rev.RevStay.services;
 
+import com.Rev.RevStay.DTOS.UserDTO;
 import com.Rev.RevStay.exceptions.GenericException;
 import com.Rev.RevStay.models.Hotel;
 import com.Rev.RevStay.models.User;
@@ -89,7 +90,7 @@ public class UserService {
     }*/
 
     //Login User
-    public Optional<User> login(User userCredentials) {
+    public Optional<UserDTO> login(User userCredentials) {
         Optional<User> user = userDAO.findUserByEmail(userCredentials.getEmail());
         User userToLogin;
 
@@ -102,8 +103,8 @@ public class UserService {
         if (!PasswordUtil.checkPassword(userToLogin.getPasswordHash(),userCredentials.getPasswordHash())) {
             throw new GenericException("Incorrect Password");
         }
-
-        return Optional.of(userToLogin);
+        UserDTO userDTO = new UserDTO(userToLogin.getUserId(), userToLogin.getEmail(), userToLogin.getFullName(), userToLogin.getUserType());
+        return Optional.of(userDTO);
     }
 
     //Add hotel to favorites
@@ -122,7 +123,7 @@ public class UserService {
 
         if (!userExist.getFavoriteHotels().contains(hotelExist)){
             userExist.getFavoriteHotels().add(hotelExist);
-            hotelExist.getUsersWhoFavorite().add(userExist);
+            //hotelExist.getUsersWhoFavorite().add(userExist);
             userDAO.save(userExist);
         }
     }
@@ -142,7 +143,7 @@ public class UserService {
         Hotel hotelExist = hotel.get();
 
         userExist.getFavoriteHotels().remove(hotelExist);
-        hotelExist.getUsersWhoFavorite().remove(userExist);
+        //hotelExist.getUsersWhoFavorite().remove(userExist);
         userDAO.save(userExist);
     }
 }
