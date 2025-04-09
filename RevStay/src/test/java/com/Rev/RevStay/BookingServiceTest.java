@@ -87,25 +87,40 @@ import static org.mockito.Mockito.*;
 
         @Test
         public void testUpdateBookingStatus_CancelledByUser() {
+            int bookingId = 1;
+            int userId = 1;
+
+            booking.setBookId(bookingId);
             booking.setStatus(BookingStatus.CONFIRMED);
-            when(bookingDAO.findById(anyInt())).thenReturn(Optional.of(booking));
 
-            Booking updatedBooking = bookingService.updateBookingStatus(1, BookingStatus.CANCELLED, 1);
+            when(bookingDAO.findById(bookingId)).thenReturn(Optional.of(booking));
+            when(bookingDAO.save(any(Booking.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-            assertEquals(BookingStatus.CANCELLED, updatedBooking.getStatus());
-            verify(bookingDAO, times(1)).save(booking);
+            Booking updated = bookingService.updateBookingStatus(bookingId, BookingStatus.CANCELLED, userId);
+
+            assertNotNull(updated);
+            assertEquals(BookingStatus.CANCELLED, updated.getStatus());
         }
 
         @Test
         public void testUpdateBookingStatus_ConfirmedByOwner() {
-            booking.setStatus(BookingStatus.CONFIRMED);
-            hotel.setOwner(new User());
-            when(bookingDAO.findById(anyInt())).thenReturn(Optional.of(booking));
+            int bookingId = 1;
+            int ownerId = 2;
 
-            Booking updatedBooking = bookingService.updateBookingStatus( 1, BookingStatus.CONFIRMED, 2);
+            booking.setBookId(bookingId);
+            booking.setStatus(BookingStatus.PENDING);
 
-            assertEquals(BookingStatus.CONFIRMED, updatedBooking.getStatus());
-            verify(bookingDAO, times(1)).save(booking);
+            User owner = new User();
+            owner.setUserId(ownerId);
+            hotel.setOwner(owner);
+
+            when(bookingDAO.findById(bookingId)).thenReturn(Optional.of(booking));
+            when(bookingDAO.save(any(Booking.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+            Booking updated = bookingService.updateBookingStatus(bookingId, BookingStatus.ACCEPTED, ownerId);
+
+            assertNotNull(updated);
+            assertEquals(BookingStatus.ACCEPTED, updated.getStatus());
         }
 
         @Test
