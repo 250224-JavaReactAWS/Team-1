@@ -59,7 +59,7 @@ public class UserService {
         return Optional.of(userDAO.save(userToBeRegistered));
     }
 
-    //registration of an Hotel Owner and Hotel details
+    //registration of a Hotel Owner and Hotel details
     /*public Optional<User> registerOwner(User ownerToBeRegistered, Hotel hotelToBeRegistered) {
 
         Optional<User> potentialOwner = userDAO.findUserByEmail(ownerToBeRegistered.getEmail());
