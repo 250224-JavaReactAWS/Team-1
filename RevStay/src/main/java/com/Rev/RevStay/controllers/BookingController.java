@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("bookings")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class BookingController {
     
     private final BookingService bookingService;

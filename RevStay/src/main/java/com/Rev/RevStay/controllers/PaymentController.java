@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("payments")
-
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class PaymentController {
     private final PaymentService paymentService;
     private final BookingService bookingService;
