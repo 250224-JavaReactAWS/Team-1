@@ -1,6 +1,8 @@
 package com.Rev.RevStay.controllers;
 
+import com.Rev.RevStay.models.UserType;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -20,7 +22,7 @@ import org.springframework.http.ResponseEntity;
 @RequestMapping("bookings")
 public class BookingController {
     
-    private BookingService bookingService;
+    private final BookingService bookingService;
 
     @Autowired
     public BookingController(BookingService bookingService){
@@ -33,8 +35,22 @@ public class BookingController {
         Optional<Booking> bookingResponse = bookingService.makeReservation(bookingRequest);
         return ResponseEntity.ok(bookingResponse);
     }
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Booking>> getBookingsByUser(@PathVariable int userId) {
+
+    @GetMapping("/hotel/{hotelId}")
+    public ResponseEntity<List<Booking>> getBookingByHotelId(@PathVariable int hotelId){
+        List<Booking> bookings = bookingService.getBookingsByHotelId(hotelId);
+        return ResponseEntity.ok(bookings);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<List<Booking>> getBookingsByUser(HttpSession session) {
+        int userId = (Integer) session.getAttribute("userId");
+        UserType userType = (UserType) session.getAttribute("role");
+
+        if (userType != UserType.USER) {
+            ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied: role must be USER");
+        }
+
         List<Booking> bookings = bookingService.getBookingsByUser(userId);
 
         //Check in the bookings if the checkOut pass, set the status for booking as completed
@@ -55,6 +71,12 @@ public class BookingController {
     //update booking status
     @PutMapping("/{bookingId}/status")
     public ResponseEntity<Booking> updateBookingStatus(@PathVariable int bookingId, @RequestParam BookingStatus bookingStatus, HttpSession session) {
+
+        UserType userType = (UserType) session.getAttribute("role");
+
+        if (userType != UserType.OWNER) {
+            ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied: role must be OWNER");
+        }
 
         Booking updatedBooking = bookingService.updateBookingStatus(bookingId, bookingStatus, (Integer) session.getAttribute("userId"));
         return ResponseEntity.ok(updatedBooking);

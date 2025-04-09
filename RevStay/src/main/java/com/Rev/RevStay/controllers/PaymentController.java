@@ -70,7 +70,6 @@ public class PaymentController {
             return updatedPayment;
         }
         //otherwise the state of payment is FAILED
-
         return updatedPayment;
     }
 
