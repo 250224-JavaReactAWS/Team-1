@@ -118,8 +118,8 @@ public class Booking {
     public int getUserId() {return user.getUserId();
     }
 
-    public void setStatusCompleted() {
-        status = BookingStatus.CONFIRMED;
+    public void setStatusAccepted(){
+        status = BookingStatus.ACCEPTED;
     }
 
     public void setStatusCancelled() {
