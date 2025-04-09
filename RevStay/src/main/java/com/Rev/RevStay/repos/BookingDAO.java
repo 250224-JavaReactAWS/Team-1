@@ -24,8 +24,8 @@ public interface BookingDAO extends JpaRepository<Booking, Integer> {
                             @Param("checkOut") LocalDateTime checkOut, 
                             @Param("room_id") int room_id);
     @Query("SELECT b FROM Booking b WHERE b.user.id = :userId")
-    List<Booking> findByUserId(Long userId);
+    List<Booking> findByUserId(int userId);
 
     @Query("SELECT b FROM Booking b WHERE b.id = :bookingId")
-    Optional<Booking> findById(Long bookingId);
+    Optional<Booking> findById(int bookingId);
 }

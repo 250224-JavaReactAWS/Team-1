@@ -88,9 +88,9 @@ import static org.mockito.Mockito.*;
         @Test
         public void testUpdateBookingStatus_CancelledByUser() {
             booking.setStatus(BookingStatus.CONFIRMED);
-            when(bookingDAO.findById(anyLong())).thenReturn(Optional.of(booking));
+            when(bookingDAO.findById(anyInt())).thenReturn(Optional.of(booking));
 
-            Booking updatedBooking = bookingService.updateBookingStatus((long) 1, BookingStatus.CANCELLED, 1);
+            Booking updatedBooking = bookingService.updateBookingStatus(1, BookingStatus.CANCELLED, 1);
 
             assertEquals(BookingStatus.CANCELLED, updatedBooking.getStatus());
             verify(bookingDAO, times(1)).save(booking);
@@ -100,9 +100,9 @@ import static org.mockito.Mockito.*;
         public void testUpdateBookingStatus_ConfirmedByOwner() {
             booking.setStatus(BookingStatus.CONFIRMED);
             hotel.setOwner(new User());
-            when(bookingDAO.findById(anyLong())).thenReturn(Optional.of(booking));
+            when(bookingDAO.findById(anyInt())).thenReturn(Optional.of(booking));
 
-            Booking updatedBooking = bookingService.updateBookingStatus((long) 1, BookingStatus.CONFIRMED, 2);
+            Booking updatedBooking = bookingService.updateBookingStatus( 1, BookingStatus.CONFIRMED, 2);
 
             assertEquals(BookingStatus.CONFIRMED, updatedBooking.getStatus());
             verify(bookingDAO, times(1)).save(booking);
@@ -110,11 +110,11 @@ import static org.mockito.Mockito.*;
 
         @Test
         public void testUpdateBookingStatus_InvalidStatus() {
-            when(bookingDAO.findById(anyLong())).thenReturn(Optional.of(booking));
+            when(bookingDAO.findById(anyInt())).thenReturn(Optional.of(booking));
 
             assertThrows(IllegalArgumentException.class, () -> {
                 BookingStatus invalidStatus = BookingStatus.valueOf("NOT_A_REAL_STATUS");
-                bookingService.updateBookingStatus(1L, invalidStatus, 1);
+                bookingService.updateBookingStatus(1, invalidStatus, 1);
             });
 
             verify(bookingDAO, never()).save(any(Booking.class));
@@ -122,9 +122,9 @@ import static org.mockito.Mockito.*;
 
         @Test
         public void testUpdateBookingStatus_BookingNotFound() {
-            when(bookingDAO.findById(anyLong())).thenReturn(Optional.empty());
+            when(bookingDAO.findById(anyInt())).thenReturn(Optional.empty());
 
-            assertThrows(GenericException.class, () -> bookingService.updateBookingStatus(1L, BookingStatus.CANCELLED, 1));
+            assertThrows(GenericException.class, () -> bookingService.updateBookingStatus(1, BookingStatus.CANCELLED, 1));
             verify(bookingDAO, never()).save(any(Booking.class));
         }
     }

@@ -10,7 +10,7 @@ public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long bookId;
+    private int bookId;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -43,11 +43,11 @@ public class Booking {
     public Booking() {
     }
 
-    public Long getBookId() {
+    public int getBookId() {
         return bookId;
     }
 
-    public void setBookId(Long bookId) {
+    public void setBookId(int bookId) {
         this.bookId = bookId;
     }
 

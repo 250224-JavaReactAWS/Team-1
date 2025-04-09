@@ -60,13 +60,14 @@ public class PaymentController {
     public Optional<Payment> updatePaymentStatus(@PathVariable int paymentId,
                                                  @RequestParam PaymentStatus newStatus,
                                                  HttpSession session,
-                                                 @RequestParam Long bookingId) {
+                                                 @RequestParam int bookingId) {
 
         Optional<Payment> updatedPayment = paymentService.updatePaymentStatus(paymentId, newStatus);
 
         // If the state of the payment is COMPLETED update the booking status to confirmed
         if (newStatus == PaymentStatus.COMPLETED) {
             bookingService.updateBookingStatus(bookingId, BookingStatus.CONFIRMED, (Integer) session.getAttribute("userId"));
+            return updatedPayment;
         }
         //otherwise the state of payment is FAILED
 
