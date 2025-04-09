@@ -47,6 +47,12 @@ public class HotelController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("favoritesUser")
+    public List<Hotel> getHotelFavoriteByUserId(HttpSession session){
+        int userId = (Integer) session.getAttribute("userId");
+        return hotelService.findFavoriteHotelsByUserId(userId);
+    }
+
     // Update hotel
     @PutMapping("/{hotelId}")
     public ResponseEntity<Hotel> updateHotel(@PathVariable int hotelId, @RequestBody Hotel updatedHotel, HttpSession session) {

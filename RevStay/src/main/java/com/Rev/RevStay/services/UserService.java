@@ -1,6 +1,8 @@
 package com.Rev.RevStay.services;
 
+import com.Rev.RevStay.DTOS.UserDTO;
 import com.Rev.RevStay.exceptions.GenericException;
+import com.Rev.RevStay.models.Hotel;
 import com.Rev.RevStay.models.User;
 import com.Rev.RevStay.models.UserType;
 import com.Rev.RevStay.repos.HotelDAO;
@@ -58,7 +60,7 @@ public class UserService {
         return Optional.of(userDAO.save(userToBeRegistered));
     }
 
-    //registration of an Hotel Owner and Hotel details
+    //registration of a Hotel Owner and Hotel details
     /*public Optional<User> registerOwner(User ownerToBeRegistered, Hotel hotelToBeRegistered) {
 
         Optional<User> potentialOwner = userDAO.findUserByEmail(ownerToBeRegistered.getEmail());
@@ -88,7 +90,7 @@ public class UserService {
     }*/
 
     //Login User
-    public Optional<User> login(User userCredentials) {
+    public Optional<UserDTO> login(User userCredentials) {
         Optional<User> user = userDAO.findUserByEmail(userCredentials.getEmail());
         User userToLogin;
 
@@ -101,9 +103,48 @@ public class UserService {
         if (!PasswordUtil.checkPassword(userToLogin.getPasswordHash(),userCredentials.getPasswordHash())) {
             throw new GenericException("Incorrect Password");
         }
-
-        return Optional.of(userToLogin);
+        UserDTO userDTO = new UserDTO(userToLogin.getUserId(), userToLogin.getEmail(), userToLogin.getFullName(), userToLogin.getUserType());
+        return Optional.of(userDTO);
     }
 
+    //Add hotel to favorites
+    public void addHotelToFavorites(int userId, int hotelId){
+        Optional<User> user = userDAO.findById(userId);
+        Optional<Hotel> hotel = hotelDAO.findById(hotelId);
+
+        if (hotel.isEmpty()) {
+            throw new GenericException("The hotel does not exist");
+        }
+        if (user.isEmpty()){
+            throw new GenericException(("The user does not exist"));
+        }
+        User userExist = user.get();
+        Hotel hotelExist = hotel.get();
+
+        if (!userExist.getFavoriteHotels().contains(hotelExist)){
+            userExist.getFavoriteHotels().add(hotelExist);
+            //hotelExist.getUsersWhoFavorite().add(userExist);
+            userDAO.save(userExist);
+        }
+    }
+
+    //Remove hotel from favorites
+    public void removeHotelFromFavorites(int userId, int hotelId){
+        Optional<User> user = userDAO.findById(userId);
+        Optional<Hotel> hotel = hotelDAO.findById(hotelId);
+
+        if (hotel.isEmpty()) {
+            throw new GenericException("The hotel does not exist");
+        }
+        if (user.isEmpty()){
+            throw new GenericException(("The user does not exist"));
+        }
+        User userExist = user.get();
+        Hotel hotelExist = hotel.get();
+
+        userExist.getFavoriteHotels().remove(hotelExist);
+        //hotelExist.getUsersWhoFavorite().remove(userExist);
+        userDAO.save(userExist);
+    }
 }
 

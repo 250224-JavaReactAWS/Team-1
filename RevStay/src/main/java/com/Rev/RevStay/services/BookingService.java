@@ -70,20 +70,22 @@ public class BookingService {
         // Logic to fetch room details (stubbed for now)
         return "Room details for " + roomType + " in " + hotel;
     }
-    public List<Booking> getBookingsByUser(Long userId) {
+
+    public List<Booking> getBookingsByUser(int userId) {
         return bookingDAO.findByUserId(userId);
     }
 
-    public Booking updateBookingStatus(Long bookingId, BookingStatus status, Integer userId) {
+    public List<Booking> getBookingsByHotelId(int hotelId){ return  bookingDAO.findByHotel_HotelId(hotelId); }
+
+    public Booking updateBookingStatus(int bookingId, BookingStatus status, Integer userId) {
         Optional<Booking> bookingOptional = bookingDAO.findById(bookingId);
 
-        boolean validStatus = status.toString().equals("CANCELLED") || status.toString().equals("COMPLETED");
+        boolean validStatus = status.toString().equals("CANCELLED") || status.toString().equals("ACCEPTED");
         if(!validStatus) {
             throw new GenericException("Invalid status: " + status);
         }
 
-
-        //TODO check if the user is the owner of the booking with the id in session
+        //Check if the user is the owner of the booking with the id in session
 
         if (bookingOptional.isPresent()) {
             Booking booking = bookingOptional.get();
@@ -94,8 +96,8 @@ public class BookingService {
 
                 }
             }else if((int)(userId)==booking.getHotel().getOwner().getUserId()) {
-                if (status.toString().equals("COMPLETED")) {
-                    booking.setStatusCompleted();
+                if (status.toString().equals("ACCEPTED")) {
+                    booking.setStatusAccepted();
                 }
             }
 

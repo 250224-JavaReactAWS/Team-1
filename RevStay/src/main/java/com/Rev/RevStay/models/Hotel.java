@@ -39,8 +39,7 @@ public class Hotel {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     //The contraRelation with users for get the favorite table
-    @ManyToMany(mappedBy = "favoriteHotels")
-    private Set<User> usersWhoFavorited = new HashSet<>();
+
 
     public Hotel() {
     }
@@ -104,4 +103,8 @@ public class Hotel {
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
+
+    //public Set<User> getUsersWhoFavorite() { return usersWhoFavorited; }
+
+   // public void setUsersWhoFavorite(Set<User> usersWhoFavorited) { this.usersWhoFavorited = usersWhoFavorited; }
 }
