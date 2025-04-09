@@ -1,41 +1,23 @@
-package com.Rev.RevStay.models;
+package com.Rev.RevStay.DTOS;
 
+import com.Rev.RevStay.models.Booking;
+import com.Rev.RevStay.models.PaymentStatus;
+import com.Rev.RevStay.models.User;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "payments")
-
-public class Payment {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PaymentDTO {
     private int paymentId;
-
-    //Make the relations between the tables bookings and users
-    @ManyToOne
-    @JoinColumn(name = "bookId", nullable = false)
     private Booking booking;
-
-    @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
     private User user;
-
-    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal amount;
-
-    @Column(name = "payment_method", length = 50)
     private String paymentMethod;
-
-    @Enumerated(EnumType.STRING)  // Save the ENUM as String in the DB
-    @Column(nullable = false)
     private PaymentStatus paymentStatus = PaymentStatus.PENDING;
-
-    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public Payment() { this.createdAt = LocalDateTime.now(); }
+
 
 
     //Getters and Setters
@@ -66,5 +48,5 @@ public class Payment {
     public LocalDateTime getCreatedAt() { return createdAt; }
 
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-}
 
+}
