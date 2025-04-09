@@ -1,6 +1,7 @@
 package com.Rev.RevStay.controllers;
 
 import com.Rev.RevStay.models.User;
+import com.Rev.RevStay.models.UserType;
 import com.Rev.RevStay.services.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,36 @@ public class UserController {
             return userLogged.get();
         }
         return null;
+    }
+
+    @PostMapping("favorites/{hotelId}")
+    public ResponseEntity<String>
+        addHotelToFavorites(HttpSession session, @PathVariable int hotelId){
+
+        UserType userType = (UserType) session.getAttribute("role");
+        int userId = (int) session.getAttribute("userId");
+
+        if (userType != UserType.USER) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied: role must be USER");
+        }
+
+        userService.addHotelToFavorites(userId, hotelId);
+        return ResponseEntity.ok("Hotel added to favorites successfully");
+    }
+
+    @DeleteMapping("favorites/{hotelId}")
+    public ResponseEntity<String>
+        removeHotelFromFavorite(HttpSession session, @PathVariable int hotelId){
+
+        UserType userType = (UserType) session.getAttribute("role");
+        int userId = (int) session.getAttribute("userId");
+
+        if (userType != UserType.USER) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied: role must be USER");
+        }
+
+        userService.removeHotelFromFavorites(userId, hotelId);
+        return ResponseEntity.ok("Hotel removed from favorites successfully");
     }
 
     /*@PostMapping("register/owner")

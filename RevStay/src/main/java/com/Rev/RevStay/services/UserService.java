@@ -1,6 +1,7 @@
 package com.Rev.RevStay.services;
 
 import com.Rev.RevStay.exceptions.GenericException;
+import com.Rev.RevStay.models.Hotel;
 import com.Rev.RevStay.models.User;
 import com.Rev.RevStay.models.UserType;
 import com.Rev.RevStay.repos.HotelDAO;
@@ -105,5 +106,44 @@ public class UserService {
         return Optional.of(userToLogin);
     }
 
+    //Add hotel to favorites
+    public void addHotelToFavorites(int userId, int hotelId){
+        Optional<User> user = userDAO.findById(userId);
+        Optional<Hotel> hotel = hotelDAO.findById(hotelId);
+
+        if (hotel.isEmpty()) {
+            throw new GenericException("The hotel does not exist");
+        }
+        if (user.isEmpty()){
+            throw new GenericException(("The user does not exist"));
+        }
+        User userExist = user.get();
+        Hotel hotelExist = hotel.get();
+
+        if (!userExist.getFavoriteHotels().contains(hotelExist)){
+            userExist.getFavoriteHotels().add(hotelExist);
+            hotelExist.getUsersWhoFavorite().add(userExist);
+            userDAO.save(userExist);
+        }
+    }
+
+    //Remove hotel from favorites
+    public void removeHotelFromFavorites(int userId, int hotelId){
+        Optional<User> user = userDAO.findById(userId);
+        Optional<Hotel> hotel = hotelDAO.findById(hotelId);
+
+        if (hotel.isEmpty()) {
+            throw new GenericException("The hotel does not exist");
+        }
+        if (user.isEmpty()){
+            throw new GenericException(("The user does not exist"));
+        }
+        User userExist = user.get();
+        Hotel hotelExist = hotel.get();
+
+        userExist.getFavoriteHotels().remove(hotelExist);
+        hotelExist.getUsersWhoFavorite().remove(userExist);
+        userDAO.save(userExist);
+    }
 }
 

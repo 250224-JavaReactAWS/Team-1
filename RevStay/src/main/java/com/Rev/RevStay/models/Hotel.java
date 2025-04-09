@@ -104,4 +104,8 @@ public class Hotel {
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
+
+    public Set<User> getUsersWhoFavorite() { return usersWhoFavorited; }
+
+    public void setUsersWhoFavorite(Set<User> usersWhoFavorited) { this.usersWhoFavorited = usersWhoFavorited; }
 }

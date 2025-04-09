@@ -20,7 +20,7 @@ import org.springframework.http.ResponseEntity;
 @RequestMapping("bookings")
 public class BookingController {
     
-    private BookingService bookingService;
+    private final BookingService bookingService;
 
     @Autowired
     public BookingController(BookingService bookingService){

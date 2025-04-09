@@ -31,8 +31,8 @@ public class User {
     @ManyToMany
     @JoinTable(
             name = "favorites",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "hotel_id")
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "hotelId")
     )
     private Set<Hotel> favoriteHotels = new HashSet<>();
 
@@ -55,11 +55,11 @@ public class User {
     }
 
     public User(int userId2) {
-        //TODO Auto-generated constructor stub
+        // Auto-generated constructor stub
     }
 
     public User(String string, String string2) {
-        //TODO Auto-generated constructor stub
+        // Auto-generated constructor stub
     }
 
     public int getUserId() {
@@ -101,5 +101,9 @@ public class User {
     public void setUserType(UserType userType) {
         this.userType = userType;
     }
+
+    public Set<Hotel> getFavoriteHotels() { return favoriteHotels; }
+
+    public void setFavoriteHotels(Set<Hotel> favoriteHotels) { this.favoriteHotels = favoriteHotels; }
 
 }

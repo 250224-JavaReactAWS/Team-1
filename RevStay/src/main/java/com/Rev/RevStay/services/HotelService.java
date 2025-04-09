@@ -31,6 +31,9 @@ public class HotelService {
         return hotelDAO.findById(hotelId);
     }
 
+    //Get hotels by favorite by UserId
+    public List<Hotel> findFavoriteHotelsByUserId(int userId){ return hotelDAO.findFavoriteHotelsByUserId(userId); }
+
     // Update an existing hotel
     public Hotel updateHotel(int hotelId, int ownerId, Hotel updatedHotel) {
         Optional<Hotel> existingHotel = hotelDAO.findById(hotelId);
