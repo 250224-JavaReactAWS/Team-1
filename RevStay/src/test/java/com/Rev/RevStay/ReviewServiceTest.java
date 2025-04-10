@@ -42,56 +42,56 @@ class ReviewServiceTest {
     @Test
     void testReviewById() {
         Review review = new Review();
-        review.setId(1);
+        review.setReviewId(1);
 
         when(reviewDao.findById(1)).thenReturn(Optional.of(review));
 
         Optional<Review> result = reviewService.reviewById(1);
 
         assertTrue(result.isPresent());
-        assertEquals(1, result.get().getId());
+        assertEquals(1, result.get().getReviewId());
         verify(reviewDao, times(1)).findById(1);
     }
 
     @Test
     void testGetReviewsByHotelId() {
         Review review = new Review();
-        review.setId(1);
+        review.setReviewId(1);
 
         when(reviewDao.getReviewsByHotelId(1)).thenReturn(List.of(review));
 
         List<Review> result = reviewService.getReviewsByHotelId(1);
 
         assertEquals(1, result.size());
-        assertEquals(1, result.get(0).getId());
+        assertEquals(1, result.get(0).getReviewId());
         verify(reviewDao, times(1)).getReviewsByHotelId(1);
     }
 
     @Test
     void testGetReviewsByUserId() {
         Review review = new Review();
-        review.setId(1);
+        review.setReviewId(1);
 
         when(reviewDao.getReviewsByUserId(1)).thenReturn(List.of(review));
 
         List<Review> result = reviewService.getReviewsByUserId(1);
 
         assertEquals(1, result.size());
-        assertEquals(1, result.get(0).getId());
+        assertEquals(1, result.get(0).getReviewId());
         verify(reviewDao, times(1)).getReviewsByUserId(1);
     }
 
     @Test
     void testGetReviewByUserAndHotelId() {
         Review review = new Review();
-        review.setId(1);
+        review.setReviewId(1);
 
         when(reviewDao.getReviewByHotelIdAndUserId(1, 1)).thenReturn(review);
 
         Optional<Review> result = reviewService.getReviewByUserAndHotelId(1, 1);
 
         assertTrue(result.isPresent());
-        assertEquals(1, result.get().getId());
+        assertEquals(1, result.get().getReviewId());
         verify(reviewDao, times(1)).getReviewByHotelIdAndUserId(1, 1);
     }
 

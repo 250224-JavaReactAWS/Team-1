@@ -95,7 +95,7 @@ public class UserService {
         User userToLogin;
 
         if (user.isEmpty()) {
-            throw new GenericException("User not found with tha Email");
+            throw new GenericException("User not found with the Email");
         } else {
             userToLogin = user.get();
         }
