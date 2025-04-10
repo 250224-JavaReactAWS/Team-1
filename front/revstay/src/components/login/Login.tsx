@@ -35,8 +35,8 @@ function Login() {
       let res = await axios.post<IUser>('http://localhost:8080/users/login',
         // Data is the body of our request
         {
-            "email": "bob@example.com",
-            "passwordHash" : "Password1"
+            email: email,
+            passwordHash: password // Cambia el nombre de la propiedad
         },
         // The next option is for a config object
         {withCredentials: true} // This allows for the JSESSIONID to be passed
