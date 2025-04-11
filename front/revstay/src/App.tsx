@@ -14,6 +14,7 @@ import { createContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import { ThemeProvider } from '@emotion/react'
 import { theme } from './theme'
+import RoomList from './components/rooms/RoomList'
 
 /*
 Need to run 
@@ -78,10 +79,11 @@ function App() {
             <Route path='/' element={<HotelPage />} />
             <Route path='/hotelFav' element={<HotelFavorite />} />
             <Route path="/registerHotel" element={<RegisterHotel />} />
+
             <Route path='Bookings' element={<Bookings />}/>
             <Route path='login' element={<Login />} />
             <Route path='register' element={<Register />} />
-
+            <Route path='rooms/hotel/:hotelId' element={<RoomList />} />
           </Routes>
         
         </BrowserRouter>
