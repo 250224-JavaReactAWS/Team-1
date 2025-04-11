@@ -1,29 +1,31 @@
 package com.Rev.RevStay.DTOS;
 
 public class ReviewDTO {
-    private Long id;
+    private int reviewId;
     private String reviewText;
     private int rating;
-    private Long userId;
-    private Long bookingId;
+    private int userId;
+    private String userFullName;
+    private int bookingId;
 
     public ReviewDTO() {
     }
 
-    public ReviewDTO(Long id, String reviewText, int rating, Long userId, Long bookingId) {
-        this.id = id;
+    public ReviewDTO(int reviewId, String reviewText, int rating, int userId, String userFullName, int bookingId) {
+        this.reviewId = reviewId;
         this.reviewText = reviewText;
         this.rating = rating;
         this.userId = userId;
+        this.userFullName = userFullName;
         this.bookingId = bookingId;
     }
 
-    public Long getId() {
-        return id;
+    public int getId() {
+        return reviewId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(int reviewId) {
+        this.reviewId = reviewId;
     }
 
     public String getReviewText() {
@@ -42,19 +44,23 @@ public class ReviewDTO {
         this.rating = rating;
     }
 
-    public Long getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
-    public Long getBookingId() {
+    public int getBookingId() {
         return bookingId;
     }
 
-    public void setBookingId(Long bookingId) {
+    public void setBookingId(int bookingId) {
         this.bookingId = bookingId;
     }
+
+    public String getUserFullName() { return userFullName; }
+
+    public void setUserFullName(String userFullName) { this.userFullName = userFullName; }
 }
