@@ -59,15 +59,21 @@ public class PaymentController {
         return created.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
+
     @PutMapping("/{paymentId}/status")
     public ResponseEntity<PaymentDTO> updatePaymentStatus(@PathVariable int paymentId,
                                                           @RequestParam PaymentStatus newStatus,
                                                           HttpSession session,
                                                           @RequestParam int bookingId) {
-        Optional<PaymentDTO> updatedPayment = paymentService.updatePaymentStatus(paymentId, newStatus);
+        Integer userId = (Integer) session.getAttribute("userId");
+        String role = (String) session.getAttribute("role");
+
+        Optional<PaymentDTO> updatedPayment = paymentService.updatePaymentStatus(paymentId, newStatus, userId, role, bookingId);
 
         if (newStatus == PaymentStatus.COMPLETED) {
             bookingService.markBookingAsConfirmed(bookingId);
+        } else if (newStatus == PaymentStatus.FAILED) {
+            bookingService.markBookingAsAccepted(bookingId);
         }
 
         return updatedPayment.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());

@@ -74,12 +74,20 @@ public class PaymentService {
 
         Room room = booking.getRoom();
         if (room == null) {
-            return Optional.empty();
+            throw new GenericException("This booking has no assigned room. Cannot calculate total.");
         }
 
-        long nights = ChronoUnit.DAYS.between(booking.getCheckIn(), booking.getCheckOut());
+        if (booking.getCheckIn() == null || booking.getCheckOut() == null) {
+            throw new GenericException("Booking dates are incomplete.");
+        }
+
+        long nights = ChronoUnit.DAYS.between(
+                booking.getCheckIn().toLocalDate(),
+                booking.getCheckOut().toLocalDate()
+        );
+
         if (nights <= 0) {
-            return Optional.empty();
+            nights = 1;
         }
 
         double amount = room.getPrice().doubleValue() * nights;
@@ -94,11 +102,17 @@ public class PaymentService {
     }
 
     // Update the paymentStatus
-    public Optional<PaymentDTO> updatePaymentStatus(int paymentId, PaymentStatus newStatus) {
+    public Optional<PaymentDTO> updatePaymentStatus(int paymentId, PaymentStatus newStatus, int userId, String role, int bookingId) {
         Optional<Payment> paymentOpt = paymentDAO.findById(paymentId);
-
         if (paymentOpt.isEmpty()) {
             throw new GenericException("Payment not found");
+        }
+
+        Booking booking = bookingDAO.findById(bookingId)
+                .orElseThrow(() -> new GenericException("Booking not found"));
+
+        if (!"OWNER".equals(role) || booking.getHotel().getOwner().getUserId() != userId) {
+            throw new GenericException("Not authorized to update this payment status");
         }
 
         Payment payment = paymentOpt.get();
