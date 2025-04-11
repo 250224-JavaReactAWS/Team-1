@@ -10,43 +10,99 @@ import java.time.LocalDateTime;
 
 public class PaymentDTO {
     private int paymentId;
-    private Booking booking;
-    private User user;
     private BigDecimal amount;
     private String paymentMethod;
-    private PaymentStatus paymentStatus = PaymentStatus.PENDING;
+    private PaymentStatus paymentStatus;
     private LocalDateTime createdAt;
+    private int bookingId;
+    private int hotelId;
+    private int userId;
 
+    public PaymentDTO(int paymentId, BigDecimal amount, String paymentMethod,
+                      PaymentStatus paymentStatus, LocalDateTime createdAt,
+                      int bookingId, int hotelId, int userId) {
+        this.paymentId = paymentId;
+        this.amount = amount;
+        this.paymentMethod = paymentMethod;
+        this.paymentStatus = paymentStatus;
+        this.createdAt = createdAt;
+        this.bookingId = bookingId;
+        this.hotelId = hotelId;
+        this.userId = userId;
+    }
 
+    public PaymentDTO(com.Rev.RevStay.models.Payment payment) {
+        this.paymentId = payment.getPaymentId();
+        this.amount = payment.getAmount();
+        this.paymentMethod = payment.getPaymentMethod();
+        this.paymentStatus = payment.getPaymentStatus();
+        this.createdAt = payment.getCreatedAt();
+        this.bookingId = payment.getBooking().getBookId();
+        this.hotelId = payment.getBooking().getHotel().getHotelId();
+        this.userId = payment.getBooking().getUser().getUserId();
+    }
 
+    public int getPaymentId() {
+        return paymentId;
+    }
 
-    //Getters and Setters
-    public int getPaymentId() { return paymentId; }
+    public void setPaymentId(int paymentId) {
+        this.paymentId = paymentId;
+    }
 
-    public void setPaymentId(int paymentId) { this.paymentId = paymentId; }
+    public BigDecimal getAmount() {
+        return amount;
+    }
 
-    public Booking getBooking() { return booking; }
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
 
-    public void setBooking(Booking booking) { this.booking = booking; }
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
 
-    public User getUser() { return user; }
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
 
-    public void setUser(User user) { this.user = user; }
+    public PaymentStatus getPaymentStatus() {
+        return paymentStatus;
+    }
 
-    public BigDecimal getAmount() { return amount; }
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
 
-    public void setAmount(BigDecimal amount) { this.amount = amount;}
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 
-    public String getPaymentMethod() { return paymentMethod; }
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 
-    public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
+    public int getBookingId() {
+        return bookingId;
+    }
 
-    public PaymentStatus getPaymentStatus() {  return paymentStatus; }
+    public void setBookingId(int bookingId) {
+        this.bookingId = bookingId;
+    }
 
-    public void setPaymentStatus(PaymentStatus paymentStatus) { this.paymentStatus = paymentStatus; }
+    public int getHotelId() {
+        return hotelId;
+    }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setHotelId(int hotelId) {
+        this.hotelId = hotelId;
+    }
 
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public int getUserId() {
+        return userId;
+    }
 
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 }

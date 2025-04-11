@@ -134,6 +134,10 @@ public class Booking {
         status = BookingStatus.COMPLETED;
     }
 
+    public void setStatusConfirmed(){
+        status = BookingStatus.CONFIRMED;
+    }
+
 }
 
 

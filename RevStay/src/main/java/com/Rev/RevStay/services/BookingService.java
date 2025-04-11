@@ -120,6 +120,16 @@ public class BookingService {
         }
     }
 
+    public void markBookingAsConfirmed(int bookingId) {
+        Booking booking = bookingDAO.findById(bookingId)
+                .orElseThrow(() -> new GenericException("Booking not found with id: " + bookingId));
+
+        if (booking.getStatus() != BookingStatus.CONFIRMED) {
+            booking.setStatusConfirmed();
+            bookingDAO.save(booking);
+        }
+    }
+
 
 
     private BookingDTO convertToDTO(Booking booking) {
