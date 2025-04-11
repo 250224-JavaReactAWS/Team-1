@@ -42,18 +42,23 @@ public class UserController {
 
         if(userLogged.isPresent()) {
             session.setAttribute("userId", userLogged.get().getUserId());
-            session.setAttribute("role", userLogged.get().getUserType());
+            session.setAttribute("role", userLogged.get().getUserType().name());
 
             return userLogged.get();
         }
         return null;
     }
 
-    @PostMapping("favorites/{hotelId}")
+    @PostMapping("/favorites/{hotelId}")
     public ResponseEntity<String>
-        addHotelToFavorites(HttpSession session, @PathVariable int hotelId){
+        addHotelToFavorites(HttpSession session, @PathVariable int hotelId) {
 
-        UserType userType = (UserType) session.getAttribute("role");
+        String roleStr = (String) session.getAttribute("role");
+        if (roleStr == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not logged in.");
+        }
+
+        UserType userType = UserType.valueOf(roleStr);
         int userId = (int) session.getAttribute("userId");
 
         if (userType != UserType.USER) {
@@ -64,11 +69,17 @@ public class UserController {
         return ResponseEntity.ok("Hotel added to favorites successfully");
     }
 
-    @DeleteMapping("favorites/{hotelId}")
+
+    @DeleteMapping("/favorites/{hotelId}")
     public ResponseEntity<String>
         removeHotelFromFavorite(HttpSession session, @PathVariable int hotelId){
 
-        UserType userType = (UserType) session.getAttribute("role");
+        String roleStr = (String) session.getAttribute("role");
+        if (roleStr == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not logged in.");
+        }
+
+        UserType userType = UserType.valueOf(roleStr);
         int userId = (int) session.getAttribute("userId");
 
         if (userType != UserType.USER) {
@@ -78,18 +89,5 @@ public class UserController {
         userService.removeHotelFromFavorites(userId, hotelId);
         return ResponseEntity.ok("Hotel removed from favorites successfully");
     }
-
-    /*@PostMapping("register/owner")
-    public ResponseEntity<User> registerOwnerHandler(@RequestBody User user, @RequestBody Hotel hotel){
-        Optional<Map<String, Object>> newUserMap = userService.registerOwner(user, hotel);
-
-        if (newUserMap.isPresent() && newUserMap.get().containsKey("user")) {
-            User newUser = (User) newUserMap.get().get("user");
-            logger.info("User created with Id: {}", newUser.getUserId());
-            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
-        }
-
-        return ResponseEntity.badRequest().build();
-    }*/
 
 }

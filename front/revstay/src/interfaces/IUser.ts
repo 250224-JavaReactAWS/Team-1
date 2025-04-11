@@ -5,6 +5,6 @@ export interface IUser{
     full_name: string,
     email: string,
     password: string,
-    role: "USER" | "OWNER" | "UNAUTHENTICATED",
+    userType: "USER" | "OWNER" | "UNAUTHENTICATED",
 
 }

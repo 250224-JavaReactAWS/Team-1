@@ -12,26 +12,30 @@ public class RoomDTO {
 
 
     private int roomId;
-
-    private Hotel hotel;
-
+    private int hotelId;
     private String roomType;
-
     private String description;
-
     private BigDecimal price;
-
     private int maxGuests;
 
-    public RoomDTO() {}
-    public RoomDTO(int roomId, Hotel hotel, String roomType, String description, BigDecimal price, int maxGuests) {
+    public RoomDTO(int roomId, int hotelId, String roomType, String description, BigDecimal price, int maxGuests) {
         this.roomId = roomId;
-        this.hotel = hotel;
+        this.hotelId = hotelId;
         this.roomType = roomType;
         this.description = description;
         this.price = price;
         this.maxGuests = maxGuests;
     }
+
+    public RoomDTO(com.Rev.RevStay.models.Room room) {
+        this.roomId = room.getRoomId();
+        this.price = room.getPrice();
+        this.maxGuests = room.getMaxGuests();
+        this.description = room.getDescription();
+        this.roomType = room.getRoomType();
+        this.hotelId = room.getHotel().getHotelId();
+    }
+
     public int getRoomId() {
         return roomId;
     }
@@ -40,13 +44,9 @@ public class RoomDTO {
         this.roomId = roomId;
     }
 
-    public Hotel getHotel() {
-        return hotel;
-    }
+    public int getHotelId() { return hotelId; }
 
-    public void setHotel(Hotel hotel) {
-        this.hotel = hotel;
-    }
+    public void setHotelId(int hotelId) { this.hotelId = hotelId; }
 
     public String getRoomType() {
         return roomType;

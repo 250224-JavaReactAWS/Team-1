@@ -4,6 +4,7 @@ import Login from './components/login/Login'
 import Nav from './components/nav/Nav'
 import Hotels from './components/hotels/Hotel'
 import Bookings from './components/bookings/bookings'
+import RegisterHotel from './components/hotels/RegisterHotel';
 //import Enrollments from './components/enrollments/Enrollments'
 //import Courses from './components/courses/Courses'
 import Register from './components/register/Register'
@@ -28,7 +29,12 @@ export const authContext = createContext<AuthContextType | null>(null)
 
 function App() {
 
-  const [role, setRole] = useState<"USER" | "OWNER" | "UNAUTHENTICATED">("UNAUTHENTICATED")
+  const savedUser = localStorage.getItem("user");
+  const initialRole = savedUser ? JSON.parse(savedUser).role : "UNAUTHENTICATED";
+  const [role, setRole] = useState<"USER" | "OWNER" | "UNAUTHENTICATED">(initialRole);
+
+
+  //const [role, setRole] = useState<"USER" | "OWNER" | "UNAUTHENTICATED">("UNAUTHENTICATED")
 
   // Right now we're logged in but if I hard refresh all of the state variables disappear, I could just check
   // if the cookie exists and store a little more information inside of local storage (this is totally valid
@@ -36,15 +42,33 @@ function App() {
   // that retrieves the current session info
 
   useEffect(() => {
-    axios.get<"USER" | "OWNER">("http://localhost:8080/users/session", {withCredentials: true})
-    .then(res => {
-      setRole(res.data)
-    })
-    .catch(err => {
-      setRole("UNAUTHENTICATED")
-      console.log(err)
-    })
-  }, [])
+    axios.get<"USER" | "OWNER">("http://localhost:8080/users/session", { withCredentials: true })
+      .then(res => {
+        setRole(res.data);
+        const saved = localStorage.getItem("user");
+        if (saved) {
+          const userObj = JSON.parse(saved);
+          userObj.role = res.data;
+          localStorage.setItem("user", JSON.stringify(userObj));
+        }
+      })
+      .catch(err => {
+        setRole("UNAUTHENTICATED");
+        console.log(err);
+      });
+  }, []);
+  
+
+  // useEffect(() => {
+  //   axios.get<"USER" | "OWNER">("http://localhost:8080/users/session", {withCredentials: true})
+  //   .then(res => {
+  //     setRole(res.data)
+  //   })
+  //   .catch(err => {
+  //     setRole("UNAUTHENTICATED")
+  //     console.log(err)
+  //   })
+  // }, [])
   
 
   return (
@@ -56,6 +80,7 @@ function App() {
 
           <Routes>
             <Route path='/' element={<Hotels />} />
+            <Route path="/registerHotel" element={<RegisterHotel />} />
             <Route path='Bookings' element={<Bookings />}/>
             <Route path='login' element={<Login />} />
             <Route path='register' element={<Register />} />

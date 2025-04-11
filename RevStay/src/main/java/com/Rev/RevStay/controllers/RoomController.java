@@ -1,5 +1,6 @@
 package com.Rev.RevStay.controllers;
 
+import com.Rev.RevStay.DTOS.RoomDTO;
 import com.Rev.RevStay.models.Room;
 import com.Rev.RevStay.services.RoomService;
 import jakarta.servlet.http.HttpSession;
@@ -26,11 +27,12 @@ public class RoomController {
 
     // Create a new Room
     @PostMapping
-    public ResponseEntity<Room> registerRoom(@RequestBody Room room, HttpSession session) {
-        Optional<Room> createdRoom = roomService.register(room, (Integer) session.getAttribute("userId"));
+    public ResponseEntity<RoomDTO> registerRoom(@RequestBody Room room, HttpSession session) {
+        Optional<RoomDTO> createdRoom = roomService.register(room, (Integer) session.getAttribute("userId"));
         return createdRoom.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
+
 
     // Delete Room
     @DeleteMapping("/{roomId}")
@@ -45,15 +47,15 @@ public class RoomController {
 
     // Update Room
     @PutMapping("/{roomId}")
-    public ResponseEntity<Room> updateRoom(@PathVariable int roomId, @RequestBody Room updatedRoom, HttpSession session) {
-        Optional<Room> updated = roomService.updateRoom(roomId, updatedRoom, (Integer) session.getAttribute("userId"));
+    public ResponseEntity<RoomDTO> updateRoom(@PathVariable int roomId, @RequestBody Room updatedRoom, HttpSession session) {
+        Optional<RoomDTO> updated = roomService.updateRoom(roomId, updatedRoom, (Integer) session.getAttribute("userId"));
         return updated.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // Get rooms by Hotel Id
     @GetMapping("/hotel/{hotelId}")
-    public List<Room> getRoomsByHotelId(@PathVariable int hotelId) {
+    public List<RoomDTO> getRoomsByHotelId(@PathVariable int hotelId) {
         return roomService.getRoomsByHotelId(hotelId);
     }
 
