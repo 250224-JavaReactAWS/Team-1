@@ -1,5 +1,6 @@
 package com.Rev.RevStay;
 
+import com.Rev.RevStay.DTOS.UserDTO;
 import com.Rev.RevStay.exceptions.GenericException;
 import com.Rev.RevStay.models.User;
 import com.Rev.RevStay.models.UserType;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
@@ -84,9 +86,12 @@ public class UserServiceTest {
         user.setPasswordHash(PasswordUtil.hashPassword("Password1"));
 
         when(userDAO.findUserByEmail(user.getEmail())).thenReturn(Optional.of(user));
-        when(PasswordUtil.checkPassword(user.getPasswordHash(), "Password1")).thenReturn(true);
+        when(userDAO.findUserByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        try (MockedStatic<PasswordUtil> mockedPasswordUtil = mockStatic(PasswordUtil.class)) {
+            mockedPasswordUtil.when(() -> PasswordUtil.checkPassword(user.getPasswordHash(), "Password1")).thenReturn(true);
+        }
 
-        Optional<User> loggedInUser = userService.login(new User("test@example.com", "Password1"));
+        Optional<UserDTO> loggedInUser = userService.login(new User("test@example.com", "Password1"));
 
         assertTrue(loggedInUser.isPresent());
         assertEquals(user.getEmail(), loggedInUser.get().getEmail());
@@ -107,9 +112,11 @@ public class UserServiceTest {
         user.setPasswordHash(PasswordUtil.hashPassword("Password1"));
 
         when(userDAO.findUserByEmail(user.getEmail())).thenReturn(Optional.of(user));
-        when(PasswordUtil.checkPassword(user.getPasswordHash(), "WrongPassword")).thenReturn(false);
+        try (MockedStatic<PasswordUtil> mockedPasswordUtil = mockStatic(PasswordUtil.class)) {
+            mockedPasswordUtil.when(() -> PasswordUtil.checkPassword(user.getPasswordHash(), "WrongPassword")).thenReturn(false);
 
-        GenericException exception = assertThrows(GenericException.class, () -> userService.login(new User("test@example.com", "WrongPassword")));
-        assertEquals("Incorrect Password", exception.getMessage());
+            GenericException exception = assertThrows(GenericException.class, () -> userService.login(new User("test@example.com", "WrongPassword")));
+            assertEquals("Incorrect Password", exception.getMessage());
+        }
     }
 }

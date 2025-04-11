@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("rooms")
-
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class RoomController {
 
     private final RoomService roomService;
