@@ -10,48 +10,35 @@ import java.time.LocalDateTime;
 
 public class BookingDTO {
 
-
-    private int bookId;
-    private User user;
-    private Hotel hotel;
-    private Room room;
+    private int bookingId;
     private LocalDateTime checkIn;
     private LocalDateTime checkOut;
     private int guests;
-    private BookingStatus status;
-    private LocalDateTime createdAt;
+    private String status;
+    private int hotelId;
+    private String hotelName;
+    private int roomId;
+    private String roomType;
 
-
-    public int getBookId() {
-        return bookId;
+    public BookingDTO(int bookingId, LocalDateTime checkIn, LocalDateTime checkOut, int guests,
+                      String status, int hotelId, String hotelName, int roomId, String roomType) {
+        this.bookingId = bookingId;
+        this.checkIn = checkIn;
+        this.checkOut = checkOut;
+        this.guests = guests;
+        this.status = status;
+        this.hotelId = hotelId;
+        this.hotelName = hotelName;
+        this.roomId = roomId;
+        this.roomType = roomType;
     }
 
-    public void setBookId(int bookId) {
-        this.bookId = bookId;
+    public int getBookingId() {
+        return bookingId;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Hotel getHotel() {
-        return hotel;
-    }
-
-    public void setHotel(Hotel hotel) {
-        this.hotel = hotel;
-    }
-
-    public Room getRoom() {
-        return room;
-    }
-
-    public void setRoom(Room room) {
-        this.room = room;
+    public void setBookingId(int bookingId) {
+        this.bookingId = bookingId;
     }
 
     public LocalDateTime getCheckIn() {
@@ -78,33 +65,44 @@ public class BookingDTO {
         this.guests = guests;
     }
 
-    public BookingStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(BookingStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public int getHotelId() {
+        return hotelId;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setHotelId(int hotelId) {
+        this.hotelId = hotelId;
     }
 
-    public int getUserId() {
-        return user.getUserId();
+    public String getHotelName() {
+        return hotelName;
     }
 
-    public void setStatusAccepted() {
-        status = BookingStatus.ACCEPTED;
+    public void setHotelName(String hotelName) {
+        this.hotelName = hotelName;
     }
 
-    public void setStatusCancelled() {
-        status = BookingStatus.CANCELLED;
+    public int getRoomId() {
+        return roomId;
     }
 
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
+    }
+
+    public String getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(String roomType) {
+        this.roomType = roomType;
+    }
 }
 
