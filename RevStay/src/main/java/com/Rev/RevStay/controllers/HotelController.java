@@ -41,16 +41,27 @@ public class HotelController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("favoritesUser")
-    public List<Hotel> getHotelFavoriteByUserId(HttpSession session){
-        int userId = (Integer) session.getAttribute("userId");
-        return hotelService.findFavoriteHotelsByUserId(userId);
+    @GetMapping("/favoritesUser")
+    public ResponseEntity<List<HotelDTO>> getHotelFavoriteByUserId(HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+
+        if (session.getAttribute("role").equals("OWNER")){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        List<HotelDTO> favorites = hotelService.findFavoriteHotelsByUserId(userId);
+        return ResponseEntity.ok(favorites);
     }
+
 
     // Update hotel
     @PutMapping("/{hotelId}")
-    public ResponseEntity<Hotel> updateHotel(@PathVariable int hotelId, @RequestBody Hotel updatedHotel, HttpSession session) {
-        Optional<Hotel> updated = Optional.of(hotelService.updateHotel(hotelId, (Integer) session.getAttribute("userId"), updatedHotel));
+    public ResponseEntity<HotelDTO> updateHotel(@PathVariable int hotelId, @RequestBody Hotel updatedHotel, HttpSession session) {
+        Optional<HotelDTO> updated = Optional.of(hotelService.updateHotel(hotelId, (Integer) session.getAttribute("userId"), updatedHotel));
         
         return updated.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -71,6 +82,24 @@ public class HotelController {
         return newHotel.map(value -> new ResponseEntity<>(value, HttpStatus.CREATED))
                 .orElseGet(() -> ResponseEntity.badRequest().build() );
         
+    }
+
+    @DeleteMapping("/{hotelId}")
+    public ResponseEntity<String> deleteHotel(@PathVariable int hotelId, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not logged in.");
+        }
+
+        try {
+            hotelService.deleteHotel(hotelId, userId);
+            return ResponseEntity.ok("Hotel deleted successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unexpected error occurred.");
+        }
     }
 
 }

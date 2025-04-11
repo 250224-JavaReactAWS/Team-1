@@ -36,7 +36,11 @@ public class HotelService {
     }
 
     //Get hotels by favorite by UserId
-    public List<Hotel> findFavoriteHotelsByUserId(int userId){ return hotelDAO.findFavoriteHotelsByUserId(userId); }
+    public List<HotelDTO> findFavoriteHotelsByUserId(int userId){
+        List<Hotel> favoriteHotels = hotelDAO.findFavoriteHotelsByUserId(userId);
+        return favoriteHotels.stream()
+                .map(this::convertToDTO).toList();
+    }
 
     // Update an existing hotel
     public HotelDTO updateHotel(int hotelId, int ownerId, Hotel updatedHotel) {
@@ -110,7 +114,8 @@ public class HotelService {
                 hotel.getPriceRange(),
                 hotel.getImages(),
                 hotel.getCreatedAt(),
-                hotel.getOwner().getEmail()
+                hotel.getOwner().getEmail(),
+                hotel.getOwner().getFullName()
         );
     }
 }

@@ -13,9 +13,10 @@ public class HotelDTO {
     private List<String> images;
     private LocalDateTime createdAt;
     private String ownerEmail;
+    private String ownerFullName;
 
     public HotelDTO(int hotelId, String name, String location, String description, String amenities,
-                    String priceRange, List<String> images, LocalDateTime createdAt, String ownerEmail) {
+                    String priceRange, List<String> images, LocalDateTime createdAt, String ownerEmail, String ownerFullName) {
         this.hotelId = hotelId;
         this.name = name;
         this.location = location;
@@ -25,6 +26,7 @@ public class HotelDTO {
         this.images = images;
         this.createdAt = createdAt;
         this.ownerEmail = ownerEmail;
+        this.ownerFullName = ownerFullName;
     }
 
     public int getHotelId() {
@@ -97,5 +99,13 @@ public class HotelDTO {
 
     public void setOwnerEmail(String ownerEmail) {
         this.ownerEmail = ownerEmail;
+    }
+
+    public String getOwnerFullName() {
+        return ownerFullName;
+    }
+
+    public void setOwnerFullName(String ownerFullName) {
+        this.ownerFullName = ownerFullName;
     }
 }
