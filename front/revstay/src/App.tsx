@@ -2,8 +2,10 @@ import { BrowserRouter, Routes, Route } from 'react-router'
 import './App.css'
 import Login from './components/login/Login'
 import Nav from './components/nav/Nav'
-import Hotels from './components/hotels/Hotel'
+import Hotels from './components/hotels/Hotel'///no yet
+import HotelPage from './components/hotels/HotelPage'
 import Bookings from './components/bookings/bookings'
+import HotelFavorite from './components/hotels/HotelFavorite'
 import RegisterHotel from './components/hotels/RegisterHotel';
 //import Enrollments from './components/enrollments/Enrollments'
 //import Courses from './components/courses/Courses'
@@ -79,11 +81,13 @@ function App() {
           <Nav />
 
           <Routes>
-            <Route path='/' element={<Hotels />} />
+            <Route path='/' element={<HotelPage />} />
+            <Route path='/hotelFav' element={<HotelFavorite />} />
             <Route path="/registerHotel" element={<RegisterHotel />} />
             <Route path='Bookings' element={<Bookings />}/>
             <Route path='login' element={<Login />} />
             <Route path='register' element={<Register />} />
+
           </Routes>
         
         </BrowserRouter>

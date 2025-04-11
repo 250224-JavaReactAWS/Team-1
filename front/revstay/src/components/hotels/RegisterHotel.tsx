@@ -1,160 +1,121 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { IHotel } from '../../interfaces/IHotel';
+import {
+  TextField,
+  Button,
+  Container,
+  Typography,
+  Box,
+  Paper,
+  Stack
+} from '@mui/material';
 
-const AddHotel: React.FC = () => {
-  const navigate = useNavigate();
-  const [hotel, setHotel] = useState<Partial<IHotel>>({
+
+const RegisterHotel: React.FC = () => {
+  const [formData, setFormData] = useState({
     name: '',
     location: '',
     description: '',
     priceRange: '',
-    amenities: [],
-    images: [],
+    amenities: '',
+    images: '',
   });
-
-  const [newAmenity, setNewAmenity] = useState('');
-
-  const addAmenity = () => {
-    if (newAmenity.trim()) {
-      setHotel(prev => ({
-        ...prev,
-        amenities: [...(prev.amenities || []), newAmenity.trim()]
-      }));
-      setNewAmenity('');
-    }
-  };
-
-  const removeAmenity = (indexToRemove: number) => {
-    setHotel(prev => ({
-      ...prev,
-      amenities: prev.amenities?.filter((_, index) => index !== indexToRemove)
-    }));
-  };
-  
-
-  const [isAuthorized, setIsAuthorized] = useState(false);
-
-  useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      const user = JSON.parse(userData);
-      if (user.userType === 'OWNER') {
-        setIsAuthorized(true);
-      }
-    }
-  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-
-    if (name === 'amenities' || name === 'images') {
-        setHotel(prev => ({
-          ...prev,
-          [name]: value ? value.split(',').map((item) => item.trim()) : []
-        }));
-      } else {
-        setHotel(prev => ({
-          ...prev,
-          [name]: value
-        }));
-      }
-    };
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     const payload = {
-        ...hotel,
-        amenities: Array.isArray(hotel.amenities) ? hotel.amenities : [],
-        images: Array.isArray(hotel.images) ? hotel.images : []
-      };    
+      ...formData,
+      amenities: formData.amenities.split(',').map(item => item.trim()),
+      images: formData.images.split(',').map(item => item.trim()),
+    };
 
     try {
-        console.log("Payload enviado al backend:", payload);
-        await axios.put('http://localhost:8080/hotels/register', payload, {
-        withCredentials: true // importante para enviar la cookie de sesión
-      });
-
-      alert('Hotel registrado correctamente');
-      navigate('/');
+      const response = await axios.post('http://localhost:8080/hotels/register', payload,{withCredentials: true});
+      alert('Hotel registrado con éxito!');
+      console.log('Respuesta:', response.data);
     } catch (error) {
       console.error('Error al registrar el hotel:', error);
-      alert('No se pudo registrar el hotel. ¿Estás logueado como OWNER?');
+      alert('Hubo un error al registrar el hotel.');
     }
   };
 
-  if (!isAuthorized) {
-    return <p>No tienes permiso para acceder a esta sección.</p>;
-  }
-
   return (
-    <div>
-      <h2>Registrar nuevo hotel</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Nombre del hotel"
-          value={hotel.name || ''}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="location"
-          placeholder="Ubicación"
-          value={hotel.location || ''}
-          onChange={handleChange}
-          required
-        />
-        <textarea
-          name="description"
-          placeholder="Descripción"
-          value={hotel.description || ''}
-          onChange={handleChange}
-        />
-        <div>
-            <label>Amenidades:</label>
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '10px' }}>
-            <input
-                type="text"
-                value={newAmenity}
-                onChange={(e) => setNewAmenity(e.target.value)}
-                placeholder="Nueva amenidad"
+    <Container maxWidth="sm">
+      <Paper elevation={3} sx={{ p: 4, mt: 4 }}>
+        <Typography variant="h5" gutterBottom>
+          Registrar Hotel
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit}>
+          <Stack spacing={2}>
+            <TextField
+              label="Nombre del hotel"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              fullWidth
+              required
             />
-            <button type="button" onClick={addAmenity}>Agregar</button>
-            </div>
-        
-            <ul>
-            {hotel.amenities?.map((amenity, index) => (
-                <li key={index}>
-                {amenity}{" "}
-                <button type="button" onClick={() => removeAmenity(index)}>✖</button>
-                </li>
-            ))}
-            </ul>
-        </div>
-
-        <input
-          type="text"
-          name="priceRange"
-          placeholder="Rango de precios"
-          value={hotel.priceRange || ''}
-          onChange={handleChange}
-        />
-        <input
-          type="text"
-          name="images"
-          placeholder="URLs de imágenes (separadas por comas)"
-          onChange={handleChange}
-        />
-        <button type="submit">Registrar Hotel</button>
-      </form>
-    </div>
+            <TextField
+              label="Ubicación"
+              name="location"
+              value={formData.location}
+              onChange={handleChange}
+              fullWidth
+              required
+            />
+            <TextField
+              label="Descripción"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              fullWidth
+              multiline
+              rows={3}
+              required
+            />
+            <TextField
+              label="Rango de precios (ej: 2000 - 7500)"
+              name="priceRange"
+              value={formData.priceRange}
+              onChange={handleChange}
+              fullWidth
+              required
+            />
+            <TextField
+              label="Amenidades (separadas por coma)"
+              name="amenities"
+              value={formData.amenities}
+              onChange={handleChange}
+              fullWidth
+              required
+            />
+            <TextField
+              label="URLs de imágenes (separadas por coma)"
+              name="images"
+              value={formData.images}
+              onChange={handleChange}
+              fullWidth
+              required
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+            >
+              Enviar
+            </Button>
+          </Stack>
+        </Box>
+      </Paper>
+    </Container>
   );
 };
 
-
-
-export default AddHotel;
+export default RegisterHotel;
