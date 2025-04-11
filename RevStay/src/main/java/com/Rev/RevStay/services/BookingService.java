@@ -94,7 +94,7 @@ public class BookingService {
         Booking booking = bookingDAO.findById(bookId)
                 .orElseThrow(() -> new GenericException("Booking not found with id: " + bookId));
 
-        boolean validStatus = status == BookingStatus.CANCELLED || status == BookingStatus.ACCEPTED;
+        boolean validStatus = status == BookingStatus.CANCELLED || status == BookingStatus.ACCEPTED || status == BookingStatus.CONFIRMED || status == BookingStatus.COMPLETED;
         if (!validStatus) {
             throw new GenericException("Invalid status: " + status);
         }
@@ -110,6 +110,17 @@ public class BookingService {
         return convertToDTO(bookingDAO.save(booking));
     }
 
+    public void markBookingAsCompleted(int bookingId) {
+        Booking booking = bookingDAO.findById(bookingId)
+                .orElseThrow(() -> new GenericException("Booking not found with id: " + bookingId));
+
+        if (booking.getStatus() != BookingStatus.COMPLETED) {
+            booking.setStatusCompleted();
+            bookingDAO.save(booking);
+        }
+    }
+
+
 
     private BookingDTO convertToDTO(Booking booking) {
         return new BookingDTO(
@@ -121,7 +132,8 @@ public class BookingService {
                 booking.getHotel().getHotelId(),
                 booking.getHotel().getName(),
                 booking.getRoom().getRoomId(),
-                booking.getRoom().getRoomType()
+                booking.getRoom().getRoomType(),
+                booking.getUser().getEmail()
         );
     }
 

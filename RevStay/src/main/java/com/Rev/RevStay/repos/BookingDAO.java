@@ -14,15 +14,24 @@ import org.springframework.data.repository.query.Param;
 public interface BookingDAO extends JpaRepository<Booking, Integer> {
     Optional<Booking> findByBookId(int book_Id);
 
-    // Alternative approach for room availability verification
-    @Query("SELECT COUNT(r) = 0 " +
-           "FROM Room r LEFT JOIN Booking b ON r.id = b.room.id " +
-           "WHERE r.hotel.id = :hotelId AND r.id = :room_id " +
-           "AND (b.id IS NULL OR b.checkIn > :checkOut OR b.checkOut < :checkIn)")
-    boolean isRoomAvailable(@Param("hotelId") int hotelId, 
-                            @Param("checkIn") LocalDateTime checkIn, 
-                            @Param("checkOut") LocalDateTime checkOut, 
-                            @Param("room_id") int room_id);
+    @Query("""
+    SELECT COUNT(b) = 0
+    FROM Booking b
+    WHERE b.hotel.hotelId = :hotelId
+      AND b.room.roomId = :roomId
+      AND b.status <> 'CANCELLED'
+      AND (
+        b.checkIn < :checkOut AND
+        b.checkOut > :checkIn
+      )
+""")
+    boolean isRoomAvailable(@Param("hotelId") int hotelId,
+                            @Param("checkIn") LocalDateTime checkIn,
+                            @Param("checkOut") LocalDateTime checkOut,
+                            @Param("roomId") int roomId);
+
+
+
     @Query("SELECT b FROM Booking b WHERE b.user.id = :userId")
     List<Booking> findByUserId(int userId);
 

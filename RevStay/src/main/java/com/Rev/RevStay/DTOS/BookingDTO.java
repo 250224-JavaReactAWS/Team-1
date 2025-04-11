@@ -19,9 +19,10 @@ public class BookingDTO {
     private String hotelName;
     private int roomId;
     private String roomType;
+    private String userEmail;
 
     public BookingDTO(int bookingId, LocalDateTime checkIn, LocalDateTime checkOut, int guests,
-                      String status, int hotelId, String hotelName, int roomId, String roomType) {
+                      String status, int hotelId, String hotelName, int roomId, String roomType, String userEmail) {
         this.bookingId = bookingId;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
@@ -31,6 +32,15 @@ public class BookingDTO {
         this.hotelName = hotelName;
         this.roomId = roomId;
         this.roomType = roomType;
+        this.userEmail = userEmail;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public int getBookingId() {

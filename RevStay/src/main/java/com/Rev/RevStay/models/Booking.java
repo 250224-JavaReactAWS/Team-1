@@ -38,7 +38,7 @@ public class Booking {
     private BookingStatus status;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     public Booking() {
     }
@@ -128,6 +128,10 @@ public class Booking {
 
     public void setStatusPending(){
         status = BookingStatus.PENDING;
+    }
+
+    public void setStatusCompleted(){
+        status = BookingStatus.COMPLETED;
     }
 
 }

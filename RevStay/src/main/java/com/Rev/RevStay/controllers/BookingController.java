@@ -68,7 +68,7 @@ public class BookingController {
         LocalDateTime today = LocalDateTime.now();
         for (BookingDTO booking : bookings) {
             if (booking.getCheckOut() != null && booking.getCheckOut().isBefore(today) && !"COMPLETED".equals(booking.getStatus())) {
-                bookingService.updateBookingStatus(booking.getBookingId(), BookingStatus.COMPLETED, userId);
+                bookingService.markBookingAsCompleted(booking.getBookingId());
             }
         }
 
@@ -83,7 +83,7 @@ public class BookingController {
         Integer userId = (Integer) session.getAttribute("userId");
         String roleStr = (String) session.getAttribute("role");
 
-        if (userId == null || roleStr == null || !UserType.valueOf(roleStr).equals(UserType.OWNER)) {
+        if (userId == null || roleStr == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
