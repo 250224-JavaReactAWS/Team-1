@@ -3,9 +3,7 @@ package com.Rev.RevStay.models;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "hotels")
@@ -27,9 +25,10 @@ public class Hotel {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(nullable = false)
-    private List<String> amenities;
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String amenities;
 
+    @Column(nullable = false)
     private String priceRange;
 
     @ElementCollection
@@ -102,6 +101,15 @@ public class Hotel {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public List<String> getAmenities() {
+        if (amenities == null || amenities.isEmpty()) return new ArrayList<>();
+        return Arrays.asList(amenities.split(","));
+    }
+
+    public void setAmenities(List<String> amenitiesList) {
+        this.amenities = String.join(",", amenitiesList);
     }
 
     //public Set<User> getUsersWhoFavorite() { return usersWhoFavorited; }

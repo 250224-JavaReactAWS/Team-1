@@ -1,5 +1,6 @@
 package com.Rev.RevStay.services;
 
+import com.Rev.RevStay.DTOS.HotelDTO;
 import com.Rev.RevStay.exceptions.GenericException;
 import com.Rev.RevStay.models.Hotel;
 import com.Rev.RevStay.models.User;
@@ -22,34 +23,48 @@ public class HotelService {
     }
 
     // Get all hotels
-    public List<Hotel> getAllHotels() {
-        return hotelDAO.findAll();
+    public List<HotelDTO> getAllHotels() {
+        return hotelDAO.findAll().stream()
+                .map(this::convertToDTO)
+                .toList();
+
     }
 
     // Get hotel by ID
-    public Optional<Hotel> getById(int hotelId) {
-        return hotelDAO.findById(hotelId);
+    public Optional<HotelDTO> getById(int hotelId) {
+        return hotelDAO.findById(hotelId).map(this::convertToDTO);
     }
 
     //Get hotels by favorite by UserId
     public List<Hotel> findFavoriteHotelsByUserId(int userId){ return hotelDAO.findFavoriteHotelsByUserId(userId); }
 
     // Update an existing hotel
-    public Hotel updateHotel(int hotelId, int ownerId, Hotel updatedHotel) {
-        Optional<Hotel> existingHotel = hotelDAO.findById(hotelId);
-        Optional<User> owner = userDAO.findById(ownerId);
+    public HotelDTO updateHotel(int hotelId, int ownerId, Hotel updatedHotel) {
+        Optional<Hotel> existingHotelOpt = hotelDAO.findById(hotelId);
+        Optional<User> ownerOpt = userDAO.findById(ownerId);
 
-        if (existingHotel.isPresent() && owner.isPresent()) {
-            if (existingHotel.get().getOwner() == owner.get()) {
-                updatedHotel.setHotelId(hotelId);
-                return hotelDAO.save(updatedHotel);
-            } else {
-                throw new IllegalArgumentException("Owner ID does not match the hotel's owner ID.");
-            }
-        } else {
+        if (existingHotelOpt.isEmpty()) {
             throw new IllegalArgumentException("Hotel with ID " + hotelId + " does not exist.");
         }
+
+        if (ownerOpt.isEmpty()) {
+            throw new IllegalArgumentException("Owner with ID " + ownerId + " does not exist.");
+        }
+
+        Hotel existingHotel = existingHotelOpt.get();
+        User owner = ownerOpt.get();
+
+        if (!existingHotel.getOwner().equals(owner)) {
+            throw new IllegalArgumentException("Owner ID does not match the hotel's owner ID.");
+        }
+
+        updatedHotel.setHotelId(hotelId);
+        updatedHotel.setOwner(owner);
+
+        Hotel savedHotel = hotelDAO.save(updatedHotel);
+        return convertToDTO(savedHotel);
     }
+
 
     // Delete a hotel by ID
     public void deleteHotel(int hotelId, int ownerId) {
@@ -67,7 +82,7 @@ public class HotelService {
         }
     }
 
-    public Optional<Hotel> createHotel(Hotel hotel, int userId){
+    public Optional<HotelDTO> createHotel(Hotel hotel, int userId) {
         Optional<Hotel> potentialHotel = hotelDAO.findHotelByName(hotel.getName());
 
         if (potentialHotel.isPresent()) {
@@ -75,13 +90,27 @@ public class HotelService {
         }
 
         Optional<User> owner = userDAO.findById(userId);
-
         if (owner.isPresent()) {
             hotel.setOwner(owner.get());
-        }else{
+        } else {
             throw new IllegalArgumentException("No owner found with id: " + userId);
         }
 
-       return Optional.of(hotelDAO.save(hotel));
+        return Optional.of(convertToDTO(hotelDAO.save(hotel)));
+    }
+
+
+    private HotelDTO convertToDTO(Hotel hotel) {
+        return new HotelDTO(
+                hotel.getHotelId(),
+                hotel.getName(),
+                hotel.getLocation(),
+                hotel.getDescription(),
+                hotel.getAmenities() != null ? String.join(",", hotel.getAmenities()) : "",
+                hotel.getPriceRange(),
+                hotel.getImages(),
+                hotel.getCreatedAt(),
+                hotel.getOwner().getEmail()
+        );
     }
 }

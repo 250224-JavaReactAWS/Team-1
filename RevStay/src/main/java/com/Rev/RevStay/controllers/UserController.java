@@ -42,7 +42,7 @@ public class UserController {
 
         if(userLogged.isPresent()) {
             session.setAttribute("userId", userLogged.get().getUserId());
-            session.setAttribute("role", userLogged.get().getUserType());
+            session.setAttribute("role", userLogged.get().getUserType().name());
 
             return userLogged.get();
         }

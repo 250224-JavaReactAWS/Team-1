@@ -35,6 +35,8 @@ function Nav() {
           <Button color="inherit" onClick={() => navigate('/')}>Hotels</Button>
           {roleReference?.role === "USER" && 
           <Button color="inherit" onClick={() => navigate('/bookings')}>Bookings</Button>}
+          {roleReference?.role === "OWNER" &&
+            <Button color="inherit" onClick={() => navigate('/registerHotel')}>Registrar Hotel</Button>}
           {
             roleReference?.role === "UNAUTHENTICATED" ? 
             <>

@@ -54,7 +54,6 @@ public class UserService {
         String hashPassword = PasswordUtil.hashPassword(userToBeRegistered.getPasswordHash());
 
         userToBeRegistered.setPasswordHash(hashPassword);
-        userToBeRegistered.setUserType(UserType.USER);
 
 
         return Optional.of(userDAO.save(userToBeRegistered));

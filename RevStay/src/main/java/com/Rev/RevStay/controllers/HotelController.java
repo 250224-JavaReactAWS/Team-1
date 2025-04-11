@@ -1,5 +1,6 @@
 package com.Rev.RevStay.controllers;
 
+import com.Rev.RevStay.DTOS.HotelDTO;
 import com.Rev.RevStay.exceptions.GenericException;
 import com.Rev.RevStay.models.Hotel;
 import com.Rev.RevStay.services.HotelService;
@@ -29,13 +30,11 @@ public class HotelController {
     }
 
     @GetMapping
-    public List<Hotel> getAllHotelsHandler() {
-        return hotelService.getAllHotels();
-    }
+    public List<HotelDTO> getAllHotelsHandler() { return hotelService.getAllHotels(); }
 
     @GetMapping("/{hotelId}")
-    public ResponseEntity<Hotel> getHotelByIdHandler(@PathVariable int hotelId) {
-        Optional<Hotel> hotel = hotelService.getById(hotelId);
+    public ResponseEntity<HotelDTO> getHotelByIdHandler(@PathVariable int hotelId) {
+        Optional<HotelDTO> hotel = hotelService.getById(hotelId);
 
         //Return 404 Not Found
         return hotel.map(ResponseEntity::ok)
@@ -57,15 +56,15 @@ public class HotelController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/register")
-    public ResponseEntity<Hotel> registerHotel(@RequestBody Hotel hotelToBeRegistered, HttpSession session){
+    @PostMapping ("/register")
+    public ResponseEntity<HotelDTO> registerHotel(@RequestBody Hotel hotelToBeRegistered, HttpSession session){
 
         if (!"OWNER".equals(session.getAttribute("role"))) {
             ResponseEntity.status(403).build();
             throw new GenericException("User does not have the OWNER role.");
         }
         
-        Optional<Hotel> newHotel = hotelService.createHotel(hotelToBeRegistered, (Integer) session.getAttribute("userId"));
+        Optional<HotelDTO> newHotel = hotelService.createHotel(hotelToBeRegistered, (Integer) session.getAttribute("userId"));
 
         newHotel.ifPresent(value -> logger.info("Hotel created with Id: {}", value.getHotelId()));
 

@@ -43,7 +43,8 @@ function Login() {
       )
 
       console.log(res)
-      roleReference?.setRole(res.data.role)
+      roleReference?.setRole(res.data.userType);
+      localStorage.setItem('user', JSON.stringify(res.data));
       navigate('/')
     } catch (error){
       setError(true)
