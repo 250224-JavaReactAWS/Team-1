@@ -1,6 +1,7 @@
 package com.Rev.RevStay.controllers;
 
 import com.Rev.RevStay.DTOS.UserDTO;
+import com.Rev.RevStay.exceptions.GenericException;
 import com.Rev.RevStay.models.User;
 import com.Rev.RevStay.models.UserType;
 import com.Rev.RevStay.services.UserService;
@@ -89,5 +90,23 @@ public class UserController {
         userService.removeHotelFromFavorites(userId, hotelId);
         return ResponseEntity.ok("Hotel removed from favorites successfully");
     }
+    @GetMapping("session")
+    public String getCurrentRoleHandler(HttpSession session){
+        if (session.getAttribute("role") == null){
+            // This means we are not authenticated
+            throw new GenericException("Not logged in!");
+        }
 
+        UserType role = UserType.valueOf((String) session.getAttribute("role"));
+
+        return role.toString();
+
+    }
+
+    // Logout Endpoint
+    @PostMapping("logout")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void logoutHandler(HttpSession session){
+        session.invalidate();
+    }
 }

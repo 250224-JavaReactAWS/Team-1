@@ -47,12 +47,6 @@ function App() {
     axios.get<"USER" | "OWNER">("http://localhost:8080/users/session", { withCredentials: true })
       .then(res => {
         setRole(res.data);
-        const saved = localStorage.getItem("user");
-        if (saved) {
-          const userObj = JSON.parse(saved);
-          userObj.role = res.data;
-          localStorage.setItem("user", JSON.stringify(userObj));
-        }
       })
       .catch(err => {
         setRole("UNAUTHENTICATED");
