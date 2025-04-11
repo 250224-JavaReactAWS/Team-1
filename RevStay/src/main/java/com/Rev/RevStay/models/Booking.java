@@ -126,6 +126,10 @@ public class Booking {
         status = BookingStatus.CANCELLED;
     }
 
+    public void setStatusPending(){
+        status = BookingStatus.PENDING;
+    }
+
 }
 
 

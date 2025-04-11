@@ -36,10 +36,10 @@ public class RoomController {
 
     // Delete Room
     @DeleteMapping("/{roomId}")
-    public ResponseEntity<Void> deleteRoom(@PathVariable int roomId, HttpSession session) {
+    public ResponseEntity<String> deleteRoom(@PathVariable int roomId, HttpSession session) {
         try {
             roomService.deleteRoom(roomId, (Integer) session.getAttribute("userId"));
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok("Room deleted successfully.");
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }

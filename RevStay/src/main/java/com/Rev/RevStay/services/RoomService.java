@@ -2,6 +2,7 @@ package com.Rev.RevStay.services;
 
 import com.Rev.RevStay.DTOS.RoomDTO;
 import com.Rev.RevStay.exceptions.GenericException;
+import com.Rev.RevStay.models.Hotel;
 import com.Rev.RevStay.models.Room;
 
 import com.Rev.RevStay.models.User;
@@ -37,25 +38,23 @@ public class RoomService {
             throw new GenericException("Hotel information is required");
         }
 
-        //Validate that the hotel Exits
         int hotelId = roomToBeCreate.getHotel().getHotelId();
-        if (!hotelDAO.existsById(hotelId)) {
-            throw new GenericException("The hotel does not exist");
-        }
-
-        if (roomToBeCreate.getMaxGuests() <= 0){
-            throw new GenericException("The number of guests must be at least one");
-        }
+        Hotel hotel = hotelDAO.findById(hotelId)
+                .orElseThrow(() -> new GenericException("The hotel does not exist"));
 
         Optional<User> owner = userDAO.findById(ownerId);
-        if (owner.isPresent()){
-            if (roomToBeCreate.getHotel().getOwner().equals(owner.get())) {
-                return Optional.of(convertToDTO(roomDAO.save(roomToBeCreate)));
-            } else {
-                throw new GenericException("You are not authorized to register rooms in this Hotel.");
-            }
+        if (owner.isEmpty()) {
+            throw new GenericException("User not found");
         }
-        return Optional.empty();
+
+        if (!hotel.getOwner().equals(owner.get())) {
+            throw new GenericException("You are not authorized to register rooms in this Hotel.");
+        }
+
+        roomToBeCreate.setHotel(hotel);
+
+        return Optional.of(convertToDTO(roomDAO.save(roomToBeCreate)));
+
     }
 
     //Delete ROOM
@@ -71,39 +70,37 @@ public class RoomService {
             }
         }
     }
-
-    //Update ROOM
     public Optional<RoomDTO> updateRoom(int roomId, Room updatedRoom, int ownerId) {
         Room existingRoom = roomDAO.findById(roomId)
                 .orElseThrow(() -> new GenericException("Room not found"));
-        Optional<User> owner = userDAO.findById(ownerId);
-        if (owner.isPresent()){
-            if (existingRoom.getHotel().getOwner() == owner.get()) {
 
-                if (updatedRoom.getPrice() != null && updatedRoom.getPrice().compareTo(BigDecimal.ZERO) > 0) {
-                    existingRoom.setPrice(updatedRoom.getPrice());
-                }
+        User owner = userDAO.findById(ownerId)
+                .orElseThrow(() -> new GenericException("User not found"));
 
-                if (updatedRoom.getMaxGuests() > 0) {
-                    existingRoom.setMaxGuests(updatedRoom.getMaxGuests());
-                }
-
-                if (updatedRoom.getDescription() != null) {
-                    existingRoom.setDescription(updatedRoom.getDescription());
-                }
-
-                if (updatedRoom.getRoomType() != null) {
-                    existingRoom.setRoomType(updatedRoom.getRoomType());
-                }
-
-                return Optional.of(convertToDTO(roomDAO.save(existingRoom)));
-
-            } else {
-                throw new GenericException("You are not authorized to modify this room.");
-            }
+        Hotel hotel = existingRoom.getHotel();
+        if (hotel.getOwner() == null || !hotel.getOwner().equals(owner)) {
+            throw new GenericException("You are not authorized to modify this room.");
         }
-        return Optional.empty();
+
+        if (updatedRoom.getPrice() != null && updatedRoom.getPrice().compareTo(BigDecimal.ZERO) > 0) {
+            existingRoom.setPrice(updatedRoom.getPrice());
+        }
+
+        if (updatedRoom.getMaxGuests() > 0) {
+            existingRoom.setMaxGuests(updatedRoom.getMaxGuests());
+        }
+
+        if (updatedRoom.getDescription() != null && !updatedRoom.getDescription().isBlank()) {
+            existingRoom.setDescription(updatedRoom.getDescription());
+        }
+
+        if (updatedRoom.getRoomType() != null && !updatedRoom.getRoomType().isBlank()) {
+            existingRoom.setRoomType(updatedRoom.getRoomType());
+        }
+
+        return Optional.of(convertToDTO(roomDAO.save(existingRoom)));
     }
+
 
     //Get Rooms By Hotel Id
     public List<RoomDTO> getRoomsByHotelId(int hotelId){
