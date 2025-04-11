@@ -1,5 +1,6 @@
 package com.Rev.RevStay.services;
 
+import com.Rev.RevStay.DTOS.RoomDTO;
 import com.Rev.RevStay.exceptions.GenericException;
 import com.Rev.RevStay.models.Room;
 
@@ -29,8 +30,8 @@ public class RoomService {
         this.userDAO = userDAO;
     }
 
-    //TODO Register New ROOM
-    public Optional<Room> register(Room roomToBeCreate, int ownerId){
+    //Register New ROOM
+    public Optional<RoomDTO> register(Room roomToBeCreate, int ownerId){
 
         if (roomToBeCreate.getHotel() == null || roomToBeCreate.getHotel().getHotelId() == 0) {
             throw new GenericException("Hotel information is required");
@@ -48,8 +49,8 @@ public class RoomService {
 
         Optional<User> owner = userDAO.findById(ownerId);
         if (owner.isPresent()){
-            if (roomToBeCreate.getHotel().getOwner() == owner.get()) {
-                return Optional.of(roomDAO.save(roomToBeCreate));
+            if (roomToBeCreate.getHotel().getOwner().equals(owner.get())) {
+                return Optional.of(convertToDTO(roomDAO.save(roomToBeCreate)));
             } else {
                 throw new GenericException("You are not authorized to register rooms in this Hotel.");
             }
@@ -57,7 +58,7 @@ public class RoomService {
         return Optional.empty();
     }
 
-    //TODO Delete ROOM
+    //Delete ROOM
     public void deleteRoom(int roomId, int ownerId){
         Room roomToBeDelete = roomDAO.findById(roomId)
                 .orElseThrow(() -> new GenericException("Room not found"));
@@ -71,8 +72,8 @@ public class RoomService {
         }
     }
 
-    // TODO Update ROOM
-    public Optional<Room> updateRoom(int roomId, Room updatedRoom, int ownerId) {
+    //Update ROOM
+    public Optional<RoomDTO> updateRoom(int roomId, Room updatedRoom, int ownerId) {
         Room existingRoom = roomDAO.findById(roomId)
                 .orElseThrow(() -> new GenericException("Room not found"));
         Optional<User> owner = userDAO.findById(ownerId);
@@ -95,7 +96,7 @@ public class RoomService {
                     existingRoom.setRoomType(updatedRoom.getRoomType());
                 }
 
-                return Optional.of(roomDAO.save(existingRoom));
+                return Optional.of(convertToDTO(roomDAO.save(existingRoom)));
 
             } else {
                 throw new GenericException("You are not authorized to modify this room.");
@@ -104,9 +105,11 @@ public class RoomService {
         return Optional.empty();
     }
 
-    //TODO Get Rooms By Hotel Id
-    public List<Room> getRoomsByHotelId(int hotelId){
-        return roomDAO.getRoomsByHotelId(hotelId);
+    //Get Rooms By Hotel Id
+    public List<RoomDTO> getRoomsByHotelId(int hotelId){
+        return roomDAO.getRoomsByHotelId(hotelId).stream()
+                .map(this::convertToDTO).toList();
     }
 
+    private RoomDTO convertToDTO(Room room) { return new RoomDTO(room); }
 }

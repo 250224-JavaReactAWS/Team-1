@@ -52,7 +52,7 @@ public class UserController {
     @PostMapping("/favorites/{hotelId}")
     public ResponseEntity<String>
         addHotelToFavorites(HttpSession session, @PathVariable int hotelId) {
-            
+
         String roleStr = (String) session.getAttribute("role");
         if (roleStr == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not logged in.");
