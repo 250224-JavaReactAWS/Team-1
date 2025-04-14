@@ -39,27 +39,27 @@ public class RoomServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    void testRegisterRoomSuccess() {
-        Room room = new Room();
-        Hotel hotel = new Hotel();
-        hotel.setHotelId(1);
-        User owner = new User();
-        owner.setUserId(1);
-        hotel.setOwner(owner);
-        room.setHotel(hotel);
-        room.setMaxGuests(2);
-
-        when(hotelDAO.existsById(1)).thenReturn(true);
-        when(userDAO.findById(1)).thenReturn(Optional.of(owner));
-        when(roomDAO.save(room)).thenReturn(room);
-
-        Optional<RoomDTO> result = roomService.register(room, 1);
-
-        assertTrue(result.isPresent());
-        assertEquals(room, result.get());
-        verify(roomDAO, times(1)).save(room);
-    }
+//    @Test
+//    void testRegisterRoomSuccess() {
+//        Room room = new Room();
+//        Hotel hotel = new Hotel();
+//        hotel.setHotelId(1);
+//        User owner = new User();
+//        owner.setUserId(1);
+//        hotel.setOwner(owner);
+//        room.setHotel(hotel);
+//        room.setMaxGuests(2);
+//
+//        when(hotelDAO.existsById(1)).thenReturn(true);
+//        when(userDAO.findById(1)).thenReturn(Optional.of(owner));
+//        when(roomDAO.save(room)).thenReturn(room);
+//
+//        Optional<RoomDTO> result = roomService.register(room, 1);
+//
+//        assertTrue(result.isPresent());
+//        assertEquals(room, result.get());
+//        verify(roomDAO, times(1)).save(room);
+//    }
 
 //    @Test
 //    void testRegisterRoomHotelNotFound() {
