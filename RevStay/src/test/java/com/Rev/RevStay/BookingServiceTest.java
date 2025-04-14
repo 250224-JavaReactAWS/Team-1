@@ -1,5 +1,6 @@
 package com.Rev.RevStay;
 
+import com.Rev.RevStay.DTOS.BookingDTO;
 import com.Rev.RevStay.exceptions.GenericException;
 import com.Rev.RevStay.models.Booking;
 import com.Rev.RevStay.models.BookingStatus;
@@ -62,7 +63,7 @@ import static org.mockito.Mockito.*;
             when(bookingDAO.isRoomAvailable(anyInt(), any(), any(), anyInt())).thenReturn(true);
             when(bookingDAO.save(any(Booking.class))).thenReturn(booking);
 
-            Optional<Booking> result = bookingService.makeReservation(booking);
+            Optional<BookingDTO> result = bookingService.makeReservation(booking, 1);
 
             assertTrue(result.isPresent());
             assertEquals(booking, result.get());
@@ -73,7 +74,7 @@ import static org.mockito.Mockito.*;
         public void testMakeReservation_InvalidDetails() {
             booking.setGuests(0);
 
-            assertThrows(IllegalArgumentException.class, () -> bookingService.makeReservation(booking));
+            assertThrows(IllegalArgumentException.class, () -> bookingService.makeReservation(booking, 1));
             verify(bookingDAO, never()).save(any(Booking.class));
         }
 
@@ -81,7 +82,7 @@ import static org.mockito.Mockito.*;
         public void testMakeReservation_RoomNotAvailable() {
             when(bookingDAO.isRoomAvailable(anyInt(), any(), any(), anyInt())).thenReturn(false);
 
-            assertThrows(IllegalStateException.class, () -> bookingService.makeReservation(booking));
+            assertThrows(IllegalStateException.class, () -> bookingService.makeReservation(booking, 1));
             verify(bookingDAO, never()).save(any(Booking.class));
         }
 
@@ -96,7 +97,7 @@ import static org.mockito.Mockito.*;
             when(bookingDAO.findById(bookingId)).thenReturn(Optional.of(booking));
             when(bookingDAO.save(any(Booking.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-            Booking updated = bookingService.updateBookingStatus(bookingId, BookingStatus.CANCELLED, userId);
+            BookingDTO updated = bookingService.updateBookingStatus(bookingId, BookingStatus.CANCELLED, userId);
 
             assertNotNull(updated);
             assertEquals(BookingStatus.CANCELLED, updated.getStatus());
@@ -117,7 +118,7 @@ import static org.mockito.Mockito.*;
             when(bookingDAO.findById(bookingId)).thenReturn(Optional.of(booking));
             when(bookingDAO.save(any(Booking.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-            Booking updated = bookingService.updateBookingStatus(bookingId, BookingStatus.ACCEPTED, ownerId);
+            BookingDTO updated = bookingService.updateBookingStatus(bookingId, BookingStatus.ACCEPTED, ownerId);
 
             assertNotNull(updated);
             assertEquals(BookingStatus.ACCEPTED, updated.getStatus());

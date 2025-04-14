@@ -1,5 +1,6 @@
 package com.Rev.RevStay;
 
+import com.Rev.RevStay.DTOS.PaymentDTO;
 import com.Rev.RevStay.exceptions.GenericException;
 import com.Rev.RevStay.models.*;
 import com.Rev.RevStay.repos.BookingDAO;
@@ -40,7 +41,7 @@ class PaymentServiceTest {
         List<Payment> mockPayments = List.of(new Payment());
         when(paymentDAO.getPaymentsByUserId(userId)).thenReturn(mockPayments);
 
-        List<Payment> payments = paymentService.getPaymentsByUserId(userId);
+        List<PaymentDTO> payments = paymentService.getPaymentsByUserId(userId);
 
         assertEquals(mockPayments, payments);
         verify(paymentDAO, times(1)).getPaymentsByUserId(userId);
@@ -52,7 +53,7 @@ class PaymentServiceTest {
         List<Payment> mockPayments = List.of(new Payment());
         when(paymentDAO.getPaymentsByHotelId(hotelId)).thenReturn(mockPayments);
 
-        List<Payment> payments = paymentService.getPaymentsByHotelId(hotelId);
+        List<PaymentDTO> payments = paymentService.getPaymentsByHotelId(hotelId);
 
         assertEquals(mockPayments, payments);
         verify(paymentDAO, times(1)).getPaymentsByHotelId(hotelId);
@@ -77,7 +78,7 @@ class PaymentServiceTest {
         when(bookingDAO.findById(bookId)).thenReturn(Optional.of(mockBooking));
         when(paymentDAO.save(any(Payment.class))).thenReturn(mockPayment);
 
-        Optional<Payment> payment = paymentService.registerPayment(mockPayment, userId, bookId);
+        Optional<PaymentDTO> payment = paymentService.registerPayment(mockPayment, userId, bookId);
 
         assertTrue(payment.isPresent());
         assertEquals(mockPayment, payment.get());

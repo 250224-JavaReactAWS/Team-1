@@ -16,12 +16,12 @@ public class Review {
 
     //Relation ManyToOne in references key to users table
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "userId", nullable = false)
     private User user;
 
     //Relation ManyToOne in references key to hotels table
     @ManyToOne
-    @JoinColumn(name = "hotel_id", nullable = false)
+    @JoinColumn(name = "hotelId", nullable = false)
     private Hotel hotel;
 
     @Column(nullable = false)

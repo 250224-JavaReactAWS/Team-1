@@ -1,5 +1,6 @@
 package com.Rev.RevStay;
 
+import com.Rev.RevStay.DTOS.HotelDTO;
 import com.Rev.RevStay.exceptions.GenericException;
 import com.Rev.RevStay.models.Hotel;
 import com.Rev.RevStay.models.User;
@@ -47,7 +48,6 @@ public class FavoriteServiceTest {
 
         hotel = new Hotel();
         hotel.setHotelId(1);
-        hotel.setUsersWhoFavorite(new HashSet<>());
     }
 
     @Test
@@ -58,7 +58,6 @@ public class FavoriteServiceTest {
         userService.addHotelToFavorites(1, 1);
 
         assertTrue(user.getFavoriteHotels().contains(hotel));
-        assertTrue(hotel.getUsersWhoFavorite().contains(user));
         Mockito.verify(userDAO).save(user);
     }
 
@@ -86,7 +85,6 @@ public class FavoriteServiceTest {
     @Test
     void testRemoveHotelFromFavorites_Success() {
         user.getFavoriteHotels().add(hotel);
-        hotel.getUsersWhoFavorite().add(user);
 
         Mockito.when(userDAO.findById(1)).thenReturn(Optional.of(user));
         Mockito.when(hotelDAO.findById(1)).thenReturn(Optional.of(hotel));
@@ -94,7 +92,6 @@ public class FavoriteServiceTest {
         userService.removeHotelFromFavorites(1, 1);
 
         assertFalse(user.getFavoriteHotels().contains(hotel));
-        assertFalse(hotel.getUsersWhoFavorite().contains(user));
         Mockito.verify(userDAO).save(user);
     }
 
@@ -124,7 +121,7 @@ public class FavoriteServiceTest {
         List<Hotel> expectedHotels = List.of(hotel);
         Mockito.when(hotelDAO.findFavoriteHotelsByUserId(1)).thenReturn(expectedHotels);
 
-        List<Hotel> actualHotels = hotelService.findFavoriteHotelsByUserId(1);
+        List<HotelDTO> actualHotels = hotelService.findFavoriteHotelsByUserId(1);
 
         assertEquals(expectedHotels, actualHotels);
         Mockito.verify(hotelDAO).findFavoriteHotelsByUserId(1);

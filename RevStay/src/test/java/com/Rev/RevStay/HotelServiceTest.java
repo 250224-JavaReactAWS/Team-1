@@ -1,5 +1,6 @@
 package com.Rev.RevStay;
 
+import com.Rev.RevStay.DTOS.HotelDTO;
 import com.Rev.RevStay.exceptions.GenericException;
 import com.Rev.RevStay.models.Hotel;
 import com.Rev.RevStay.models.User;
@@ -39,7 +40,7 @@ public class HotelServiceTest {
         hotels.add(new Hotel());
         when(hotelDAO.findAll()).thenReturn(hotels);
 
-        List<Hotel> result = hotelService.getAllHotels();
+        List<HotelDTO> result = hotelService.getAllHotels();
 
         assertEquals(1, result.size());
         verify(hotelDAO, times(1)).findAll();
@@ -50,7 +51,7 @@ public class HotelServiceTest {
         Hotel hotel = new Hotel();
         when(hotelDAO.findById(1)).thenReturn(Optional.of(hotel));
 
-        Optional<Hotel> result = hotelService.getById(1);
+        Optional<HotelDTO> result = hotelService.getById(1);
 
         assertTrue(result.isPresent());
         assertEquals(hotel, result.get());
@@ -69,7 +70,7 @@ public class HotelServiceTest {
         when(userDAO.findById(1)).thenReturn(Optional.of(owner));
         when(hotelDAO.save(updatedHotel)).thenReturn(updatedHotel);
 
-        Hotel result = hotelService.updateHotel(1, 1, updatedHotel);
+        HotelDTO result = hotelService.updateHotel(1, 1, updatedHotel);
 
         assertEquals(updatedHotel, result);
         verify(hotelDAO, times(1)).save(updatedHotel);
@@ -129,7 +130,7 @@ public class HotelServiceTest {
         when(userDAO.findById(1)).thenReturn(Optional.of(owner));
         when(hotelDAO.save(hotel)).thenReturn(hotel);
 
-        Optional<Hotel> result = hotelService.createHotel(hotel, 1);
+        Optional<HotelDTO> result = hotelService.createHotel(hotel, 1);
 
         assertTrue(result.isPresent());
         assertEquals(hotel, result.get());
