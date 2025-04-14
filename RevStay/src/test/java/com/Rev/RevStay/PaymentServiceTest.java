@@ -30,102 +30,99 @@ class PaymentServiceTest {
     @InjectMocks
     private PaymentService paymentService;
 
+    private User user;
+    private Hotel hotel;
+    private Room room;
+    private Booking booking;
+    private Payment payment;
+
     @BeforeEach
     void setUp() {
+        user = new User();
+        user.setUserId(1);
+
+        hotel = new Hotel();
+        hotel.setHotelId(10);
+        hotel.setOwner(user);
+
+        room = new Room();
+        room.setRoomId(100);
+        room.setPrice(BigDecimal.valueOf(200));
+
+        booking = new Booking();
+        booking.setBookId(20);
+        booking.setUser(user);
+        booking.setHotel(hotel);
+        booking.setRoom(room);
+        booking.setCheckIn(LocalDateTime.now());
+        booking.setCheckOut(LocalDateTime.now().plusDays(2));
+
+        payment = new Payment();
+        payment.setPaymentId(1);
+        payment.setBooking(booking);
+        payment.setUser(user);
         MockitoAnnotations.openMocks(this);
     }
-//
-//    @Test
-//    void testGetPaymentsByUserId() {
-//        int userId = 1;
-//        List<Payment> mockPayments = List.of(new Payment());
-//        when(paymentDAO.getPaymentsByUserId(userId)).thenReturn(mockPayments);
-//
-//        List<PaymentDTO> payments = paymentService.getPaymentsByUserId(userId);
-//
-//        assertEquals(mockPayments, payments);
-//        verify(paymentDAO, times(1)).getPaymentsByUserId(userId);
-//    }
-//
-//    @Test
-//    void testGetPaymentsByHotelId() {
-//        int hotelId = 1;
-//        List<Payment> mockPayments = List.of(new Payment());
-//        when(paymentDAO.getPaymentsByHotelId(hotelId)).thenReturn(mockPayments);
-//
-//        List<PaymentDTO> payments = paymentService.getPaymentsByHotelId(hotelId);
-//
-//        assertEquals(mockPayments, payments);
-//        verify(paymentDAO, times(1)).getPaymentsByHotelId(hotelId);
-//    }
-//
-//    @Test
-//    void testRegisterPayment_Success() {
-//        int userId = 1;
-//        int bookId = 1;
-//        Booking mockBooking = new Booking();
-//        Room mockRoom = new Room();
-//        mockRoom.setPrice(BigDecimal.valueOf(100)); // Ensure Room class has setPrice method
-//        mockBooking.setRoom(mockRoom); // Ensure Booking class has setRoom method
-//
-//        User mockUser = new User();
-//        mockUser.setUserId(userId); // Ensure User class has setId method
-//        mockBooking.setUser(mockUser); // Ensure Booking class has setUser method
-//        mockBooking.setCheckIn(LocalDateTime.now());
-//        mockBooking.setCheckOut(LocalDateTime.now().plusDays(2));
-//        Payment mockPayment = new Payment();
-//
-//        when(bookingDAO.findById(bookId)).thenReturn(Optional.of(mockBooking));
-//        when(paymentDAO.save(any(Payment.class))).thenReturn(mockPayment);
-//
-//        Optional<PaymentDTO> payment = paymentService.registerPayment(mockPayment, userId, bookId);
-//
-//        assertTrue(payment.isPresent());
-//        assertEquals(mockPayment, payment.get());
-//        verify(bookingDAO, times(1)).findById(bookId);
-//        verify(paymentDAO, times(1)).save(mockPayment);
-//    }
-//
-//    @Test
-//    void testRegisterPayment_BookingNotFound() {
-//        int userId = 1;
-//        int bookId = 1;
-//        Payment mockPayment = new Payment();
-//
-//        when(bookingDAO.findById(bookId)).thenReturn(Optional.empty());
-//
-//        assertThrows(GenericException.class, () -> paymentService.registerPayment(mockPayment, userId, bookId));
-//        verify(bookingDAO, times(1)).findById(bookId);
-//        verify(paymentDAO, never()).save(any(Payment.class));
-//    }
 
-//    @Test
-//    void testUpdatePaymentStatus_Success() {
-//        int paymentId = 1;
-//        PaymentStatus newStatus = PaymentStatus.COMPLETED;
-//        Payment mockPayment = new Payment();
-//        mockPayment.setPaymentStatus(PaymentStatus.PENDING);
-//
-//        when(paymentDAO.findById(paymentId)).thenReturn(Optional.of(mockPayment));
-//        when(paymentDAO.save(any(Payment.class))).thenReturn(mockPayment);
-//
-//        Optional<Payment> updatedPayment = paymentService.updatePaymentStatus(paymentId, newStatus);
-//
-//        assertTrue(updatedPayment.isPresent());
-//        assertEquals(newStatus, updatedPayment.get().getPaymentStatus());
-//        verify(paymentDAO, times(1)).findById(paymentId);
-//        verify(paymentDAO, times(1)).save(mockPayment);
-//    }
-//
-//    @Test
-//    void testUpdatePaymentStatus_PaymentNotFound() {
-//        int paymentId = 1;
-//        PaymentStatus newStatus = PaymentStatus.COMPLETED;
-//
-//        when(paymentDAO.findById(paymentId)).thenReturn(Optional.empty());
-//
-//        assertThrows(GenericException.class, () -> paymentService.updatePaymentStatus(paymentId, newStatus));
-//        verify(paymentDAO, times(1)).findById(paymentId);
-//        verify(paymentDAO, never()).save(any(Payment.class));
-//    }
+    @Test
+    void testGetPaymentsByUserId() {
+
+        when(paymentDAO.getPaymentsByUserId(1)).thenReturn(List.of(payment));
+
+        List<PaymentDTO> result = paymentService.getPaymentsByUserId(1);
+
+        assertEquals(1, result.size());
+        assertEquals(payment.getPaymentId(), result.get(0).getPaymentId());
+    }
+
+    @Test
+    void testGetPaymentsByHotelId() {
+        when(paymentDAO.getPaymentsByHotelId(10)).thenReturn(List.of(payment));
+
+        List<PaymentDTO> result = paymentService.getPaymentsByHotelId(10);
+
+        assertEquals(1, result.size());
+    }
+
+
+    @Test
+    void testRegisterPayment_Success() {
+        when(bookingDAO.findById(20)).thenReturn(Optional.of(booking));
+        when(paymentDAO.save(any(Payment.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Optional<PaymentDTO> result = paymentService.registerPayment(payment, 1, 20);
+
+        assertTrue(result.isPresent());
+        assertEquals(PaymentStatus.PENDING, result.get().getPaymentStatus());
+        assertEquals(BigDecimal.valueOf(400), result.get().getAmount()); // 2 noches x 200
+    }
+
+    @Test
+    void testRegisterPayment_BookingNotFound() {
+        when(bookingDAO.findById(20)).thenReturn(Optional.empty());
+
+        assertThrows(GenericException.class, () -> paymentService.registerPayment(payment, 1, 20));
+    }
+
+    @Test
+    void testUpdatePaymentStatus_Success() {
+        payment.setPaymentStatus(PaymentStatus.PENDING);
+        when(paymentDAO.findById(1)).thenReturn(Optional.of(payment));
+        when(bookingDAO.findById(20)).thenReturn(Optional.of(booking));
+        when(paymentDAO.save(any(Payment.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Optional<PaymentDTO> result = paymentService.updatePaymentStatus(1, PaymentStatus.COMPLETED, 1, "OWNER", 20);
+
+        assertTrue(result.isPresent());
+        assertEquals(PaymentStatus.COMPLETED, result.get().getPaymentStatus());
+    }
+
+    @Test
+    void testUpdatePaymentStatus_PaymentNotFound() {
+        when(paymentDAO.findById(1)).thenReturn(Optional.empty());
+
+        assertThrows(GenericException.class,
+                () -> paymentService.updatePaymentStatus(1, PaymentStatus.COMPLETED, 1, "OWNER", 20));
+    }
+
 }
