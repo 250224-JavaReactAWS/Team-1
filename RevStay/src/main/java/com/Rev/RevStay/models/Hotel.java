@@ -43,6 +43,10 @@ public class Hotel {
     public Hotel() {
     }
 
+    public Hotel(User user) {
+        //TODO Auto-generated constructor stub
+    }
+
     public int getHotelId() {
         return hotelId;
     }

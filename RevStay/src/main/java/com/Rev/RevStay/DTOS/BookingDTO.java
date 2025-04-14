@@ -7,6 +7,7 @@ import com.Rev.RevStay.models.User;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class BookingDTO {
 
@@ -114,5 +115,30 @@ public class BookingDTO {
     public void setRoomType(String roomType) {
         this.roomType = roomType;
     }
+    // Fields and constructor
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BookingDTO that = (BookingDTO) o;
+        return Objects.equals(bookingId, that.bookingId) &&
+               Objects.equals(checkIn, that.checkIn) &&
+               Objects.equals(checkOut, that.checkOut) &&
+               guests == that.guests &&
+               Objects.equals(status, that.status) &&
+               hotelId == that.hotelId &&
+               Objects.equals(hotelName, that.hotelName) &&
+               roomId == that.roomId &&
+               Objects.equals(roomType, that.roomType) &&
+               Objects.equals(userEmail, that.userEmail);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(bookingId, checkIn, checkOut, guests, status, hotelId, hotelName, roomId, roomType, userEmail);
+    }
+
+
 }
 
