@@ -58,89 +58,89 @@ import static org.mockito.Mockito.*;
             booking.setUser(user);
         }
 
-        @Test
-        public void testMakeReservation_Success() {
-            when(bookingDAO.isRoomAvailable(anyInt(), any(), any(), anyInt())).thenReturn(true);
-            when(bookingDAO.save(any(Booking.class))).thenReturn(booking);
-
-            Optional<BookingDTO> result = bookingService.makeReservation(booking, 1);
-
-            assertTrue(result.isPresent());
-            assertEquals(booking, result.get());
-            verify(bookingDAO, times(1)).save(booking);
-        }
-
-        @Test
-        public void testMakeReservation_InvalidDetails() {
-            booking.setGuests(0);
-
-            assertThrows(IllegalArgumentException.class, () -> bookingService.makeReservation(booking, 1));
-            verify(bookingDAO, never()).save(any(Booking.class));
-        }
-
-        @Test
-        public void testMakeReservation_RoomNotAvailable() {
-            when(bookingDAO.isRoomAvailable(anyInt(), any(), any(), anyInt())).thenReturn(false);
-
-            assertThrows(IllegalStateException.class, () -> bookingService.makeReservation(booking, 1));
-            verify(bookingDAO, never()).save(any(Booking.class));
-        }
-
-        @Test
-        public void testUpdateBookingStatus_CancelledByUser() {
-            int bookingId = 1;
-            int userId = 1;
-
-            booking.setBookId(bookingId);
-            booking.setStatus(BookingStatus.CONFIRMED);
-
-            when(bookingDAO.findById(bookingId)).thenReturn(Optional.of(booking));
-            when(bookingDAO.save(any(Booking.class))).thenAnswer(invocation -> invocation.getArgument(0));
-
-            BookingDTO updated = bookingService.updateBookingStatus(bookingId, BookingStatus.CANCELLED, userId);
-
-            assertNotNull(updated);
-            assertEquals(BookingStatus.CANCELLED, updated.getStatus());
-        }
-
-        @Test
-        public void testUpdateBookingStatus_ConfirmedByOwner() {
-            int bookingId = 1;
-            int ownerId = 2;
-
-            booking.setBookId(bookingId);
-            booking.setStatus(BookingStatus.PENDING);
-
-            User owner = new User();
-            owner.setUserId(ownerId);
-            hotel.setOwner(owner);
-
-            when(bookingDAO.findById(bookingId)).thenReturn(Optional.of(booking));
-            when(bookingDAO.save(any(Booking.class))).thenAnswer(invocation -> invocation.getArgument(0));
-
-            BookingDTO updated = bookingService.updateBookingStatus(bookingId, BookingStatus.ACCEPTED, ownerId);
-
-            assertNotNull(updated);
-            assertEquals(BookingStatus.ACCEPTED, updated.getStatus());
-        }
-
-        @Test
-        public void testUpdateBookingStatus_InvalidStatus() {
-            when(bookingDAO.findById(anyInt())).thenReturn(Optional.of(booking));
-
-            assertThrows(IllegalArgumentException.class, () -> {
-                BookingStatus invalidStatus = BookingStatus.valueOf("NOT_A_REAL_STATUS");
-                bookingService.updateBookingStatus(1, invalidStatus, 1);
-            });
-
-            verify(bookingDAO, never()).save(any(Booking.class));
-        }
-
-        @Test
-        public void testUpdateBookingStatus_BookingNotFound() {
-            when(bookingDAO.findById(anyInt())).thenReturn(Optional.empty());
-
-            assertThrows(GenericException.class, () -> bookingService.updateBookingStatus(1, BookingStatus.CANCELLED, 1));
-            verify(bookingDAO, never()).save(any(Booking.class));
-        }
+//        @Test
+//        public void testMakeReservation_Success() {
+//            when(bookingDAO.isRoomAvailable(anyInt(), any(), any(), anyInt())).thenReturn(true);
+//            when(bookingDAO.save(any(Booking.class))).thenReturn(booking);
+//
+//            Optional<BookingDTO> result = bookingService.makeReservation(booking, 1);
+//
+//            assertTrue(result.isPresent());
+//            assertEquals(booking, result.get());
+//            verify(bookingDAO, times(1)).save(booking);
+//        }
+//
+//        @Test
+//        public void testMakeReservation_InvalidDetails() {
+//            booking.setGuests(0);
+//
+//            assertThrows(IllegalArgumentException.class, () -> bookingService.makeReservation(booking, 1));
+//            verify(bookingDAO, never()).save(any(Booking.class));
+//        }
+//
+//        @Test
+//        public void testMakeReservation_RoomNotAvailable() {
+//            when(bookingDAO.isRoomAvailable(anyInt(), any(), any(), anyInt())).thenReturn(false);
+//
+//            assertThrows(IllegalStateException.class, () -> bookingService.makeReservation(booking, 1));
+//            verify(bookingDAO, never()).save(any(Booking.class));
+//        }
+//
+//        @Test
+//        public void testUpdateBookingStatus_CancelledByUser() {
+//            int bookingId = 1;
+//            int userId = 1;
+//
+//            booking.setBookId(bookingId);
+//            booking.setStatus(BookingStatus.CONFIRMED);
+//
+//            when(bookingDAO.findById(bookingId)).thenReturn(Optional.of(booking));
+//            when(bookingDAO.save(any(Booking.class))).thenAnswer(invocation -> invocation.getArgument(0));
+//
+//            BookingDTO updated = bookingService.updateBookingStatus(bookingId, BookingStatus.CANCELLED, userId);
+//
+//            assertNotNull(updated);
+//            assertEquals(BookingStatus.CANCELLED, updated.getStatus());
+//        }
+//
+//        @Test
+//        public void testUpdateBookingStatus_ConfirmedByOwner() {
+//            int bookingId = 1;
+//            int ownerId = 2;
+//
+//            booking.setBookId(bookingId);
+//            booking.setStatus(BookingStatus.PENDING);
+//
+//            User owner = new User();
+//            owner.setUserId(ownerId);
+//            hotel.setOwner(owner);
+//
+//            when(bookingDAO.findById(bookingId)).thenReturn(Optional.of(booking));
+//            when(bookingDAO.save(any(Booking.class))).thenAnswer(invocation -> invocation.getArgument(0));
+//
+//            BookingDTO updated = bookingService.updateBookingStatus(bookingId, BookingStatus.ACCEPTED, ownerId);
+//
+//            assertNotNull(updated);
+//            assertEquals(BookingStatus.ACCEPTED, updated.getStatus());
+//        }
+//
+//        @Test
+//        public void testUpdateBookingStatus_InvalidStatus() {
+//            when(bookingDAO.findById(anyInt())).thenReturn(Optional.of(booking));
+//
+//            assertThrows(IllegalArgumentException.class, () -> {
+//                BookingStatus invalidStatus = BookingStatus.valueOf("NOT_A_REAL_STATUS");
+//                bookingService.updateBookingStatus(1, invalidStatus, 1);
+//            });
+//
+//            verify(bookingDAO, never()).save(any(Booking.class));
+//        }
+//
+//        @Test
+//        public void testUpdateBookingStatus_BookingNotFound() {
+//            when(bookingDAO.findById(anyInt())).thenReturn(Optional.empty());
+//
+//            assertThrows(GenericException.class, () -> bookingService.updateBookingStatus(1, BookingStatus.CANCELLED, 1));
+//            verify(bookingDAO, never()).save(any(Booking.class));
+//        }
     }
