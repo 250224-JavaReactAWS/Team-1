@@ -1,5 +1,6 @@
 package com.Rev.RevStay;
 
+import com.Rev.RevStay.DTOS.ReviewDTO;
 import com.Rev.RevStay.exceptions.GenericException;
 import com.Rev.RevStay.models.Hotel;
 import com.Rev.RevStay.models.Review;
@@ -46,10 +47,10 @@ class ReviewServiceTest {
 
         when(reviewDao.findById(1)).thenReturn(Optional.of(review));
 
-        Optional<Review> result = reviewService.reviewById(1);
+        Optional<ReviewDTO> result = reviewService.reviewById(1);
 
         assertTrue(result.isPresent());
-        assertEquals(1, result.get().getReviewId());
+        assertEquals(1, result.get().getId());
         verify(reviewDao, times(1)).findById(1);
     }
 
@@ -60,10 +61,10 @@ class ReviewServiceTest {
 
         when(reviewDao.getReviewsByHotelId(1)).thenReturn(List.of(review));
 
-        List<Review> result = reviewService.getReviewsByHotelId(1);
+        List<ReviewDTO> result = reviewService.getReviewsByHotelId(1);
 
         assertEquals(1, result.size());
-        assertEquals(1, result.get(0).getReviewId());
+        assertEquals(1, result.get(0).getId());
         verify(reviewDao, times(1)).getReviewsByHotelId(1);
     }
 
@@ -74,10 +75,10 @@ class ReviewServiceTest {
 
         when(reviewDao.getReviewsByUserId(1)).thenReturn(List.of(review));
 
-        List<Review> result = reviewService.getReviewsByUserId(1);
+        List<ReviewDTO> result = reviewService.getReviewsByUserId(1);
 
         assertEquals(1, result.size());
-        assertEquals(1, result.get(0).getReviewId());
+        assertEquals(1, result.get(0).getId());
         verify(reviewDao, times(1)).getReviewsByUserId(1);
     }
 
@@ -88,10 +89,10 @@ class ReviewServiceTest {
 
         when(reviewDao.getReviewByHotelIdAndUserId(1, 1)).thenReturn(review);
 
-        Optional<Review> result = reviewService.getReviewByUserAndHotelId(1, 1);
+        Optional<ReviewDTO> result = reviewService.getReviewByUserAndHotelId(1, 1);
 
         assertTrue(result.isPresent());
-        assertEquals(1, result.get().getReviewId());
+        assertEquals(1, result.get().getId());
         verify(reviewDao, times(1)).getReviewByHotelIdAndUserId(1, 1);
     }
 
@@ -105,7 +106,7 @@ class ReviewServiceTest {
         when(hotelDAO.findById(1)).thenReturn(Optional.of(hotel));
         when(reviewDao.save(any(Review.class))).thenReturn(review);
 
-        Optional<Review> result = reviewService.registerReview(review, 1, 1);
+        Optional<ReviewDTO> result = reviewService.registerReview(review, 1, 1);
 
         assertTrue(result.isPresent());
         verify(userDAO, times(1)).findById(1);

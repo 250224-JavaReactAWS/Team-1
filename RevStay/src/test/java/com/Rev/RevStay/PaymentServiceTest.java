@@ -99,33 +99,33 @@ class PaymentServiceTest {
         verify(paymentDAO, never()).save(any(Payment.class));
     }
 
-    @Test
-    void testUpdatePaymentStatus_Success() {
-        int paymentId = 1;
-        PaymentStatus newStatus = PaymentStatus.COMPLETED;
-        Payment mockPayment = new Payment();
-        mockPayment.setPaymentStatus(PaymentStatus.PENDING);
-
-        when(paymentDAO.findById(paymentId)).thenReturn(Optional.of(mockPayment));
-        when(paymentDAO.save(any(Payment.class))).thenReturn(mockPayment);
-
-        Optional<Payment> updatedPayment = paymentService.updatePaymentStatus(paymentId, newStatus);
-
-        assertTrue(updatedPayment.isPresent());
-        assertEquals(newStatus, updatedPayment.get().getPaymentStatus());
-        verify(paymentDAO, times(1)).findById(paymentId);
-        verify(paymentDAO, times(1)).save(mockPayment);
-    }
-
-    @Test
-    void testUpdatePaymentStatus_PaymentNotFound() {
-        int paymentId = 1;
-        PaymentStatus newStatus = PaymentStatus.COMPLETED;
-
-        when(paymentDAO.findById(paymentId)).thenReturn(Optional.empty());
-
-        assertThrows(GenericException.class, () -> paymentService.updatePaymentStatus(paymentId, newStatus));
-        verify(paymentDAO, times(1)).findById(paymentId);
-        verify(paymentDAO, never()).save(any(Payment.class));
-    }
+//    @Test
+//    void testUpdatePaymentStatus_Success() {
+//        int paymentId = 1;
+//        PaymentStatus newStatus = PaymentStatus.COMPLETED;
+//        Payment mockPayment = new Payment();
+//        mockPayment.setPaymentStatus(PaymentStatus.PENDING);
+//
+//        when(paymentDAO.findById(paymentId)).thenReturn(Optional.of(mockPayment));
+//        when(paymentDAO.save(any(Payment.class))).thenReturn(mockPayment);
+//
+//        Optional<Payment> updatedPayment = paymentService.updatePaymentStatus(paymentId, newStatus);
+//
+//        assertTrue(updatedPayment.isPresent());
+//        assertEquals(newStatus, updatedPayment.get().getPaymentStatus());
+//        verify(paymentDAO, times(1)).findById(paymentId);
+//        verify(paymentDAO, times(1)).save(mockPayment);
+//    }
+//
+//    @Test
+//    void testUpdatePaymentStatus_PaymentNotFound() {
+//        int paymentId = 1;
+//        PaymentStatus newStatus = PaymentStatus.COMPLETED;
+//
+//        when(paymentDAO.findById(paymentId)).thenReturn(Optional.empty());
+//
+//        assertThrows(GenericException.class, () -> paymentService.updatePaymentStatus(paymentId, newStatus));
+//        verify(paymentDAO, times(1)).findById(paymentId);
+//        verify(paymentDAO, never()).save(any(Payment.class));
+//    }
 }

@@ -1,5 +1,6 @@
 package com.Rev.RevStay;
 
+import com.Rev.RevStay.DTOS.RoomDTO;
 import com.Rev.RevStay.exceptions.GenericException;
 import com.Rev.RevStay.models.Hotel;
 import com.Rev.RevStay.models.Room;
@@ -53,7 +54,7 @@ public class RoomServiceTest {
         when(userDAO.findById(1)).thenReturn(Optional.of(owner));
         when(roomDAO.save(room)).thenReturn(room);
 
-        Optional<Room> result = roomService.register(room, 1);
+        Optional<RoomDTO> result = roomService.register(room, 1);
 
         assertTrue(result.isPresent());
         assertEquals(room, result.get());
@@ -127,7 +128,7 @@ public class RoomServiceTest {
         when(userDAO.findById(1)).thenReturn(Optional.of(owner));
         when(roomDAO.save(existingRoom)).thenReturn(existingRoom);
 
-        Optional<Room> result = roomService.updateRoom(1, updatedRoom, 1);
+        Optional<RoomDTO> result = roomService.updateRoom(1, updatedRoom, 1);
 
         assertTrue(result.isPresent());
         assertEquals(BigDecimal.valueOf(150), result.get().getPrice());
