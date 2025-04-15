@@ -94,7 +94,7 @@ class PaymentServiceTest {
 
         assertTrue(result.isPresent());
         assertEquals(PaymentStatus.PENDING, result.get().getPaymentStatus());
-        assertEquals(BigDecimal.valueOf(400), result.get().getAmount()); // 2 noches x 200
+        assertEquals(BigDecimal.valueOf(400), result.get().getAmount());
     }
 
     @Test
