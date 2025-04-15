@@ -150,7 +150,7 @@ function Register() {
         left: 0,
         width: "100%",
         height: "100%",
-        background: "linear-gradient(135deg, #3f51b5 0%, #e91e63 100%)",
+        background: "linear-gradient(135deg, #3f51b5 0%,rgb(255, 81, 0) 100%)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",

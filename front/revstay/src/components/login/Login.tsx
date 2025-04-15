@@ -130,7 +130,7 @@ function Login() {
           left: 0,
           width: '100%',
           height: '100%',
-          background: 'linear-gradient(135deg, #3f51b5 0%, #e91e63 100%)',
+          background: 'linear-gradient(135deg, #3f51b5 0%,rgb(255, 81, 0) 100%)',
           zIndex: -1,
         }}
       />
@@ -218,7 +218,8 @@ function Login() {
                     type="submit"
                     variant="contained"
                     fullWidth
-                    sx={{ backgroundColor: '#4CAF50', fontWeight: 'bold' }}
+                    color="primary"
+                    sx={{ fontWeight: 'bold' }}
                   >
                     Login
                   </Button>
