@@ -6,7 +6,7 @@ import { authContext } from "../../App"
 import { useNavigate } from "react-router"
 import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
-import Grid from '@mui/material/Grid';
+import  Grid  from '@mui/material/Grid';
 
 
 function Login() {
@@ -120,6 +120,7 @@ function Login() {
   //     </form>
   //   </Box>
   // )
+  
   return (
     <>
        <Box
@@ -127,8 +128,8 @@ function Login() {
           position: 'fixed',
           top: 0,
           left: 0,
-          width: '100vw',
-          height: '100vh',
+          width: '100%',
+          height: '100%',
           background: 'linear-gradient(135deg, #3f51b5 0%, #e91e63 100%)',
           zIndex: -1,
         }}
@@ -136,8 +137,8 @@ function Login() {
       <Box
         sx={{
           position: 'relative',
-          width: '100vw',
-          height: '100vh',
+          width: '100%',
+          height: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -146,17 +147,14 @@ function Login() {
         <Paper
         elevation={6}
         sx={{
-          width: { xs: '90%', md: '35%' },
+          width: { xs: '90%', md: '90vh' },
           borderRadius: 4,
           overflow: 'hidden',
           zIndex: 1, // Para que el login esté por delante
         }}
       >
-          <Grid container>
-          <Grid 
-            item
-            xs={12}
-            md={6}
+          <Grid container sx={{minHeight:'60vh'}}>
+          <Grid size={4}
             sx={{
               backgroundColor: '#f5f5f5',
               display: 'flex',
@@ -169,11 +167,11 @@ function Login() {
                 component="img"
                 src="src\assets\react.svg" 
                 alt="Logo"
-                sx={{ width: '100%', maxWidth: 180}}
+                sx={{ width: '50%', maxWidth: 180}}
               />
             </Grid>
 
-            <Grid item xs={12} md={6} sx={{ p: 5 }}>
+            <Grid size={6} sx={{ p: 2, margin:'0 auto', marginTop:'5%' }}>
               <form onSubmit={submitForm}>
                 <Stack spacing={3}>
                   <Typography variant="h4" fontWeight="bold" textAlign="center">
@@ -232,6 +230,5 @@ function Login() {
       </Box>
     </>
       );
-    
 }
 export default Login

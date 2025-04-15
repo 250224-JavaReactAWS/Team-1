@@ -63,7 +63,7 @@ function Register() {
       );
 
       console.log(res);
-      roleReference?.setRole(res.data.role);
+      roleReference?.setRole(res.data.userType);
       navigate("/login");
     } catch (error) {
       setError(true);
@@ -148,8 +148,8 @@ function Register() {
         position: "fixed",
         top: '5%',
         left: 0,
-        width: "100vw",
-        height: "100vh",
+        width: "100%",
+        height: "100%",
         background: "linear-gradient(135deg, #3f51b5 0%, #e91e63 100%)",
         display: "flex",
         alignItems: "center",
@@ -161,8 +161,8 @@ function Register() {
     <Box
         sx={{
           position: 'relative',
-          width: '100vw',
-          height: '100vh',
+          width: '100%',
+          height: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -172,7 +172,7 @@ function Register() {
         elevation={6}
         sx={{
           
-          width: { xs: "95%", md: "33%" },
+          width: { xs: "96%", md: "90vh" },
           height: "min(500px, 80vh)",
           borderRadius: 4,
           overflow: "hidden",
@@ -181,9 +181,7 @@ function Register() {
         <Grid container sx={{ height: "100%" }}>
           {/* Logo Side */}
           <Grid
-            item
-            xs={12}
-            md={6}
+            size={4}
             sx={{
               backgroundColor: "#f5f5f5",
               display: "flex",
@@ -193,20 +191,19 @@ function Register() {
               p: 4,
             }}
           >
-            <Box component="img" src={logo} alt="Logo" sx={{ width: '100%', maxWidth: 180 }} />
+            <Box component="img" src={logo} alt="Logo" sx={{ width: '50%', maxWidth: 180 }} />
           </Grid>
 
           {/* Form Side */}
           <Grid
-            item
-            xs={12}
-            md={6}
+            size={6}
             sx={{
+              margin: '0 auto',
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               height: "100%",
-              p: 4,
+              p: 2,
             }}
           >
             <Box
