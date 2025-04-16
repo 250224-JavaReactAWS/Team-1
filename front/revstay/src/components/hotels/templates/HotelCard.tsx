@@ -11,7 +11,7 @@ import {
   import FavoriteIcon from '@mui/icons-material/Favorite';
   import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
   import { useContext, useState } from 'react';
-  import { authContext } from '../../App';
+  import { authContext } from '../../../App';
   import { useNavigate } from 'react-router-dom';
   import HotelImageGallery from './HoltelImageGalery';
 
@@ -82,7 +82,7 @@ import {
             {hotel.description}
           </Typography>
           <Typography variant="subtitle2" color="primary">
-            Price: {hotel.priceRange}
+            Price: {hotel.priceRange} $
           </Typography>
   
           <Box mt={2} mb={1}>
