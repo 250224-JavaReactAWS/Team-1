@@ -37,6 +37,10 @@ public class Hotel {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Room> rooms;
+
+
     //The contraRelation with users for get the favorite table
 
 
@@ -116,7 +120,11 @@ public class Hotel {
         this.amenities = String.join(",", amenitiesList);
     }
 
-    //public Set<User> getUsersWhoFavorite() { return usersWhoFavorited; }
+    public List<Room> getRooms() {
+        return rooms;
+    }
 
-   // public void setUsersWhoFavorite(Set<User> usersWhoFavorited) { this.usersWhoFavorited = usersWhoFavorited; }
+    public void setRooms(List<Room> rooms) {
+        this.rooms = rooms;
+    }
 }

@@ -11,7 +11,7 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int roomId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hotel_id", nullable = false)
     private Hotel hotel;
 
@@ -26,6 +26,7 @@ public class Room {
 
     @Column(nullable = false)
     private int maxGuests;
+
 
     public Room() {}
 

@@ -11,12 +11,11 @@ public class HotelDTO {
     private String amenities;
     private String priceRange;
     private List<String> images;
-    private LocalDateTime createdAt;
     private String ownerEmail;
     private String ownerFullName;
 
     public HotelDTO(int hotelId, String name, String location, String description, String amenities,
-                    String priceRange, List<String> images, LocalDateTime createdAt, String ownerEmail, String ownerFullName) {
+                    String priceRange, List<String> images, String ownerEmail, String ownerFullName) {
         this.hotelId = hotelId;
         this.name = name;
         this.location = location;
@@ -24,7 +23,7 @@ public class HotelDTO {
         this.amenities = amenities;
         this.priceRange = priceRange;
         this.images = images;
-        this.createdAt = createdAt;
+
         this.ownerEmail = ownerEmail;
         this.ownerFullName = ownerFullName;
     }
@@ -83,14 +82,6 @@ public class HotelDTO {
 
     public void setPriceRange(String priceRange) {
         this.priceRange = priceRange;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 
     public String getOwnerEmail() {

@@ -80,7 +80,7 @@ const HotelList: React.FC<Props> = ({ hotels}) => {
 
   return (
     <Box p={4}>
-      <Grid container spacing={3}>
+      <Grid container spacing={3}  justifyContent="center">
         {hotels.map((hotel) => (
           <Grid key={hotel.hotelId} size={4}>
             <HotelCard

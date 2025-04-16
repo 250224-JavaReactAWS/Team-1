@@ -1,6 +1,7 @@
 package com.Rev.RevStay.controllers;
 
 import com.Rev.RevStay.DTOS.HotelDTO;
+import com.Rev.RevStay.DTOS.HotelSearchRequest;
 import com.Rev.RevStay.exceptions.GenericException;
 import com.Rev.RevStay.models.Hotel;
 import com.Rev.RevStay.services.HotelService;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -69,6 +71,12 @@ public class HotelController {
         return ResponseEntity.ok(ownerHotels);
     }
 
+    //get Hotels by amenities
+    @PostMapping("/search")
+    public ResponseEntity<List<HotelDTO>> searchHotels(@RequestBody HotelSearchRequest request) {
+        List<HotelDTO> filteredHotels = hotelService.filterHotels(request);
+        return ResponseEntity.ok(filteredHotels);
+    }
 
     // Update hotel
     @PutMapping("/{hotelId}")

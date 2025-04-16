@@ -28,8 +28,9 @@ const HotelPage: React.FC = () => {
 
 
 
+  
   return (
-    <Container /*sx={{ mt: 4 }}*/>
+    <Container sx={{ mt: 4, width:'100%', height:'100%'  } }>
       <Typography variant="h4" gutterBottom>
         Owner Hotels
       </Typography>
