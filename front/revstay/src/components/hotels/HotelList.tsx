@@ -40,26 +40,26 @@ const HotelList: React.FC<Props> = ({ hotels}) => {
   const navigate = useNavigate();
   const roleReference = useContext(authContext);
   const isLoggedIn = roleReference?.role !== "UNAUTHENTICATED";
-  useEffect(() => {
-    const fetchFavorites = async () => {
-      try {
+  // useEffect(() => {
+  //   const fetchFavorites = async () => {
+  //     try {
 
-        console.log(isLoggedIn)
-        if (isLoggedIn) {
-          const response = await axios.get<Hotel[]>(
-            "http://localhost:8080/hotels/favoritesUser",
-            { withCredentials: true }
-          );
-          const favoriteIds = response.data.map((hotel) => hotel.hotelId);
-          setFavoriteHotels(favoriteIds);
-        }
-      } catch (error) {
-        console.error("Error fetching favorite hotels:", error);
-      }
-    };
+  //       console.log(isLoggedIn)
+  //       if (isLoggedIn) {
+  //         const response = await axios.get<Hotel[]>(
+  //           "http://localhost:8080/hotels/favoritesUser",
+  //           { withCredentials: true }
+  //         );
+  //         const favoriteIds = response.data.map((hotel) => hotel.hotelId);
+  //         setFavoriteHotels(favoriteIds);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching favorite hotels:", error);
+  //     }
+  //   };
 
-    fetchFavorites();
-  }, [isLoggedIn]);
+  //   fetchFavorites();
+  // }, [isLoggedIn]);
 
   const handleRoomNavigation = (hotelId: number) => {
     navigate(`/rooms/hotel/${hotelId}`);
@@ -120,11 +120,11 @@ const HotelList: React.FC<Props> = ({ hotels}) => {
                   {hotel.description}
                 </Typography>
                 <Typography variant="subtitle2" color="primary">
-                  Precio: {hotel.priceRange}
+                  Price: {hotel.priceRange}
                 </Typography>
                 <Box mt={2} mb={1}>
-                  <Typography variant="caption">Amenidades:</Typography>
-                  <Box display="flex" justifyContent={'center'} flexWrap="wrap" gap={1} mt={0.5}>
+                  <Typography variant="caption">Amenities:</Typography>
+                  <Box display="flex" flexWrap="wrap" gap={1} mt={0.5}>
                     {hotel.amenities
                       .replace(/[{}]/g, "")
                       .split(",")
@@ -139,7 +139,7 @@ const HotelList: React.FC<Props> = ({ hotels}) => {
                   </Box>
                 </Box>
                 <Typography variant="caption" color="text.secondary">
-                  Propietario: {hotel.ownerFullName} ({hotel.ownerEmail})
+                  Owner: {hotel.ownerFullName} ({hotel.ownerEmail})
                 </Typography>
                 <Box mt={2}>
                   <Button
@@ -147,7 +147,7 @@ const HotelList: React.FC<Props> = ({ hotels}) => {
                     color="primary"
                     onClick={() => handleRoomNavigation(hotel.hotelId)}
                   >
-                    Ver habitaciones
+                    See Rooms
                   </Button>
                 </Box>
               </CardContent>
