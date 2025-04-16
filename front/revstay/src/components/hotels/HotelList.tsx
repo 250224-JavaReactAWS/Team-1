@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import {
   Card,
   CardContent,
@@ -124,7 +124,7 @@ const HotelList: React.FC<Props> = ({ hotels}) => {
                 </Typography>
                 <Box mt={2} mb={1}>
                   <Typography variant="caption">Amenities:</Typography>
-                  <Box display="flex" flexWrap="wrap" gap={1} mt={0.5}>
+                  <Box display="flex" justifyContent={'center'} flexWrap="wrap" gap={1} mt={0.5}>
                     {hotel.amenities
                       .replace(/[{}]/g, "")
                       .split(",")
