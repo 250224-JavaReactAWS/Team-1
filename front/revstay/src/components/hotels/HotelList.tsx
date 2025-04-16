@@ -6,7 +6,6 @@ import {
   Grid,
   Box,
   Chip,
-  Avatar,
   CardHeader,
   IconButton,
   Button,
@@ -16,6 +15,8 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { authContext } from "../../App";
+import HotelImageGallery from './HoltelImageGalery';
+
 
 // Define el tipo de hotel
 type Hotel = {
@@ -108,10 +109,11 @@ const HotelList: React.FC<Props> = ({ hotels}) => {
         {hotels.map((hotel) => (
           <Grid size={4} key={hotel.hotelId}>
             <Card elevation={3}>
+              <HotelImageGallery images={hotel.images} />
               <CardHeader
-                avatar={<Avatar>{hotel.ownerFullName[0]}</Avatar>}
                 title={hotel.name}
                 subheader={hotel.location}
+                sx={{ mt: 0, mb: 0, pb: 0 }}
                 action={
                   isLoggedIn && roleReference?.role === "USER" &&( 
                     <IconButton onClick={() => toggleFavorite(hotel.hotelId)}>
@@ -147,9 +149,6 @@ const HotelList: React.FC<Props> = ({ hotels}) => {
                       ))}
                   </Box>
                 </Box>
-                <Typography variant="caption" color="text.secondary">
-                  Owner: {hotel.ownerFullName} ({hotel.ownerEmail})
-                </Typography>
                 <Box mt={2} justifyContent={'center'} display="flex" gap={2} >
                   <Button
                     variant="contained"
