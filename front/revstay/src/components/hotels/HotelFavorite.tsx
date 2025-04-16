@@ -15,7 +15,7 @@ const HotelPage: React.FC = () => {
         const response = await axios.get('http://localhost:8080/hotels/favoritesUser', { withCredentials: true });
         setHotels(response.data);
       } catch (err) {
-        setError('Error at obtaining hotels');
+        setError('Error al obtener los hoteles');
         console.error(err);
       } finally {
         setLoading(false);
@@ -29,7 +29,7 @@ const HotelPage: React.FC = () => {
 
 
   return (
-    <Container /*sx={{ mt: 4 }}*/>
+    <Container sx={{ mt: 4, width:'100%', height:'100%' }}>
       <Typography variant="h4" gutterBottom>
         Hotels List
       </Typography>
