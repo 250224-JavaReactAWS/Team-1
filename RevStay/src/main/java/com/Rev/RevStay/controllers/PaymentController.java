@@ -1,7 +1,6 @@
 package com.Rev.RevStay.controllers;
 
 import com.Rev.RevStay.DTOS.PaymentDTO;
-import com.Rev.RevStay.models.BookingStatus;
 import com.Rev.RevStay.models.Payment;
 import com.Rev.RevStay.models.PaymentStatus;
 import com.Rev.RevStay.services.BookingService;

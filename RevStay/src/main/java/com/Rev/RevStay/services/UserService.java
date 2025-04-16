@@ -4,7 +4,6 @@ import com.Rev.RevStay.DTOS.UserDTO;
 import com.Rev.RevStay.exceptions.GenericException;
 import com.Rev.RevStay.models.Hotel;
 import com.Rev.RevStay.models.User;
-import com.Rev.RevStay.models.UserType;
 import com.Rev.RevStay.repos.HotelDAO;
 import com.Rev.RevStay.repos.UserDAO;
 import com.Rev.RevStay.util.PasswordUtil;

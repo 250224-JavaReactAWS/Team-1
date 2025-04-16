@@ -1,9 +1,6 @@
 package com.Rev.RevStay.DTOS;
 
-import com.Rev.RevStay.models.Booking;
 import com.Rev.RevStay.models.PaymentStatus;
-import com.Rev.RevStay.models.User;
-import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

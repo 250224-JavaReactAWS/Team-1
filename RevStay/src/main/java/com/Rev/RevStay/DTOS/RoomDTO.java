@@ -1,9 +1,6 @@
 package com.Rev.RevStay.DTOS;
 
 
-import com.Rev.RevStay.models.Hotel;
-
-
 import java.math.BigDecimal;
 
 
