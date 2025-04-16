@@ -21,7 +21,7 @@ import com.Rev.RevStay.services.BookingService;
 import org.springframework.http.ResponseEntity;
 
 @RestController
-@RequestMapping("bookings")
+@RequestMapping("/bookings")
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class BookingController {
     
@@ -56,9 +56,17 @@ public class BookingController {
     @GetMapping("/user")
     public ResponseEntity<List<BookingDTO>> getBookingsByUser(HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
-        String roleStr = (String) session.getAttribute("role");
+        // String roleStr = (String) session.getAttribute("role");
+        System.out.println(userId);
+        // System.out.println(roleStr);
+        // System.out.println(UserType.valueOf(roleStr).equals(UserType.USER));
+            
 
-        if (userId == null || roleStr == null || !UserType.valueOf(roleStr).equals(UserType.USER)) {
+
+        if (userId == null ) {
+            System.out.println(userId);
+            // System.out.println(roleStr);
+            // System.out.println(UserType.valueOf(roleStr).equals(UserType.USER));
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 

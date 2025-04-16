@@ -44,7 +44,7 @@ public class UserController {
         if(userLogged.isPresent()) {
             session.setAttribute("userId", userLogged.get().getUserId());
             session.setAttribute("role", userLogged.get().getUserType().name());
-
+            System.out.println(userLogged.get().getUserType().name());
             return userLogged.get();
         }
         return null;

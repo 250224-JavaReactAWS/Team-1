@@ -4,7 +4,7 @@ import Login from './components/login/Login'
 import Nav from './components/nav/Nav'
 import Hotels from './components/hotels/Hotel'///no yet
 import HotelPage from './components/hotels/HotelPage'
-import Bookings from './components/bookings/bookings'
+import Bookings from './components/bookings/Bookings'
 import HotelFavorite from './components/hotels/HotelFavorite'
 import RegisterHotel from './components/hotels/RegisterHotel';
 //import Enrollments from './components/enrollments/Enrollments'
@@ -15,6 +15,7 @@ import axios from 'axios'
 import { ThemeProvider } from '@emotion/react'
 import { theme } from './theme'
 import RoomList from './components/rooms/RoomList'
+import BookingPage from './components/bookings/BookingPage'
 
 /*
 Need to run 
@@ -80,7 +81,7 @@ function App() {
             <Route path='/hotelFav' element={<HotelFavorite />} />
             <Route path="/registerHotel" element={<RegisterHotel />} />
 
-            <Route path='Bookings' element={<Bookings />}/>
+            <Route path='bookings' element={<BookingPage />}/>
             <Route path='login' element={<Login />} />
             <Route path='register' element={<Register />} />
             <Route path='rooms/hotel/:hotelId' element={<RoomList />} />
