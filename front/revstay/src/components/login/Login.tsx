@@ -1,9 +1,12 @@
 import axios from "axios"
 import { ChangeEvent, SyntheticEvent, useContext, useState } from "react"
 import { IUser } from "../../interfaces/IUser"
-import { Box, Button, TextField, Typography } from "@mui/material"
+import { Box, Button, InputAdornment, Paper, Stack, TextField, Typography } from "@mui/material";
 import { authContext } from "../../App"
 import { useNavigate } from "react-router"
+import EmailIcon from '@mui/icons-material/Email';
+import LockIcon from '@mui/icons-material/Lock';
+import  Grid  from '@mui/material/Grid';
 
 
 function Login() {
@@ -59,61 +62,174 @@ function Login() {
     login()
   }
 
+  // return (
+
+  //   <Box  
+  //   sx={{ 
+  //     color: 'black',
+  //     border: '2px solid black',
+  //     borderRadius: '10px',
+  //     width: '100%',
+  //     height: '50%',
+  //     margin: 'auto',
+  //     alignContent: 'center',
+  //     textAlign: 'center',
+  //     backgroundColor: 'white',
+  //   }}
+  //   >
+  //     <form onSubmit={submitForm} style={{margin: '20px'}}>
+  //       <Typography variant='h2'>
+  //         Login
+  //       </Typography>
+
+  //       {error && <Typography color="error">
+  //         Username or Password Incorrect
+  //       </Typography>}
+
+  //       <TextField 
+  //        required
+  //         id="email-input" 
+  //         label="Email" 
+  //         variant="outlined" 
+  //         value={email} 
+  //         onChange={updateEmail} 
+  //         type="email"
+  //       />
+
+  //       <br/>
+  //       <br/>
+  //       <br/>
+  //       <TextField 
+  //         required
+  //         id="password-input" 
+  //         label="Password" 
+  //         variant="outlined" 
+  //         value={password} 
+  //         onChange={updatePassword} 
+  //         type="password"
+  //       />
+
+  //       <br />
+  //       <br />
+  //       <br />
+
+  //       {/* Forms behave slightly different than divs, we can use it for additional validation 
+  //       or taking in input. It's important to note that we should prevent default to prevent the form from
+  //       just clearing on submit */}
+  //       <Button variant="contained" type="submit">Login!</Button>
+  //     </form>
+  //   </Box>
+  // )
+  
   return (
+    <>
+       <Box
+        sx={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          background: 'linear-gradient(135deg, #3f51b5 0%,rgb(255, 81, 0) 100%)',
+          zIndex: -1,
+        }}
+      />
+      <Box
+        sx={{
+          position: 'relative',
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Paper
+        elevation={6}
+        sx={{
+          width: { xs: '90%', md: '90vh' },
+          borderRadius: 4,
+          overflow: 'hidden',
+          zIndex: 1, // Para que el login esté por delante
+        }}
+      >
+          <Grid container sx={{minHeight:'60vh'}}>
+          <Grid size={4}
+            sx={{
+              backgroundColor: '#f5f5f5',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              p: 4,
+            }}
+          >
+              <Box
+                component="img"
+                src="src\assets\react.svg" 
+                alt="Logo"
+                sx={{ width: '50%', maxWidth: 180}}
+              />
+            </Grid>
 
-    <Box  
-    sx={{ 
-      border: '2px solid black',
-      width: '100%',
-      height: '50%',
-      margin: 'auto',
-      alignContent: 'center',
-      textAlign: 'center'
+            <Grid size={6} sx={{ p: 2, margin:'0 auto', marginTop:'5%' }}>
+              <form onSubmit={submitForm}>
+                <Stack spacing={3}>
+                  <Typography variant="h4" fontWeight="bold" textAlign="center">
+                    Login
+                  </Typography>
 
-    }}
-    >
-      <form onSubmit={submitForm} style={{margin: '20px'}}>
-        <Typography variant='h2'>
-          Login
-        </Typography>
+                    {error && <Typography color="error">
+                      Username or Password Incorrect
+                    </Typography>}
 
-        {error && <Typography color="error">
-          Username or Password Incorrect
-        </Typography>}
+                  <TextField
+                    required
+                    type="email"
+                    value={email}
+                    onChange={updateEmail}
+                    placeholder="Email"
+                    fullWidth
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <EmailIcon />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
 
-        <TextField 
-         required
-          id="email-input" 
-          label="Email" 
-          variant="outlined" 
-          value={email} 
-          onChange={updateEmail} 
-          type="email"
-        />
+                  <TextField
+                    required
+                    type="password"
+                    value={password}
+                    onChange={updatePassword}
+                    placeholder="Password"
+                    fullWidth
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <LockIcon />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
 
-        <br/>
-        <br/>
-        <br/>
-        <TextField 
-          required
-          id="password-input" 
-          label="Password" 
-          variant="outlined" 
-          value={password} 
-          onChange={updatePassword} 
-          type="password"
-        />
-
-        <br />
-        <br />
-        <br />
-
-        {/* Forms behave slightly different than divs, we can use it for additional validation 
-        or taking in input. It's important to note that we should prevent default to prevent the form from
-        just clearing on submit */}
-        <Button variant="contained" type="submit">Login!</Button>
-      </form>
-    </Box>
-  )
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    fullWidth
+                    color="primary"
+                    sx={{ fontWeight: 'bold' }}
+                  >
+                    Login
+                  </Button>
+                </Stack>
+              </form>
+            </Grid>
+          </Grid>
+        </Paper>
+      </Box>
+    </>
+      );
 }
 export default Login
