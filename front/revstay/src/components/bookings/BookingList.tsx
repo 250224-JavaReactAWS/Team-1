@@ -28,24 +28,24 @@ const BookingList: React.FC<BookingListProps> = ({ bookings }) => {
     const roleReference = useContext(authContext);
     const isLoggedIn = roleReference?.role !== "UNAUTHENTICATED";
 
-    useEffect(() => {
-        const fetchBookings = async () => {
-            try {
-                if (isLoggedIn) {
-                    const response = await axios.get<Booking[]>(
-                        "http://localhost:8080/bookings/user",
-                        { withCredentials: true }
-                    );
-                    const bookingIds = response.data.map((booking)=> booking.bookingId)
-                    setBookings(bookingIds);
-                }
-            } catch (error) {
-                console.error("Error fetching bookings:", error);
-            }
-        };
+    // useEffect(() => {
+    //     const fetchBookings = async () => {
+    //         try {
+    //             if (isLoggedIn) {
+    //                 const response = await axios.get<Booking[]>(
+    //                     "http://localhost:8080/bookings/user",
+    //                     { withCredentials: true }
+    //                 );
+    //                 const bookingIds = response.data.map((booking)=> booking.bookingId)
+    //                 setBookings(bookingIds);
+    //             }
+    //         } catch (error) {
+    //             console.error("Error fetching bookings:", error);
+    //         }
+    //     };
 
-        fetchBookings();
-    }, [isLoggedIn]);
+    //     fetchBookings();
+    // }, [isLoggedIn]);
 
     return (
         <Box p={4}>
@@ -54,8 +54,8 @@ const BookingList: React.FC<BookingListProps> = ({ bookings }) => {
                     <Grid item xs={12} sm={6} md={4} key={booking.bookingId}>
                         <Card elevation={3}>
                             <CardHeader
-                                title={`Booking ID: ${booking.bookingId}`}
-                                subheader={`Hotel: ${booking.hotelName}`}
+                                title={booking.hotelName}
+                                subheader={`Booking ID: ${booking.bookingId}`}
                             />
                             <CardContent>
                                 <Typography variant="body2" color="text.secondary" gutterBottom>
