@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from 'react-router'
 import './App.css'
 import Login from './components/login/Login'
 import Nav from './components/nav/Nav'
-import Hotels from './components/hotels/Hotel'///no yet
 import HotelPage from './components/hotels/HotelPage'
 import Bookings from './components/bookings/Bookings'
 import HotelFavorite from './components/hotels/HotelFavorite'

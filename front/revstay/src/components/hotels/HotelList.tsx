@@ -33,7 +33,6 @@ type Hotel = {
 
 interface Props {
   hotels: Hotel[];
-  isLoggedIn: boolean; // Nuevo prop para verificar si el usuario está logueado
 }
 
 const HotelList: React.FC<Props> = ({ hotels}) => {
@@ -98,7 +97,7 @@ const HotelList: React.FC<Props> = ({ hotels}) => {
     <Box p={4}>
       <Grid container spacing={3}>
         {hotels.map((hotel) => (
-          <Grid item xs={12} sm={6} md={4} key={hotel.hotelId}>
+          <Grid size={6} key={hotel.hotelId}>
             <Card elevation={3}>
               <CardHeader
                 avatar={<Avatar>{hotel.ownerFullName[0]}</Avatar>}
