@@ -37,9 +37,9 @@ function Nav() {
           {roleReference?.role === "USER" && 
             <Button color="inherit" onClick={() => navigate('/bookings')}>Bookings</Button>}
           {roleReference?.role === "USER" && 
-            <Button color="inherit" onClick={() => navigate('/hotelFav')}>My Hotels</Button>}
+            <Button color="inherit" onClick={() => navigate('/hotelFav')}>Favorites</Button>}
           {roleReference?.role === "OWNER" &&
-            <Button color="inherit" onClick={() => navigate('/ownerHotels')}>Owner Hotels</Button>}
+            <Button color="inherit" onClick={() => navigate('/ownerHotels')}>Hotels</Button>}
           {roleReference?.role === "OWNER" &&
             <Button color="inherit" onClick={() => navigate('/registerHotel')}>Register Hotel</Button>}
 

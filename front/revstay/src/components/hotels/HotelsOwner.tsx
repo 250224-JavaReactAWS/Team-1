@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { CircularProgress, Container, Typography, Alert } from '@mui/material';
-import HotelList from './HotelList';
+import HotelList from './templates/HotelList';
 
 const HotelPage: React.FC = () => {
   const [hotels, setHotels] = useState([]);

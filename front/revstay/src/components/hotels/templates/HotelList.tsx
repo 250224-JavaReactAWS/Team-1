@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { Grid, Box } from "@mui/material";
 import axios from "axios";
-import { authContext } from "../../App";
+import { authContext } from "../../../App";
 import HotelCard from "./HotelCard";
 
 
