@@ -52,13 +52,13 @@ function RoomList() {
               <CardContent>
                 <Typography variant="h6">{room.roomType}</Typography>
                 <Typography variant="body2" color="text.secondary" gutterBottom>
-                  {room.description || "Sin descripción disponible"}
+                  {room.description || "No description Available"}
                 </Typography>
                 <Typography variant="subtitle1" color="primary">
-                  Precio: ${room.price.toFixed(2)}
+                  Price: ${room.price.toFixed(2)}
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
-                  Capacidad máxima: {room.maxGuests} personas
+                  Maximum Capacity: {room.maxGuests} persons
                 </Typography>
               </CardContent>
             </Card>
