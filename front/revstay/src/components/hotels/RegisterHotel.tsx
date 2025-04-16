@@ -37,11 +37,11 @@ const RegisterHotel: React.FC = () => {
 
     try {
       const response = await axios.post('http://localhost:8080/hotels/register', payload,{withCredentials: true});
-      alert('Hotel registrado con éxito!');
-      console.log('Respuesta:', response.data);
+      alert('Hotel registration successfully');
+      console.log('Response:', response.data);
     } catch (error) {
-      console.error('Error al registrar el hotel:', error);
-      alert('Hubo un error al registrar el hotel.');
+      console.error('Error at registering the hotel', error);
+      alert('There was an error while registering the hotel');
     }
   };
 
@@ -54,7 +54,7 @@ const RegisterHotel: React.FC = () => {
         <Box component="form" onSubmit={handleSubmit}>
           <Stack spacing={2}>
             <TextField
-              label="Nombre del hotel"
+              label="Hotel Name"
               name="name"
               value={formData.name}
               onChange={handleChange}
@@ -62,7 +62,7 @@ const RegisterHotel: React.FC = () => {
               required
             />
             <TextField
-              label="Ubicación"
+              label="Location"
               name="location"
               value={formData.location}
               onChange={handleChange}
@@ -70,7 +70,7 @@ const RegisterHotel: React.FC = () => {
               required
             />
             <TextField
-              label="Descripción"
+              label="Description"
               name="description"
               value={formData.description}
               onChange={handleChange}
@@ -80,7 +80,7 @@ const RegisterHotel: React.FC = () => {
               required
             />
             <TextField
-              label="Rango de precios (ej: 2000 - 7500)"
+              label="Price range(ex: 2000 - 7500)"
               name="priceRange"
               value={formData.priceRange}
               onChange={handleChange}
@@ -88,7 +88,7 @@ const RegisterHotel: React.FC = () => {
               required
             />
             <TextField
-              label="Amenidades (separadas por coma)"
+              label="Amenities (separated by a comma)"
               name="amenities"
               value={formData.amenities}
               onChange={handleChange}
@@ -96,7 +96,7 @@ const RegisterHotel: React.FC = () => {
               required
             />
             <TextField
-              label="URLs de imágenes (separadas por coma)"
+              label="URLs of the images (separated by a comma)"
               name="images"
               value={formData.images}
               onChange={handleChange}

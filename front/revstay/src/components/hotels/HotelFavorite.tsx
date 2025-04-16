@@ -15,7 +15,7 @@ const HotelPage: React.FC = () => {
         const response = await axios.get('http://localhost:8080/hotels/favoritesUser', { withCredentials: true });
         setHotels(response.data);
       } catch (err) {
-        setError('Error al obtener los hoteles');
+        setError('Error at obtaining hotels');
         console.error(err);
       } finally {
         setLoading(false);
