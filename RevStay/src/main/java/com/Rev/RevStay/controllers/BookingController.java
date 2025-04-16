@@ -1,13 +1,9 @@
 package com.Rev.RevStay.controllers;
 
 import com.Rev.RevStay.DTOS.BookingDTO;
-import com.Rev.RevStay.models.UserType;
-import com.Rev.RevStay.repos.BookingDAO;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;

@@ -1,0 +1,11 @@
+# Use an official Node.js runtime as a parent image
+FROM amazoncorretto:17
+
+# Copy package.json and package-lock.json to the working directory
+COPY target/app.jar app.jar
+
+# Expose the port the app runs on
+EXPOSE 8080
+
+# Define the command to run the application
+CMD ["java","-jar", "app.jar"]

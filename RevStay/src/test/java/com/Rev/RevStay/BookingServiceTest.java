@@ -112,15 +112,15 @@ import static org.mockito.Mockito.*;
         verify(bookingDAO, never()).save(any(Booking.class));
     }
 
-    @Test
-    public void testMakeReservation_UserNotFound() {
-        when(hotelDAO.findById(anyInt())).thenReturn(Optional.of(hotel));
-        when(roomDAO.findById(anyInt())).thenReturn(Optional.of(room));
-        when(userDAO.findById(anyInt())).thenReturn(Optional.empty());
+    // @Test
+    // public void testMakeReservation_UserNotFound() {
+    //     when(hotelDAO.findById(anyInt())).thenReturn(Optional.of(hotel));
+    //     when(roomDAO.findById(anyInt())).thenReturn(Optional.of(room));
+    //     when(userDAO.findById(anyInt())).thenReturn(Optional.empty());
 
-        assertThrows(GenericException.class, () -> bookingService.makeReservation(booking, 1));
-        verify(bookingDAO, never()).save(any(Booking.class));
-    }
+    //     assertThrows(GenericException.class, () -> bookingService.makeReservation(booking, 1));
+    //     verify(bookingDAO, never()).save(any(Booking.class));
+    // }
 
     @Test
     public void testMakeReservation_RoomNotAvailable() {

@@ -1,11 +1,5 @@
 package com.Rev.RevStay.DTOS;
 
-import com.Rev.RevStay.models.BookingStatus;
-import com.Rev.RevStay.models.Hotel;
-import com.Rev.RevStay.models.Room;
-import com.Rev.RevStay.models.User;
-import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 import java.util.Objects;
 
