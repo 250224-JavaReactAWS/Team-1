@@ -44,7 +44,7 @@ public class HotelController {
     @GetMapping("/favoritesUser")
     public ResponseEntity<List<HotelDTO>> getHotelFavoriteByUserId(HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
-
+        System.out.println(userId);
         if (session.getAttribute("role").equals("OWNER")){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
