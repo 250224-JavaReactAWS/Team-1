@@ -57,7 +57,7 @@ public class BookingController {
     public ResponseEntity<List<BookingDTO>> getBookingsByUser(HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
         // String roleStr = (String) session.getAttribute("role");
-        System.out.println(userId);
+        // System.out.println(userId);
         // System.out.println(roleStr);
         // System.out.println(UserType.valueOf(roleStr).equals(UserType.USER));
             
