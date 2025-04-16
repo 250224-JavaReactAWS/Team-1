@@ -13,6 +13,7 @@ public class RoomDTO {
 
     private int roomId;
     private int hotelId;
+    private String hotelName;
     private String roomType;
     private String description;
     private BigDecimal price;
@@ -34,6 +35,7 @@ public class RoomDTO {
         this.description = room.getDescription();
         this.roomType = room.getRoomType();
         this.hotelId = room.getHotel().getHotelId();
+        this.hotelName = room.getHotel().getName();
     }
 
     public int getRoomId() {
@@ -79,4 +81,13 @@ public class RoomDTO {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String getHotelName() {
+        return hotelName;
+    }
+
+    public void setHotelName(String hotelName) {
+        this.hotelName = hotelName;
+    }
+
 }

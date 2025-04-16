@@ -7,6 +7,7 @@ import { Box, Card, CardContent, Typography, Grid } from "@mui/material";
 type Room = {
   roomId: number;
   hotelId: number;
+  hotelName: string;
   roomType: string;
   description: string | null;
   price: number;
@@ -26,9 +27,10 @@ function RoomList() {
           { withCredentials: true }
         );
         setRooms(response.data); // Actualiza el estado con las habitaciones obtenidas
+        // console.log("Hotel Name:", response.data[0]?.hotelName || "No hotel name available");
       } catch (err) {
         console.error("Error fetching rooms:", err);
-        setError("No se pudieron cargar las habitaciones.");
+        setError("Not able to load rooms");
       }
     };
 
@@ -38,7 +40,7 @@ function RoomList() {
   return (
     <Box p={4}>
       <Typography variant="h4" gutterBottom>
-      Hotel Rooms {hotelId}
+      {rooms.length > 0 ? `${rooms[0].hotelName} Rooms` : `Rooms ${hotelId}`}
       </Typography>
       {error && (
         <Typography color="error" gutterBottom>

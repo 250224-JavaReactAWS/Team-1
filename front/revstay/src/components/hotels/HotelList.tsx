@@ -40,26 +40,26 @@ const HotelList: React.FC<Props> = ({ hotels}) => {
   const navigate = useNavigate();
   const roleReference = useContext(authContext);
   const isLoggedIn = roleReference?.role !== "UNAUTHENTICATED";
-  // useEffect(() => {
-  //   const fetchFavorites = async () => {
-  //     try {
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      try {
 
-  //       console.log(isLoggedIn)
-  //       if (isLoggedIn) {
-  //         const response = await axios.get<Hotel[]>(
-  //           "http://localhost:8080/hotels/favoritesUser",
-  //           { withCredentials: true }
-  //         );
-  //         const favoriteIds = response.data.map((hotel) => hotel.hotelId);
-  //         setFavoriteHotels(favoriteIds);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching favorite hotels:", error);
-  //     }
-  //   };
+        console.log(isLoggedIn)
+        if (isLoggedIn) {
+          const response = await axios.get<Hotel[]>(
+            "http://localhost:8080/hotels/favoritesUser",
+            { withCredentials: true }
+          );
+          const favoriteIds = response.data.map((hotel) => hotel.hotelId);
+          setFavoriteHotels(favoriteIds);
+        }
+      } catch (error) {
+        console.error("Error fetching favorite hotels:", error);
+      }
+    };
 
-  //   fetchFavorites();
-  // }, [isLoggedIn]);
+    fetchFavorites();
+  }, [isLoggedIn]);
 
   const handleRoomNavigation = (hotelId: number) => {
     navigate(`/rooms/hotel/${hotelId}`);
