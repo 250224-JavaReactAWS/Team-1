@@ -97,7 +97,7 @@ const HotelList: React.FC<Props> = ({ hotels}) => {
     <Box p={4}>
       <Grid container spacing={3}>
         {hotels.map((hotel) => (
-          <Grid size={6} key={hotel.hotelId}>
+          <Grid size={4} key={hotel.hotelId}>
             <Card elevation={3}>
               <CardHeader
                 avatar={<Avatar>{hotel.ownerFullName[0]}</Avatar>}
@@ -124,7 +124,7 @@ const HotelList: React.FC<Props> = ({ hotels}) => {
                 </Typography>
                 <Box mt={2} mb={1}>
                   <Typography variant="caption">Amenidades:</Typography>
-                  <Box display="flex" flexWrap="wrap" gap={1} mt={0.5}>
+                  <Box display="flex" justifyContent={'center'} flexWrap="wrap" gap={1} mt={0.5}>
                     {hotel.amenities
                       .replace(/[{}]/g, "")
                       .split(",")

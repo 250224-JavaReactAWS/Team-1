@@ -25,12 +25,14 @@ const HotelPage: React.FC = () => {
     fetchHotels();
   }, []);
 
+
+
+
   return (
-    <Container sx={{ mt: 4 }}>
+    <Container /*sx={{ mt: 4 }}*/>
       <Typography variant="h4" gutterBottom>
         Hotels List
       </Typography>
-
       {loading && <CircularProgress />}
       {error && <Alert severity="error">{error}</Alert>}
       {!loading && !error && <HotelList hotels={hotels} />}
