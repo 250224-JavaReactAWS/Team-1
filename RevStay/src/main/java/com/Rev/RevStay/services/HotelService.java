@@ -42,6 +42,13 @@ public class HotelService {
                 .map(this::convertToDTO).toList();
     }
 
+    //Get hotels by User Id
+    public List<HotelDTO> findHotelByUserId(int userId){
+        List<Hotel> ownerHotels = hotelDAO.findHotelsByOwnerId(userId);
+        return ownerHotels.stream()
+                .map(this::convertToDTO).toList();
+    }
+
     // Update an existing hotel
     public HotelDTO updateHotel(int hotelId, int ownerId, Hotel updatedHotel) {
         Optional<Hotel> existingHotelOpt = hotelDAO.findById(hotelId);

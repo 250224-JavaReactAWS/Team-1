@@ -37,9 +37,9 @@ function RoomList() {
 
   return (
     <Box p={4}>
-      <Typography variant="h4" gutterBottom>
+      {/* <Typography variant="h4" gutterBottom>
       Hotel Rooms {hotelId}
-      </Typography>
+      </Typography> */}
       {error && (
         <Typography color="error" gutterBottom>
           {error}
@@ -47,7 +47,7 @@ function RoomList() {
       )}
       <Grid container spacing={3}>
         {rooms.map((room) => (
-          <Grid size={6} key={room.roomId}>
+          <Grid size={12} key={room.roomId}>
             <Card elevation={3}>
               <CardContent>
                 <Typography variant="h6">{room.roomType}</Typography>

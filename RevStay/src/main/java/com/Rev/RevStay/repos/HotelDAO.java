@@ -19,5 +19,7 @@ public interface HotelDAO extends JpaRepository<Hotel, Integer> {
     @Query("SELECT h FROM User u JOIN u.favoriteHotels h WHERE u.userId = :userId")
     List<Hotel> findFavoriteHotelsByUserId(@Param("userId") int userId);
 
+    @Query("SELECT h FROM Hotel h WHERE h.owner.userId = :userId")
+    List<Hotel> findHotelsByOwnerId(@Param("userId") int userId);
 
 }

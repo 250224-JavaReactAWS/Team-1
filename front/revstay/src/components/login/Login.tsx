@@ -48,7 +48,13 @@ function Login() {
       console.log(res)
       roleReference?.setRole(res.data.userType);
       localStorage.setItem('user', JSON.stringify(res.data));
-      navigate('/')
+
+      if (res.data.userType === "OWNER") {
+        navigate('/ownerHotels');
+      } else {
+        navigate('/');
+      }
+      
     } catch (error){
       setError(true)
       console.log(error)

@@ -65,6 +65,15 @@ const HotelList: React.FC<Props> = ({ hotels}) => {
     navigate(`/rooms/hotel/${hotelId}`);
   };
 
+  const handleUpdateHotel = (hotelId: number) => {
+    navigate(`/hotels/${hotelId}`);
+  };
+
+  const handleDeleteHotel = (hotelId : number) => {
+    navigate(`/hotels/${hotelId}`);
+  };
+  
+
   const toggleFavorite = async (hotelId: number) => {
     try {
       if (favoriteHotels.includes(hotelId)) {
@@ -104,7 +113,7 @@ const HotelList: React.FC<Props> = ({ hotels}) => {
                 title={hotel.name}
                 subheader={hotel.location}
                 action={
-                  isLoggedIn && (
+                  isLoggedIn && roleReference?.role === "USER" &&( 
                     <IconButton onClick={() => toggleFavorite(hotel.hotelId)}>
                       {favoriteHotels.includes(hotel.hotelId) ? (
                         <FavoriteIcon color="error" />
@@ -141,7 +150,7 @@ const HotelList: React.FC<Props> = ({ hotels}) => {
                 <Typography variant="caption" color="text.secondary">
                   Owner: {hotel.ownerFullName} ({hotel.ownerEmail})
                 </Typography>
-                <Box mt={2}>
+                <Box mt={2} justifyContent={'center'} display="flex" gap={2} >
                   <Button
                     variant="contained"
                     color="primary"
@@ -149,6 +158,26 @@ const HotelList: React.FC<Props> = ({ hotels}) => {
                   >
                     See Rooms
                   </Button>
+
+                  {roleReference?.role === "OWNER" && (
+                    <>
+                      <Button
+                        variant="contained"
+                        color="success"
+                        onClick={() => handleUpdateHotel(hotel.hotelId)}
+                      >
+                        Update
+                      </Button>
+
+                      <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => handleDeleteHotel(hotel.hotelId)}
+                      >
+                      Delete
+                      </Button>
+                    </>
+                  )}
                 </Box>
               </CardContent>
             </Card>
