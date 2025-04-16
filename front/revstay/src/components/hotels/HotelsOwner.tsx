@@ -12,7 +12,7 @@ const HotelPage: React.FC = () => {
   useEffect(() => {
     const fetchHotels = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/hotels/favoritesUser', { withCredentials: true });
+        const response = await axios.get('http://localhost:8080/hotels/owner', { withCredentials: true });
         setHotels(response.data);
       } catch (err) {
         setError('Error at obtaining hotels');
@@ -31,7 +31,7 @@ const HotelPage: React.FC = () => {
   return (
     <Container /*sx={{ mt: 4 }}*/>
       <Typography variant="h4" gutterBottom>
-        Hotels List
+        Owner Hotels
       </Typography>
       {loading && <CircularProgress />}
       {error && <Alert severity="error">{error}</Alert>}

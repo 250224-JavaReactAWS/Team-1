@@ -32,14 +32,19 @@ function Nav() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             RevStay
           </Typography>
-          <Button color="inherit" onClick={() => navigate('/')}>Hotels</Button>
+          {(!roleReference || roleReference.role != "OWNER") && 
+            <Button color="inherit" onClick={() => navigate('/')}>Hotels</Button>}
           {roleReference?.role === "USER" && 
-          <Button color="inherit" onClick={() => navigate('/bookings')}>Bookings</Button>}
+            <Button color="inherit" onClick={() => navigate('/bookings')}>Bookings</Button>}
           {roleReference?.role === "USER" && 
-          <Button color="inherit" onClick={() => navigate('/hotelFav')}>My Hotels</Button>}
+            <Button color="inherit" onClick={() => navigate('/hotelFav')}>My Hotels</Button>}
+          {roleReference?.role === "OWNER" &&
+            <Button color="inherit" onClick={() => navigate('/ownerHotels')}>Owner Hotels</Button>}
           {roleReference?.role === "OWNER" &&
             <Button color="inherit" onClick={() => navigate('/registerHotel')}>Register Hotel</Button>}
+
           {
+          
             roleReference?.role === "UNAUTHENTICATED" ? 
             <>
                 <Button color="inherit" onClick={() => navigate('/login')}>Login</Button>

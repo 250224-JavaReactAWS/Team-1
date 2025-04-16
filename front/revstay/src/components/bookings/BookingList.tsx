@@ -1,7 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { authContext } from '../../App';
-import axios from 'axios';
 import { Box, Button, Card, CardContent, CardHeader, Grid, Typography } from '@mui/material';
 
 interface Booking {
@@ -23,35 +20,13 @@ interface BookingListProps {
 }
 
 const BookingList: React.FC<BookingListProps> = ({ bookings }) => {
-    const [bookingsList, setBookings] = useState<number[]>([]);
     const navigate = useNavigate();
-    const roleReference = useContext(authContext);
-    const isLoggedIn = roleReference?.role !== "UNAUTHENTICATED";
-
-    // useEffect(() => {
-    //     const fetchBookings = async () => {
-    //         try {
-    //             if (isLoggedIn) {
-    //                 const response = await axios.get<Booking[]>(
-    //                     "http://localhost:8080/bookings/user",
-    //                     { withCredentials: true }
-    //                 );
-    //                 const bookingIds = response.data.map((booking)=> booking.bookingId)
-    //                 setBookings(bookingIds);
-    //             }
-    //         } catch (error) {
-    //             console.error("Error fetching bookings:", error);
-    //         }
-    //     };
-
-    //     fetchBookings();
-    // }, [isLoggedIn]);
 
     return (
         <Box p={4}>
             <Grid container spacing={3}>
                 {bookings.map((booking) => (
-                    <Grid item xs={12} sm={6} md={4} key={booking.bookingId}>
+                    <Grid size={6} key={booking.bookingId}>
                         <Card elevation={3}>
                             <CardHeader
                                 title={booking.hotelName}
