@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
-import { Box, Card, CardContent, Typography, Grid } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
+import { Box, Card, CardContent, Typography, Grid, Button } from "@mui/material";
 
 // Define el tipo de habitación
 type Room = {
@@ -16,8 +16,10 @@ type Room = {
 
 function RoomList() {
   const { hotelId } = useParams<{ hotelId: string }>(); // Obtiene el hotelId desde la URL
+  const hotelIdNumber = Number(hotelId); // Convierte el hotelId a número
   const [rooms, setRooms] = useState<Room[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -37,10 +39,15 @@ function RoomList() {
     fetchRooms();
   }, [hotelId]);
 
+  const handleRoomSelect = (room: Room) => {
+    console.log(room)
+    navigate('/bookings/reserve', { state: {room} });
+  };
+
   return (
     <Box p={4}>
       <Typography variant="h4" gutterBottom>
-      {rooms.length > 0 ? `${rooms[0].hotelName} Rooms` : `Rooms ${hotelId}`}
+        {rooms.length > 0 ? `${rooms[0].hotelName} Rooms` : `Rooms ${hotelId}`}
       </Typography>
       {error && (
         <Typography color="error" gutterBottom>
@@ -49,7 +56,7 @@ function RoomList() {
       )}
       <Grid container spacing={3}>
         {rooms.map((room) => (
-          <Grid size={12} key={room.roomId}>
+          <Grid item xs={12} key={room.roomId}>
             <Card elevation={3}>
               <CardContent>
                 <Typography variant="h6">{room.roomType}</Typography>
@@ -62,6 +69,11 @@ function RoomList() {
                 <Typography variant="caption" color="text.secondary">
                   Maximum Capacity: {room.maxGuests} persons
                 </Typography>
+              </CardContent>
+              <CardContent>
+                <Button variant="contained" onClick={() => handleRoomSelect(room)}>
+                  Book
+                </Button>
               </CardContent>
             </Card>
           </Grid>

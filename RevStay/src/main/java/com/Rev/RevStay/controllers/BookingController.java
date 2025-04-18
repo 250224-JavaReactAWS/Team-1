@@ -1,6 +1,8 @@
 package com.Rev.RevStay.controllers;
 
 import com.Rev.RevStay.DTOS.BookingDTO;
+import com.Rev.RevStay.exceptions.RoomNotAvailableException;
+
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,11 @@ import org.springframework.http.ResponseEntity;
 public class BookingController {
     
     private final BookingService bookingService;
+
+    @ExceptionHandler(RoomNotAvailableException.class)
+    public ResponseEntity<String> handleRoomNotAvailableException(RoomNotAvailableException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
 
     @Autowired
     public BookingController(BookingService bookingService){

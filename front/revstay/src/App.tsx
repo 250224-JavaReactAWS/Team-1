@@ -8,6 +8,7 @@ import OwnerHotel from './components/hotels/HotelsOwner'
 //import Bookings from './components/bookings/Bookings'
 import HotelFavorite from './components/hotels/HotelFavorite'
 import RegisterHotel from './components/hotels/RegisterHotel';
+import BookingRoom from './components/bookings/BoookingRoom'
 //import Enrollments from './components/enrollments/Enrollments'
 //import Courses from './components/courses/Courses'
 import Register from './components/register/Register'
@@ -84,6 +85,7 @@ function App() {
             <Route path="/ownerHotels" element={<OwnerHotel />} />
 
             <Route path='bookings' element={<BookingPage />}/>
+            <Route path='bookings/reserve' element={<BookingRoom />}/>
             <Route path='login' element={<Login />} />
             <Route path='register' element={<Register />} />
             <Route path='rooms/hotel/:hotelId' element={<RoomList />} />

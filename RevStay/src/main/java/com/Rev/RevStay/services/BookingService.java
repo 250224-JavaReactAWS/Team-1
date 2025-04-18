@@ -35,6 +35,11 @@ public class BookingService {
     }
 
     public Optional<BookingDTO> makeReservation(Booking booking, int userId) {
+        System.out.println("Hotel: " + booking.getHotel());
+        System.out.println("CheckIn: " + booking.getCheckIn());
+        System.out.println("CheckOut: " + booking.getCheckOut());
+        System.out.println("Room: " + booking.getRoom());
+        System.out.println("Guests: " + booking.getGuests());
         if (booking.getHotel() == null || booking.getCheckIn() == null ||
                 booking.getCheckOut() == null || booking.getRoom() == null ||
                 booking.getGuests() <= 0) {
@@ -47,8 +52,8 @@ public class BookingService {
         Room room = roomDAO.findById(booking.getRoom().getRoomId())
                 .orElseThrow(() -> new GenericException("Room not found"));
 
-        if (!isRoomAvailable(hotel, booking.getCheckIn(), booking.getCheckOut(), room.getRoomId())) {
-            throw new IllegalStateException("Room not available for selected dates.");
+        if (!isRoomAvailable(booking.getHotel(), booking.getCheckIn(), booking.getCheckOut(), booking.getRoom().getRoomId())) {
+            throw new RoomNotAvailableException("Room not available for selected dates.");
         }
 
         User user = userDAO.findById(userId)
