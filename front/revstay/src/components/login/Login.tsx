@@ -171,9 +171,9 @@ function Login() {
           >
               <Box
                 component="img"
-                src="src\assets\react.svg" 
+                src="src\assets\RevStayLogo.jpeg" 
                 alt="Logo"
-                sx={{ width: '50%', maxWidth: 180}}
+                sx={{ width: "100%" , maxWidth: 180}}
               />
             </Grid>
 

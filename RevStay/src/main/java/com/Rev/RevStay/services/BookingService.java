@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import com.Rev.RevStay.DTOS.BookingDTO;
 import com.Rev.RevStay.exceptions.GenericException;
+import com.Rev.RevStay.exceptions.RoomNotAvailableException;
 import com.Rev.RevStay.models.*;
 import com.Rev.RevStay.repos.HotelDAO;
 import com.Rev.RevStay.repos.UserDAO;
