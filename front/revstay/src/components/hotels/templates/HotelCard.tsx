@@ -46,11 +46,11 @@ import {
     };
   
     const handleUpdateHotel = (hotelId: number) => {
-        navigate(`/hotels/${hotelId}`);
+        navigate(`/hotels/update/${hotelId}`);
     };
 
     const handleDeleteHotel = (hotelId : number) => {
-        navigate(`/hotels/${hotelId}`);
+        navigate(`/hotels/delete/${hotelId}`);
     };
 
     const amenitiesArray = hotel.amenities

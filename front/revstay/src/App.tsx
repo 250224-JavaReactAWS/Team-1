@@ -18,6 +18,7 @@ import { ThemeProvider } from '@emotion/react'
 import { theme } from './theme'
 import RoomList from './components/rooms/RoomList'
 import BookingPage from './components/bookings/BookingPage'
+import UpdateHotel from './components/hotels/UpdateHotel'
 
 /*
 Need to run 
@@ -83,6 +84,7 @@ function App() {
             <Route path='/hotelFav' element={<HotelFavorite />} />
             <Route path="/registerHotel" element={<RegisterHotel />} />
             <Route path="/ownerHotels" element={<OwnerHotel />} />
+            <Route path="hotels/update/:hotelId" element={<UpdateHotel hotel={{ id: '', name: '', location: '' }} onUpdate={() => {}} />} />
 
             <Route path='bookings' element={<BookingPage />}/>
             <Route path='bookings/reserve' element={<BookingRoom />}/>

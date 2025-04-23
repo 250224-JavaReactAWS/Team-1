@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -79,9 +78,14 @@ public class HotelController {
     }
 
     // Update hotel
-    @PutMapping("/{hotelId}")
+    @PutMapping("/update/{hotelId}")
     public ResponseEntity<HotelDTO> updateHotel(@PathVariable int hotelId, @RequestBody Hotel updatedHotel, HttpSession session) {
-        Optional<HotelDTO> updated = Optional.of(hotelService.updateHotel(hotelId, (Integer) session.getAttribute("userId"), updatedHotel));
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // Return 401 Unauthorized
+        }
+
+        Optional<HotelDTO> updated = Optional.of(hotelService.updateHotel(hotelId, userId, updatedHotel));
         
         return updated.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -104,7 +108,7 @@ public class HotelController {
         
     }
 
-    @DeleteMapping("/{hotelId}")
+    @DeleteMapping("/delete/{hotelId}")
     public ResponseEntity<String> deleteHotel(@PathVariable int hotelId, HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");
 
