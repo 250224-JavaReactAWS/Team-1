@@ -23,17 +23,53 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        // stage('Build Docker Image') {
+        //     steps {
+        //         sh 'docker build -t $IMAGE_NAME .'
+        //     }
+        // }
+
+        // stage('Save Docker Image & SCP to EC2') {
+        //     steps {
+        //         sh '''
+        //         docker save $IMAGE_NAME | bzip2 > image.tar.bz2
+        //         scp -i $PRIVATE_KEY image.tar.bz2 $EC2_USER@$EC2_HOST:~/
+        //         '''
+        //     }
+        // }
+        
+        stage('SCP JAR to EC2') {
             steps {
-                sh 'docker build -t $IMAGE_NAME .'
+                sh '''
+                scp -i $PRIVATE_KEY target/$JAR_NAME $EC2_USER@$EC2_HOST:~/
+                '''
+            }
+        }
+        
+        stage('Check if docker is installed, if not install it') {
+            steps {
+                sh '''
+                ssh -i $PRIVATE_KEY $EC2_USER@$EC2_HOST 'bash -s' <<'ENDSSH'
+                    if ! command -v docker &> /dev/null; then
+                        echo "Docker not found, installing..."
+                        sudo yum update -y
+                        sudo amazon-linux-extras install docker -y
+                        sudo service docker start
+                        sudo usermod -aG docker $EC2_USER
+                    else
+                        echo "Docker is already installed."
+                    fi
+                ENDSSH
+                '''
             }
         }
 
-        stage('Save Docker Image & SCP to EC2') {
+        stage('Build Docker Image') {
             steps {
                 sh '''
-                docker save $IMAGE_NAME | bzip2 > image.tar.bz2
-                scp -i $PRIVATE_KEY image.tar.bz2 $EC2_USER@$EC2_HOST:~/
+                ssh -i $PRIVATE_KEY $EC2_USER@$EC2_HOST 'bash -s' <<'ENDSSH'
+                    docker build -t $IMAGE_NAME .
+                ENDSSH
                 '''
             }
         }
