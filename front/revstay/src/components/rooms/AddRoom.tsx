@@ -118,7 +118,7 @@ const AddRoom: React.FC = () => {
 
     axios
       .post(`http://localhost:8080/rooms`, payload, { withCredentials: true })
-      .then((response) => {
+      .then(() => {
         alert("Room added successfully!");
         navigate(`/hotel/${hotelId}/rooms`);
       })

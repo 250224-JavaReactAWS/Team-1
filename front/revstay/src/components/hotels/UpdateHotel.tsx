@@ -122,7 +122,7 @@ const UpdateHotel: React.FC = () => {
 
             console.log("Payload being sent:", updatedFormData);
 
-            const response = await axios.put(
+            await axios.put(
                 `http://localhost:8080/hotels/update/${hotelId}`,
                 updatedFormData,{withCredentials: true}
             );

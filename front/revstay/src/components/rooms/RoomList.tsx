@@ -73,7 +73,7 @@ function RoomList() {
       )}
       <Grid container spacing={3}>
         {rooms.map((room) => (
-          <Grid item xs={12} key={room.roomId}>
+          <Grid key={room.roomId}>
             <Card elevation={3}>
               <CardContent>
                 <Typography variant="h6">{room.roomType}</Typography>

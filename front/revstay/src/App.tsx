@@ -88,7 +88,7 @@ function App() {
             <Route path='/hotelFav' element={<HotelFavorite />} />
             <Route path="/registerHotel" element={<RegisterHotel />} />
             <Route path="/ownerHotels" element={<OwnerHotel />} />
-            <Route path="hotels/update/:hotelId" element={<UpdateHotel hotel={{ id: '', name: '', location: '' }} onUpdate={() => {}} />} />
+            <Route path="hotels/update/:hotelId" element={<UpdateHotel />} />
             <Route path="/hotels/delete/:hotelId" element={<DeleteHotel />} />
 
             <Route path='bookings' element={<BookingPage />}/>

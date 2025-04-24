@@ -33,7 +33,7 @@ const BookingPage: React.FC = () => {
     
             {loading && <CircularProgress />}
             {error && <Alert severity="error">{error}</Alert>}
-            {!loading && !error && <BookingList bookings={bookings} />}
+            {!loading && !error && <BookingList bookings={bookings} isLoggedIn={false} />}
         </Container>
     );
 };

@@ -171,7 +171,7 @@ function Login() {
           >
               <Box
                 component="img"
-                src="src\assets\RevStayLogo.jpeg" 
+                src="public\RevStayLogo.jpeg" 
                 alt="Logo"
                 sx={{ width: "100%" , maxWidth: 180}}
               />
