@@ -15,6 +15,16 @@ pipeline {
             }
         }
 
+        stage('Inject application.properties') {
+            steps {
+                withCredentials([file(credentialsId: '2a8afe34-4919-41d7-aee3-22448664f27f', variable: 'CONFIG_FILE')]) {
+                    bat """
+                        copy "%CONFIG_FILE%" app\\RevStay\\src\\main\\resources\\application.properties
+                    """
+                }
+            }
+        }
+
         stage('Build JAR with Maven') {
             steps {
                 dir('app/RevStay') {
