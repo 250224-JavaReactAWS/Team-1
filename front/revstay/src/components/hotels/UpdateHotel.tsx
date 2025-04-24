@@ -8,7 +8,7 @@ import {
     Paper,
     CircularProgress,
 } from "@mui/material";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import axios from "axios";
 
 interface Hotel {
@@ -23,25 +23,49 @@ interface Hotel {
 
 const UpdateHotel: React.FC = () => {
     const { hotelId } = useParams<{ hotelId: string }>();
+    const navigate = useNavigate();
     const [formData, setFormData] = useState<Hotel | null>(null);
     const [errors, setErrors] = useState<Partial<Record<keyof Hotel, string>>>({});
     const [loading, setLoading] = useState<boolean>(true);
+    const [permissionChecked, setPermissionChecked] = useState<boolean>(false);
 
     useEffect(() => {
-        // Fetch hotel data
-        const fetchHotel = async () => {
+        const checkPermissions = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/hotels/${hotelId}`);
-                setFormData(response.data); // Set the fetched hotel data
-                setLoading(false);
+                const response = await axios.get(`http://localhost:8080/hotels/${hotelId}/permissions`, { withCredentials: true });
+                if (!response.data) {
+                    alert("You do not have access to this page. Redirecting to the main page.");
+                    navigate("/ownerHotels"); // Redirect to the main page
+                } else {
+                    setPermissionChecked(true); // User has permission
+                }
             } catch (error) {
-                console.error("Error fetching hotel data:", error);
-                setLoading(false);
+                console.error("Error checking permissions:", error);
+                alert("An error occurred while checking permissions. Redirecting to the main page.");
+                navigate("/ownerHotels"); // Redirect to the main page
             }
         };
 
-        fetchHotel();
-    }, [hotelId]);
+        checkPermissions();
+    }, [hotelId, navigate]);
+
+    useEffect(() => {
+        if (permissionChecked) {
+            // Fetch hotel data
+            const fetchHotel = async () => {
+                try {
+                    const response = await axios.get(`http://localhost:8080/hotels/${hotelId}`);
+                    setFormData(response.data); // Set the fetched hotel data
+                    setLoading(false);
+                } catch (error) {
+                    console.error("Error fetching hotel data:", error);
+                    setLoading(false);
+                }
+            };
+
+            fetchHotel();
+        }
+    }, [hotelId, permissionChecked]);
 
     const validateField = (name: keyof Hotel, value: string) => {
         if (!value.trim()) {
@@ -113,7 +137,7 @@ const UpdateHotel: React.FC = () => {
         }
     };
 
-    if (loading) {
+    if (!permissionChecked || loading) {
         return (
             <Container maxWidth="sm">
                 <Box display="flex" justifyContent="center" alignItems="center" height="100vh">

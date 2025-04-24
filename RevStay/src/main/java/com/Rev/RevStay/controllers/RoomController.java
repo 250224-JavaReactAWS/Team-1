@@ -59,4 +59,15 @@ public class RoomController {
         return roomService.getRoomsByHotelId(hotelId);
     }
 
+    // Get Room by Id
+    @GetMapping("/{roomId}")
+    public ResponseEntity<RoomDTO> getRoomById(@PathVariable int roomId) {
+        RoomDTO room = roomService.getRoomById(roomId);
+        if (room != null) {
+            return ResponseEntity.ok(room);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

@@ -109,4 +109,10 @@ public class RoomService {
     }
 
     private RoomDTO convertToDTO(Room room) { return new RoomDTO(room); }
+
+    public RoomDTO getRoomById(int roomId) {
+        Room room = roomDAO.findById(roomId)
+                .orElseThrow(() -> new GenericException("Room not found"));
+        return convertToDTO(room);
+    }
 }

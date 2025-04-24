@@ -162,6 +162,20 @@ public class HotelService {
         return Optional.of(convertToDTO(hotelDAO.save(hotel)));
     }
 
+    public boolean hasPermission(int hotelId, int userId) {
+        Optional<Hotel> hotelOpt = hotelDAO.findById(hotelId);
+        Optional<User> userOpt = userDAO.findById(userId);
+
+        if (hotelOpt.isEmpty() || userOpt.isEmpty()) {
+            return false; // Hotel or user does not exist
+        }
+
+        Hotel hotel = hotelOpt.get();
+        User user = userOpt.get();
+
+        // Check if the user is the owner of the hotel or has the "OWNER" role
+        return hotel.getOwner().getUserId() == userId || "OWNER".equals(user.getUserType());
+    }
 
     private HotelDTO convertToDTO(Hotel hotel) {
         return new HotelDTO(

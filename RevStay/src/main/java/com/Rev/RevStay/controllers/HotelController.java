@@ -42,6 +42,23 @@ public class HotelController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/{hotelId}/permissions")
+    public ResponseEntity<Boolean> checkPermissions(@PathVariable int hotelId, HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false); // User not logged in
+        }
+
+        boolean hasPermission = hotelService.hasPermission(hotelId, userId);
+
+        if (!hasPermission) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(false); // User does not have permission
+        }
+
+        return ResponseEntity.ok(true); // User has permission
+    }
+
     @GetMapping("/favoritesUser")
     public ResponseEntity<List<HotelDTO>> getHotelFavoriteByUserId(HttpSession session) {
         Integer userId = (Integer) session.getAttribute("userId");

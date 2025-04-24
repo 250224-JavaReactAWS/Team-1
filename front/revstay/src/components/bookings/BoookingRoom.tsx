@@ -35,11 +35,13 @@ const BookingRoom: React.FC = () => {
         };
 
         checkSession();
-    }, [navigate]);
+    }, []);
 
     // Redirect if room is missing
     useEffect(() => {
+        
         if (!room) {
+            
             setMessage('Room details are missing. Redirecting...');
             setTimeout(() => navigate(-1), 2000); // Redirect back after 2 seconds
         }

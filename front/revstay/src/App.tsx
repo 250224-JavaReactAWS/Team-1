@@ -19,6 +19,10 @@ import { theme } from './theme'
 import RoomList from './components/rooms/RoomList'
 import BookingPage from './components/bookings/BookingPage'
 import UpdateHotel from './components/hotels/UpdateHotel'
+import DeleteHotel from './components/hotels/DeleteHotel'
+import AddRoom from './components/rooms/AddRoom'
+import DeleteRoom from './components/rooms/DeleteRoom';
+import EditRoom from './components/rooms/EditRoom';
 
 /*
 Need to run 
@@ -85,12 +89,20 @@ function App() {
             <Route path="/registerHotel" element={<RegisterHotel />} />
             <Route path="/ownerHotels" element={<OwnerHotel />} />
             <Route path="hotels/update/:hotelId" element={<UpdateHotel hotel={{ id: '', name: '', location: '' }} onUpdate={() => {}} />} />
+            <Route path="/hotels/delete/:hotelId" element={<DeleteHotel />} />
 
             <Route path='bookings' element={<BookingPage />}/>
             <Route path='bookings/reserve' element={<BookingRoom />}/>
             <Route path='login' element={<Login />} />
             <Route path='register' element={<Register />} />
             <Route path='rooms/hotel/:hotelId' element={<RoomList />} />
+            
+            {/* Add the AddRoom route */}
+            <Route path='/rooms/add/:hotelId' element={<AddRoom />} />
+
+            {/* Add the EditRoom and DeleteRoom routes */}
+            <Route path='/rooms/edit/:roomId' element={<EditRoom />} />
+            <Route path='/rooms/delete/:roomId' element={<DeleteRoom />} />
           </Routes>
         
         </BrowserRouter>
