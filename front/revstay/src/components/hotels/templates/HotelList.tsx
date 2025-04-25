@@ -34,7 +34,7 @@ const HotelList: React.FC<Props> = ({ hotels}) => {
         console.log(isLoggedIn)
         if (isLoggedIn) {
           const response = await axios.get<Hotel[]>(
-            "http://localhost:8080/hotels/favoritesUser",
+            "http://52.90.96.54:8080/hotels/favoritesUser",
             { withCredentials: true }
           );
           const favoriteIds = response.data.map((hotel) => hotel.hotelId);
@@ -54,7 +54,7 @@ const HotelList: React.FC<Props> = ({ hotels}) => {
       if (favoriteHotels.includes(hotelId)) {
         // Si el hotel ya está en favoritos, realiza una solicitud DELETE
         await axios.delete(
-          `http://localhost:8080/users/favorites/${hotelId}`,
+          `http://52.90.96.54:8080/users/favorites/${hotelId}`,
           { withCredentials: true }
         );
   
@@ -65,7 +65,7 @@ const HotelList: React.FC<Props> = ({ hotels}) => {
       } else {
         // Si el hotel no está en favoritos, realiza una solicitud POST
         await axios.post(
-          `http://localhost:8080/users/favorites/${hotelId}`,
+          `http://52.90.96.54:8080/users/favorites/${hotelId}`,
           {},
           { withCredentials: true }
         );

@@ -17,7 +17,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-
 public class UserServiceTest {
 
     @Mock
@@ -25,7 +24,6 @@ public class UserServiceTest {
 
     @Mock
     private HotelDAO hotelDAO;
-
 
     @InjectMocks
     private UserService userService;
@@ -38,12 +36,10 @@ public class UserServiceTest {
         user.setUserId(1);
         user.setEmail("test@example.com");
         user.setFullName("Test User");
-        user.setPasswordHash("Password123"); 
+        user.setPasswordHash("Password123");
         user.setUserType(UserType.USER);
         MockitoAnnotations.openMocks(this);
     }
-
-
 
     @Test
     public void testRegister_Success() {
@@ -84,7 +80,9 @@ public class UserServiceTest {
         when(userDAO.findUserByEmail(user.getEmail())).thenReturn(Optional.empty());
 
         GenericException exception = assertThrows(GenericException.class, () -> userService.register(user));
-        assertEquals("Invalid Password. Must be at least 8 charactersand need to contain at least one uppercase and lowercase letter ", exception.getMessage());
+        assertEquals(
+                "Invalid Password. Must be at least 8 charactersand need to contain at least one uppercase and lowercase letter ",
+                exception.getMessage());
     }
 
     @Test
@@ -112,7 +110,8 @@ public class UserServiceTest {
     public void testLogin_UserNotFound() {
         when(userDAO.findUserByEmail("test@example.com")).thenReturn(Optional.empty());
 
-        GenericException exception = assertThrows(GenericException.class, () -> userService.login(new User("test@example.com", "Password1")));
+        GenericException exception = assertThrows(GenericException.class,
+                () -> userService.login(new User("test@example.com", "Password1")));
         assertEquals("User not found with the Email", exception.getMessage());
     }
 

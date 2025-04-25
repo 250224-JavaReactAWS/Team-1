@@ -20,7 +20,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-
 public class RoomServiceTest {
 
     @Mock
@@ -38,7 +37,6 @@ public class RoomServiceTest {
     private User owner;
     private Hotel hotel;
     private Room room;
-
 
     @BeforeEach
     void setUp() {
@@ -99,10 +97,10 @@ public class RoomServiceTest {
         when(roomDAO.findById(room.getRoomId())).thenReturn(Optional.of(room));
         when(userDAO.findById(anotherUser.getUserId())).thenReturn(Optional.of(anotherUser));
 
-        GenericException ex = assertThrows(GenericException.class, () -> roomService.deleteRoom(room.getRoomId(), anotherUser.getUserId()));
+        GenericException ex = assertThrows(GenericException.class,
+                () -> roomService.deleteRoom(room.getRoomId(), anotherUser.getUserId()));
         assertEquals("You are not authorized to delete this room.", ex.getMessage());
     }
-
 
     @Test
     void testUpdateRoomSuccess() {
@@ -121,7 +119,6 @@ public class RoomServiceTest {
         assertTrue(result.isPresent());
         assertEquals("Suite", result.get().getRoomType());
     }
-
 
     @Test
     void testGetRoomsByHotelId() {

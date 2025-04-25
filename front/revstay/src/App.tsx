@@ -53,7 +53,7 @@ function App() {
   // that retrieves the current session info
 
   useEffect(() => {
-    axios.get<"USER" | "OWNER">("http://localhost:8080/users/session", { withCredentials: true })
+    axios.get<"USER" | "OWNER">("http://52.90.96.54:8080/users/session", { withCredentials: true })
       .then(res => {
         setRole(res.data);
       })
@@ -65,7 +65,7 @@ function App() {
   
 
   // useEffect(() => {
-  //   axios.get<"USER" | "OWNER">("http://localhost:8080/users/session", {withCredentials: true})
+  //   axios.get<"USER" | "OWNER">("http://52.90.96.54:8080/users/session", {withCredentials: true})
   //   .then(res => {
   //     setRole(res.data)
   //   })

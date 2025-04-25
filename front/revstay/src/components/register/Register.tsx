@@ -52,7 +52,7 @@ function Register() {
   let register = async () => {
     try {
       let res = await axios.post<IUser>(
-        "http://localhost:8080/users/register",
+        "http://52.90.96.54:8080/users/register",
         {
           fullName: full_name,
           email: email,

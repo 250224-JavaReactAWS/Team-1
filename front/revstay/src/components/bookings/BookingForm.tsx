@@ -31,7 +31,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ hotelId, roomId }) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/bookings/reserve",
+        "http://52.90.96.54:8080/bookings/reserve",
         bookingData,
         { withCredentials: true }
       );

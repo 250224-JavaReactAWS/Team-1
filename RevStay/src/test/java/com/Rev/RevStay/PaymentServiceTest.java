@@ -18,7 +18,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-
 class PaymentServiceTest {
 
     @Mock
@@ -84,17 +83,17 @@ class PaymentServiceTest {
         assertEquals(1, result.size());
     }
 
-
     // @Test
     // void testRegisterPayment_Success() {
-    //     when(bookingDAO.findById(20)).thenReturn(Optional.of(booking));
-    //     when(paymentDAO.save(any(Payment.class))).thenAnswer(invocation -> invocation.getArgument(0));
+    // when(bookingDAO.findById(20)).thenReturn(Optional.of(booking));
+    // when(paymentDAO.save(any(Payment.class))).thenAnswer(invocation ->
+    // invocation.getArgument(0));
 
-    //     Optional<PaymentDTO> result = paymentService.registerPayment(payment, 1, 20);
+    // Optional<PaymentDTO> result = paymentService.registerPayment(payment, 1, 20);
 
-    //     assertTrue(result.isPresent());
-    //     assertEquals(PaymentStatus.PENDING, result.get().getPaymentStatus());
-    //     assertEquals(BigDecimal.valueOf(400), result.get().getAmount());
+    // assertTrue(result.isPresent());
+    // assertEquals(PaymentStatus.PENDING, result.get().getPaymentStatus());
+    // assertEquals(BigDecimal.valueOf(400), result.get().getAmount());
     // }
 
     @Test

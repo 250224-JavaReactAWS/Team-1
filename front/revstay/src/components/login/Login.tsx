@@ -35,7 +35,7 @@ function Login() {
   let login = async () => {
     // This function should make our axios request
     try{
-      let res = await axios.post<IUser>('http://localhost:8080/users/login',
+      let res = await axios.post<IUser>('http://52.90.96.54:8080/users/login',
         // Data is the body of our request
         {
             email: email,

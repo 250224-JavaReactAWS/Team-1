@@ -35,7 +35,7 @@ const AddRoom: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/hotels/owner", { withCredentials: true })
+      .get("http://52.90.96.54:8080/hotels/owner", { withCredentials: true })
       .then((response) => {
         if (response.data.length > 0) {
           setIsOwner(true);
@@ -117,7 +117,7 @@ const AddRoom: React.FC = () => {
     console.log("Payload:", payload); // Debugging
 
     axios
-      .post(`http://localhost:8080/rooms`, payload, { withCredentials: true })
+      .post(`http://52.90.96.54:8080/rooms`, payload, { withCredentials: true })
       .then(() => {
         alert("Room added successfully!");
         navigate(`/hotel/${hotelId}/rooms`);

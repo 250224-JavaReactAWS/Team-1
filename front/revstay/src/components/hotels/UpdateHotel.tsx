@@ -32,7 +32,7 @@ const UpdateHotel: React.FC = () => {
     useEffect(() => {
         const checkPermissions = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/hotels/${hotelId}/permissions`, { withCredentials: true });
+                const response = await axios.get(`http://52.90.96.54:8080/hotels/${hotelId}/permissions`, { withCredentials: true });
                 if (!response.data) {
                     alert("You do not have access to this page. Redirecting to the main page.");
                     navigate("/ownerHotels"); // Redirect to the main page
@@ -54,7 +54,7 @@ const UpdateHotel: React.FC = () => {
             // Fetch hotel data
             const fetchHotel = async () => {
                 try {
-                    const response = await axios.get(`http://localhost:8080/hotels/${hotelId}`);
+                    const response = await axios.get(`http://52.90.96.54:8080/hotels/${hotelId}`);
                     setFormData(response.data); // Set the fetched hotel data
                     setLoading(false);
                 } catch (error) {
@@ -123,7 +123,7 @@ const UpdateHotel: React.FC = () => {
             console.log("Payload being sent:", updatedFormData);
 
             await axios.put(
-                `http://localhost:8080/hotels/update/${hotelId}`,
+                `http://52.90.96.54:8080/hotels/update/${hotelId}`,
                 updatedFormData,{withCredentials: true}
             );
             alert("Hotel updated successfully!");

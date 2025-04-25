@@ -30,7 +30,7 @@ const DeleteRoom: React.FC = () => {
     }
 
     axios
-      .delete(`http://localhost:8080/rooms/${room.roomId}`, { withCredentials: true })
+      .delete(`http://52.90.96.54:8080/rooms/${room.roomId}`, { withCredentials: true })
       .then(() => {
         alert("Room deleted successfully!");
         navigate(`/rooms/hotel/${room.hotelId}`); // Redirect to the room list

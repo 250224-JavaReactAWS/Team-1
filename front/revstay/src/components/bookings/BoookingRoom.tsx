@@ -28,7 +28,7 @@ const BookingRoom: React.FC = () => {
     const checkSession = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/users/session",
+          "http://52.90.96.54:8080/users/session",
           { withCredentials: true }
         );
         if (response.status === 200) {
@@ -77,7 +77,7 @@ const BookingRoom: React.FC = () => {
       });
 
       const response = await axios.post(
-        "http://localhost:8080/bookings/reserve",
+        "http://52.90.96.54:8080/bookings/reserve",
         {
           hotel: {
             hotelId: room.hotelId, // Extracted hotelId from location.state

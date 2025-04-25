@@ -22,7 +22,7 @@ function Nav() {
     roleReference?.setRole("UNAUTHENTICATED")
     navigate("/login")
     // Let's create a logout endpoint
-    axios.post('http://localhost:8080/users/logout', {}, {withCredentials: true})
+    axios.post('http://52.90.96.54:8080/users/logout', {}, {withCredentials: true})
    }
 
   return (

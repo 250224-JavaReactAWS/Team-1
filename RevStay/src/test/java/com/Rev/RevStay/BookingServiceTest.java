@@ -22,88 +22,88 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-    public class BookingServiceTest {
+public class BookingServiceTest {
 
-        @Mock
-        private BookingDAO bookingDAO;
+    @Mock
+    private BookingDAO bookingDAO;
 
-        @Mock
-        private RoomDAO roomDAO;
+    @Mock
+    private RoomDAO roomDAO;
 
-        @Mock
-        private HotelDAO hotelDAO;
+    @Mock
+    private HotelDAO hotelDAO;
 
-        @Mock
-        private UserDAO userDAO;
+    @Mock
+    private UserDAO userDAO;
 
-        @InjectMocks
-        private BookingService bookingService;
+    @InjectMocks
+    private BookingService bookingService;
 
-        private Booking booking;
-        private Hotel hotel;
-        private Room room;
-        private User user;
-        private BookingDTO bookingDTO;
+    private Booking booking;
+    private Hotel hotel;
+    private Room room;
+    private User user;
+    private BookingDTO bookingDTO;
 
-        @BeforeEach
-        public void setUp() {
-            MockitoAnnotations.openMocks(this);
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
 
-            hotel = new Hotel();
-            hotel.setHotelId(1);
+        hotel = new Hotel();
+        hotel.setHotelId(1);
 
-            room = new Room();
-            room.setRoomId(1);
+        room = new Room();
+        room.setRoomId(1);
 
-            user = new User();
-            user.setUserId(1);
-            user.setEmail("test@example.com");
+        user = new User();
+        user.setUserId(1);
+        user.setEmail("test@example.com");
 
-            booking = new Booking();
-            booking.setHotel(hotel);
-            booking.setRoom(room);
-            booking.setCheckIn(LocalDateTime.now().plusDays(1));
-            booking.setCheckOut(LocalDateTime.now().plusDays(2));
-            booking.setGuests(2);
-            booking.setUser(user);
-            booking.setStatus(BookingStatus.PENDING);
+        booking = new Booking();
+        booking.setHotel(hotel);
+        booking.setRoom(room);
+        booking.setCheckIn(LocalDateTime.now().plusDays(1));
+        booking.setCheckOut(LocalDateTime.now().plusDays(2));
+        booking.setGuests(2);
+        booking.setUser(user);
+        booking.setStatus(BookingStatus.PENDING);
 
-            bookingDTO = new BookingDTO(
-            booking.getBookId(),
-            booking.getCheckIn(),
-            booking.getCheckOut(),
-            booking.getGuests(),
-            booking.getStatus().toString(),
-            booking.getHotel().getHotelId(),
-            booking.getHotel().getName(),
-            booking.getRoom().getRoomId(),
-            booking.getRoom().getRoomType(),
-            booking.getUser().getEmail()
-            );
-        }
+        bookingDTO = new BookingDTO(
+                booking.getBookId(),
+                booking.getCheckIn(),
+                booking.getCheckOut(),
+                booking.getGuests(),
+                booking.getStatus().toString(),
+                booking.getHotel().getHotelId(),
+                booking.getHotel().getName(),
+                booking.getRoom().getRoomId(),
+                booking.getRoom().getRoomType(),
+                booking.getUser().getEmail());
+    }
 
-       @Test
-       public void testMakeReservation_Success() {
-            when(hotelDAO.findById(anyInt())).thenReturn(Optional.of(hotel));
-            when(roomDAO.findById(anyInt())).thenReturn(Optional.of(room));
-            when(userDAO.findById(anyInt())).thenReturn(Optional.of(user));
-            when(bookingDAO.isRoomAvailable(anyInt(), any(), any(), anyInt())).thenReturn(true);
-            when(bookingDAO.save(any(Booking.class))).thenReturn(booking);
+    @Test
+    public void testMakeReservation_Success() {
+        when(hotelDAO.findById(anyInt())).thenReturn(Optional.of(hotel));
+        when(roomDAO.findById(anyInt())).thenReturn(Optional.of(room));
+        when(userDAO.findById(anyInt())).thenReturn(Optional.of(user));
+        when(bookingDAO.isRoomAvailable(anyInt(), any(), any(), anyInt())).thenReturn(true);
+        when(bookingDAO.save(any(Booking.class))).thenReturn(booking);
 
-            Optional<BookingDTO> result = bookingService.makeReservation(booking, 1);
+        Optional<BookingDTO> result = bookingService.makeReservation(booking, 1);
 
-            assertTrue(result.isPresent());
-            assertEquals(bookingDTO, result.get());
-            verify(bookingDAO, times(1)).save(booking);
-       }
+        assertTrue(result.isPresent());
+        assertEquals(bookingDTO, result.get());
+        verify(bookingDAO, times(1)).save(booking);
+    }
 
-       @Test
-       public void testMakeReservation_InvalidDetails() {
-           booking.setGuests(0);
+    @Test
+    public void testMakeReservation_InvalidDetails() {
+        booking.setGuests(0);
 
-           assertThrows(IllegalArgumentException.class, () -> bookingService.makeReservation(booking, 1));
-           verify(bookingDAO, never()).save(any(Booking.class));
-       }
+        assertThrows(IllegalArgumentException.class, () -> bookingService.makeReservation(booking, 1));
+        verify(bookingDAO, never()).save(any(Booking.class));
+    }
+
     @Test
     public void testMakeReservation_HotelNotFound() {
         when(hotelDAO.findById(anyInt())).thenReturn(Optional.empty());
@@ -114,12 +114,13 @@ import static org.mockito.Mockito.*;
 
     // @Test
     // public void testMakeReservation_UserNotFound() {
-    //     when(hotelDAO.findById(anyInt())).thenReturn(Optional.of(hotel));
-    //     when(roomDAO.findById(anyInt())).thenReturn(Optional.of(room));
-    //     when(userDAO.findById(anyInt())).thenReturn(Optional.empty());
+    // when(hotelDAO.findById(anyInt())).thenReturn(Optional.of(hotel));
+    // when(roomDAO.findById(anyInt())).thenReturn(Optional.of(room));
+    // when(userDAO.findById(anyInt())).thenReturn(Optional.empty());
 
-    //     assertThrows(GenericException.class, () -> bookingService.makeReservation(booking, 1));
-    //     verify(bookingDAO, never()).save(any(Booking.class));
+    // assertThrows(GenericException.class, () ->
+    // bookingService.makeReservation(booking, 1));
+    // verify(bookingDAO, never()).save(any(Booking.class));
     // }
 
     @Test
@@ -176,23 +177,23 @@ import static org.mockito.Mockito.*;
         verify(bookingDAO, times(1)).save(booking);
     }
 
-       @Test
-       public void testUpdateBookingStatus_InvalidStatus() {
-           when(bookingDAO.findById(anyInt())).thenReturn(Optional.of(booking));
+    @Test
+    public void testUpdateBookingStatus_InvalidStatus() {
+        when(bookingDAO.findById(anyInt())).thenReturn(Optional.of(booking));
 
-           assertThrows(IllegalArgumentException.class, () -> {
-               BookingStatus invalidStatus = BookingStatus.valueOf("NOT_A_REAL_STATUS");
-               bookingService.updateBookingStatus(1, invalidStatus, 1);
-           });
+        assertThrows(IllegalArgumentException.class, () -> {
+            BookingStatus invalidStatus = BookingStatus.valueOf("NOT_A_REAL_STATUS");
+            bookingService.updateBookingStatus(1, invalidStatus, 1);
+        });
 
-           verify(bookingDAO, never()).save(any(Booking.class));
-       }
-
-       @Test
-       public void testUpdateBookingStatus_BookingNotFound() {
-           when(bookingDAO.findById(anyInt())).thenReturn(Optional.empty());
-
-           assertThrows(GenericException.class, () -> bookingService.updateBookingStatus(1, BookingStatus.CANCELLED, 1));
-           verify(bookingDAO, never()).save(any(Booking.class));
-       }
+        verify(bookingDAO, never()).save(any(Booking.class));
     }
+
+    @Test
+    public void testUpdateBookingStatus_BookingNotFound() {
+        when(bookingDAO.findById(anyInt())).thenReturn(Optional.empty());
+
+        assertThrows(GenericException.class, () -> bookingService.updateBookingStatus(1, BookingStatus.CANCELLED, 1));
+        verify(bookingDAO, never()).save(any(Booking.class));
+    }
+}

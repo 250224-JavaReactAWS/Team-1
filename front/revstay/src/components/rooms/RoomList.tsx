@@ -26,7 +26,7 @@ function RoomList() {
     const fetchRooms = async () => {
       try {
         const response = await axios.get<Room[]>(
-          `http://localhost:8080/rooms/hotel/${hotelId}`,
+          `http://52.90.96.54:8080/rooms/hotel/${hotelId}`,
           { withCredentials: true }
         );
         setRooms(response.data);

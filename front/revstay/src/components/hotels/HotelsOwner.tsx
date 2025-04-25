@@ -12,7 +12,7 @@ const HotelPage: React.FC = () => {
   useEffect(() => {
     const fetchHotels = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/hotels/owner', { withCredentials: true });
+        const response = await axios.get('http://52.90.96.54:8080/hotels/owner', { withCredentials: true });
         setHotels(response.data);
       } catch (err) {
         setError('Error at obtaining Hotels');

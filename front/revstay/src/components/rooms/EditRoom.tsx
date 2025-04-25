@@ -36,7 +36,7 @@ const EditRoom: React.FC = () => {
       try {
         // Check if the user has permission to edit the room's hotel
         const response = await axios.get(
-          `http://localhost:8080/hotels/${roomFromState?.hotelId}/permissions`,
+          `http://52.90.96.54:8080/hotels/${roomFromState?.hotelId}/permissions`,
           { withCredentials: true }
         );
 
@@ -105,7 +105,7 @@ const EditRoom: React.FC = () => {
 
     axios
       .put(
-        `http://localhost:8080/rooms/${roomFromState.roomId}`,
+        `http://52.90.96.54:8080/rooms/${roomFromState.roomId}`,
         roomData,
         { withCredentials: true }
       )

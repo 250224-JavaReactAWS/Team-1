@@ -20,7 +20,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-
 class ReviewServiceTest {
 
     @Mock
@@ -38,7 +37,6 @@ class ReviewServiceTest {
     private Review review;
     private User user;
     private Hotel hotel;
-
 
     @BeforeEach
     void setUp() {
@@ -75,7 +73,7 @@ class ReviewServiceTest {
     void testGetReviewsByHotelId() {
         when(reviewDao.getReviewsByHotelId(1)).thenReturn(List.of(review));
 
-        List<ReviewDTO> results  = reviewService.getReviewsByHotelId(1);
+        List<ReviewDTO> results = reviewService.getReviewsByHotelId(1);
 
         assertEquals(1, results.size());
         assertEquals("Great stay!", results.get(0).getReviewText());
@@ -91,7 +89,6 @@ class ReviewServiceTest {
         assertEquals(5, results.get(0).getRating());
     }
 
-
     @Test
     void testGetReviewByUserAndHotelId() {
         when(reviewDao.getReviewByHotelIdAndUserId(1, 1)).thenReturn(review);
@@ -101,7 +98,6 @@ class ReviewServiceTest {
         assertTrue(result.isPresent());
         assertEquals("Great stay!", result.get().getReviewText());
     }
-
 
     @Test
     void testRegisterReviewSuccess() {
@@ -115,7 +111,6 @@ class ReviewServiceTest {
         assertEquals(5, result.get().getRating());
         assertEquals("Great stay!", result.get().getReviewText());
     }
-
 
     @Test
     void testRegisterReviewFailure() {

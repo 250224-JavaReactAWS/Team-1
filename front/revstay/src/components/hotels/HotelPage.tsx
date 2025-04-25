@@ -11,7 +11,7 @@ const HotelPage: React.FC = () => {
   useEffect(() => {
     const fetchHotels = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/hotels');
+        const response = await axios.get('http://52.90.96.54:8080/hotels');
         setHotels(response.data);
       } catch (err) {
         setError('Error at fetching hotels');

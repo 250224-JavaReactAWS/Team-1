@@ -36,7 +36,7 @@ const RegisterHotel: React.FC = () => {
     };
 
     try {
-      const response = await axios.post('http://localhost:8080/hotels/register', payload,{withCredentials: true});
+      const response = await axios.post('http://52.90.96.54:8080/hotels/register', payload,{withCredentials: true});
       alert('Hotel registration successfully');
       console.log('Response:', response.data);
     } catch (error) {

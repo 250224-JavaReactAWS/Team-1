@@ -35,7 +35,7 @@ const DeleteHotel: React.FC = () => {
     const checkPermissions = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/hotels/${hotelId}/permissions`,
+          `http://52.90.96.54:8080/hotels/${hotelId}/permissions`,
           { withCredentials: true }
         );
 
@@ -63,7 +63,7 @@ const DeleteHotel: React.FC = () => {
     if (permissionChecked) {
       try {
         const response = await axios.get(
-        `http://localhost:8080/hotels/${hotelId}`,
+        `http://52.90.96.54:8080/hotels/${hotelId}`,
         { withCredentials: true }
         );
         setHotel(response.data);
@@ -91,7 +91,7 @@ const DeleteHotel: React.FC = () => {
     }
 
     try {
-      await axios.delete(`http://localhost:8080/hotels/delete/${hotelId}`, {
+      await axios.delete(`http://52.90.96.54:8080/hotels/delete/${hotelId}`, {
         withCredentials: true,
       });
       alert("Hotel deleted successfully.");
