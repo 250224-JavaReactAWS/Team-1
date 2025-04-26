@@ -1,19 +1,69 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
-import {
-  Box,
-  Button,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
+
+/**
+ * `EditRoom` is a React functional component for editing the details of a room.
+ * 
+ * This component allows hotel owners to update room details such as room type, 
+ * description, price, and maximum guest capacity. It ensures that the user has 
+ * the necessary permissions before displaying the form.
+ * 
+ * State:
+ * - `roomData` (object): Stores the current room details being edited.
+ *   - `roomType` (string): The type of the room (e.g., Single, Double).
+ *   - `description` (string): A brief description of the room.
+ *   - `price` (number): The price of the room.
+ *   - `maxGuests` (number): The maximum number of guests allowed in the room.
+ * - `errors` (object): Stores validation error messages for the form fields.
+ * - `permissionChecked` (boolean): Indicates whether the user's permissions have been verified.
+ * 
+ * Props:
+ * - None.
+ * 
+ * Room Object Structure (passed via `location.state`):
+ * - `roomId` (number): The unique identifier for the room.
+ * - `roomType` (string): The type of the room (e.g., Single, Double).
+ * - `description` (string): A brief description of the room.
+ * - `price` (number): The price of the room.
+ * - `maxGuests` (number): The maximum number of guests allowed in the room.
+ * - `hotelId` (number): The ID of the hotel to which the room belongs.
+ * 
+ * Methods:
+ * - `checkPermissions`: Ensures the user has the necessary permissions to edit the room.
+ * - `handleInputChange`: Updates the `roomData` state when the user types in the form fields.
+ * - `validateForm`: Validates the form fields and sets error messages if validation fails.
+ * - `handleUpdateRoom`: Handles the form submission, validates the input, and sends the updated data to the backend API.
+ * 
+ * API Endpoints:
+ * - GET `http://52.90.96.54:8080/hotels/{hotelId}/permissions`: Checks if the user has permissions to edit the room.
+ * - PUT `http://52.90.96.54:8080/rooms/{roomId}`: Updates the room details.
+ * 
+ * UI Elements:
+ * - `Box`: A Material-UI container for layout and styling.
+ * - `Typography`: Displays the form title and loading messages.
+ * - `TextField`: Input fields for room details such as type, description, price, and capacity.
+ * - `Button`: A button to submit the form.
+ * 
+ * Behavior:
+ * - If the user does not have permissions, they are redirected to the previous page.
+ * - The user must fill in all required fields before submitting the form.
+ * - If the room is updated successfully, the user is redirected to the hotel's room list page.
+ * - If the update fails, an error message is displayed.
+ * 
+ * Example Usage:
+ * ```tsx
+ * <EditRoom />
+ * ```
+ */
 
 const EditRoom: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const roomFromState = location.state?.room;
 
-//   console.log("Room from state:", roomFromState); // Debugging
+  //   console.log("Room from state:", roomFromState); // Debugging
 
   const [roomData, setRoomData] = useState({
     roomType: roomFromState?.roomType || "",
@@ -41,14 +91,18 @@ const EditRoom: React.FC = () => {
         );
 
         if (!response.data) {
-          alert("You do not have access to edit this room. Redirecting to the previous page.");
+          alert(
+            "You do not have access to edit this room. Redirecting to the previous page."
+          );
           navigate(-1); // Redirect to the previous page
         } else {
           setPermissionChecked(true); // User has permission
         }
       } catch (error) {
         console.error("Error checking permissions:", error);
-        alert("An error occurred while checking permissions. Redirecting to the previous page.");
+        alert(
+          "An error occurred while checking permissions. Redirecting to the previous page."
+        );
         navigate(-1); // Redirect to the previous page
       }
     };
@@ -104,11 +158,9 @@ const EditRoom: React.FC = () => {
     }
 
     axios
-      .put(
-        `http://52.90.96.54:8080/rooms/${roomFromState.roomId}`,
-        roomData,
-        { withCredentials: true }
-      )
+      .put(`http://52.90.96.54:8080/rooms/${roomFromState.roomId}`, roomData, {
+        withCredentials: true,
+      })
       .then(() => {
         alert("Room updated successfully!");
         navigate(`/rooms/hotel/${roomFromState.hotelId}`);

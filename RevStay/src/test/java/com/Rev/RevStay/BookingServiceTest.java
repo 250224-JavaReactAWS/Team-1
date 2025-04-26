@@ -23,6 +23,29 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit test class for the `BookingService` class.
+ * 
+ * This class contains test cases to verify the functionality of the `BookingService` methods, 
+ * including making reservations and updating booking statuses.
+ * 
+ * Annotations:
+ * - `@Mock`: Marks dependencies to be mocked using Mockito.
+ * - `@InjectMocks`: Injects mocked dependencies into the `BookingService` instance.
+ * - `@BeforeEach`: Sets up the test environment before each test case.
+ * - `@Test`: Marks a method as a test case.
+ * - `@ExceptionHandler`: Handles exceptions thrown during test execution.
+ * 
+ * Test Cases:
+ * - `testMakeReservation_Success`: Verifies successful reservation creation.
+ * - `testMakeReservation_InvalidDetails`: Verifies behavior when invalid booking details are provided.
+ * - `testMakeReservation_HotelNotFound`: Verifies behavior when the hotel is not found.
+ * - `testMakeReservation_RoomNotAvailable`: Verifies behavior when the room is unavailable.
+ * - `testUpdateBookingStatus_CancelledByUser`: Verifies status update to "CANCELLED" by the user.
+ * - `testUpdateBookingStatus_ConfirmedByOwner`: Verifies status update to "ACCEPTED" by the owner.
+ * - `testUpdateBookingStatus_InvalidStatus`: Verifies behavior when an invalid status is provided.
+ * - `testUpdateBookingStatus_BookingNotFound`: Verifies behavior when the booking is not found.
+ */
 public class BookingServiceTest {
 
     @Mock
@@ -112,17 +135,6 @@ public class BookingServiceTest {
         assertThrows(GenericException.class, () -> bookingService.makeReservation(booking, 1));
         verify(bookingDAO, never()).save(any(Booking.class));
     }
-
-    // @Test
-    // public void testMakeReservation_UserNotFound() {
-    // when(hotelDAO.findById(anyInt())).thenReturn(Optional.of(hotel));
-    // when(roomDAO.findById(anyInt())).thenReturn(Optional.of(room));
-    // when(userDAO.findById(anyInt())).thenReturn(Optional.empty());
-
-    // assertThrows(GenericException.class, () ->
-    // bookingService.makeReservation(booking, 1));
-    // verify(bookingDAO, never()).save(any(Booking.class));
-    // }
 
     @Test
     public void testMakeReservation_RoomNotAvailable() {

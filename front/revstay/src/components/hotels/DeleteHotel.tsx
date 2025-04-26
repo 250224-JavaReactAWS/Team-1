@@ -12,6 +12,61 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
+/**
+ * `DeleteHotel` is a React functional component for deleting a hotel.
+ * 
+ * This component allows the owner of a hotel to delete it after confirming their intent.
+ * It ensures that the user has the necessary permissions before displaying the hotel details.
+ * 
+ * State:
+ * - `hotel` (Hotel | null): The hotel details fetched from the backend.
+ * - `loading` (boolean): Indicates whether the component is in a loading state.
+ * - `error` (string): Stores any error message encountered during data fetching.
+ * - `confirmationInput` (string): Stores the user's input for confirming the deletion.
+ * - `permissionChecked` (boolean): Indicates whether the user's permissions have been verified.
+ * 
+ * Props:
+ * - None.
+ * 
+ * Hotel Object Structure:
+ * - `hotelId` (number): The unique identifier for the hotel.
+ * - `name` (string): The name of the hotel.
+ * - `location` (string): The location of the hotel.
+ * - `description` (string): A brief description of the hotel.
+ * - `amenities` (string): A comma-separated list of amenities offered by the hotel.
+ * - `priceRange` (string): The price range of the hotel.
+ * - `images` (string[]): An array of image URLs for the hotel.
+ * 
+ * Methods:
+ * - `checkPermissions`: Ensures the user has the necessary permissions to delete the hotel.
+ * - `fetchHotel`: Fetches the hotel details from the backend.
+ * - `handleDelete`: Deletes the hotel after confirming the user's input.
+ * 
+ * API Endpoints:
+ * - GET `http://52.90.96.54:8080/hotels/{hotelId}/permissions`: Checks if the user has permissions to delete the hotel.
+ * - GET `http://52.90.96.54:8080/hotels/{hotelId}`: Fetches the hotel details.
+ * - DELETE `http://52.90.96.54:8080/hotels/delete/{hotelId}`: Deletes the hotel.
+ * 
+ * UI Elements:
+ * - `Container`: A Material-UI container for layout and spacing.
+ * - `Paper`: A Material-UI paper component for displaying the hotel details and actions.
+ * - `Typography`: Displays text elements such as titles and descriptions.
+ * - `TextField`: Input field for confirming the deletion.
+ * - `Button`: Buttons for canceling or confirming the deletion.
+ * - `CircularProgress`: A loading spinner displayed while data is being fetched.
+ * - `Alert`: Displays error messages if data fetching fails.
+ * 
+ * Behavior:
+ * - If the user does not have permissions, they are redirected to the owner's hotels page.
+ * - The user must type a confirmation message exactly to delete the hotel.
+ * - If the deletion is successful, the user is redirected to the owner's hotels page.
+ * 
+ * Example Usage:
+ * ```tsx
+ * <DeleteHotel />
+ * ```
+ */
+
 interface Hotel {
   hotelId: number;
   name: string;
@@ -29,7 +84,7 @@ const DeleteHotel: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [confirmationInput, setConfirmationInput] = useState("");
-   const [permissionChecked, setPermissionChecked] = useState<boolean>(false);
+  const [permissionChecked, setPermissionChecked] = useState<boolean>(false);
 
   useEffect(() => {
     const checkPermissions = async () => {
@@ -55,25 +110,25 @@ const DeleteHotel: React.FC = () => {
           alert("An error occurred. Redirecting to the main page...");
           navigate("/ownerHotels"); // Redirect to the main page
         }
-        setPermissionChecked(true)
+        setPermissionChecked(true);
       }
     };
 
     const fetchHotel = async () => {
-    if (permissionChecked) {
-      try {
-        const response = await axios.get(
-        `http://52.90.96.54:8080/hotels/${hotelId}`,
-        { withCredentials: true }
-        );
-        setHotel(response.data);
-      } catch (error) {
-        console.error("Error fetching hotel data:", error);
-        setError("Failed to load hotel data.");
-      } finally {
-        setLoading(false);
+      if (permissionChecked) {
+        try {
+          const response = await axios.get(
+            `http://52.90.96.54:8080/hotels/${hotelId}`,
+            { withCredentials: true }
+          );
+          setHotel(response.data);
+        } catch (error) {
+          console.error("Error fetching hotel data:", error);
+          setError("Failed to load hotel data.");
+        } finally {
+          setLoading(false);
+        }
       }
-    }
     };
 
     checkPermissions();
@@ -105,7 +160,12 @@ const DeleteHotel: React.FC = () => {
   if (loading) {
     return (
       <Container maxWidth="sm">
-        <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="100vh"
+        >
           <CircularProgress />
         </Box>
       </Container>
@@ -163,11 +223,7 @@ const DeleteHotel: React.FC = () => {
           >
             Cancel
           </Button>
-          <Button
-            variant="contained"
-            color="error"
-            onClick={handleDelete}
-          >
+          <Button variant="contained" color="error" onClick={handleDelete}>
             Delete
           </Button>
         </Box>

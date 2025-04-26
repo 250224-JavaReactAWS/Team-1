@@ -4,6 +4,30 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entity class representing a booking in the system.
+ * 
+ * This class maps to the `bookings` table in the database and contains details
+ * about:
+ * - The user making the booking.
+ * - The hotel and room associated with the booking.
+ * - The check-in and check-out dates.
+ * - The number of guests.
+ * - The booking status.
+ * - The creation timestamp.
+ * 
+ * Annotations:
+ * - `@Entity`: Marks this class as a JPA entity.
+ * - `@Table`: Specifies the table name in the database.
+ * - `@Id`: Marks the primary key of the entity.
+ * - `@GeneratedValue`: Specifies the generation strategy for the primary key.
+ * - `@ManyToOne`: Defines many-to-one relationships with `User`, `Hotel`, and
+ * `Room`.
+ * - `@JoinColumn`: Specifies the foreign key columns for relationships.
+ * - `@Column`: Maps fields to database columns and specifies constraints.
+ * - `@Enumerated`: Maps the `BookingStatus` enum to a string column in the
+ * database.
+ */
 @Entity
 @Table(name = "bookings")
 public class Booking {
@@ -40,8 +64,13 @@ public class Booking {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    /**
+     * Default constructor for the Booking class.
+     */
     public Booking() {
     }
+
+    // Getters and setters for all fields.
 
     public int getBookId() {
         return bookId;
@@ -115,10 +144,18 @@ public class Booking {
         this.createdAt = createdAt;
     }
 
-    public int getUserId() {return user.getUserId();
+    /**
+     * Retrieves the user ID associated with the booking.
+     * 
+     * @return The user ID.
+     */
+    public int getUserId() {
+        return user.getUserId();
     }
 
-    public void setStatusAccepted(){
+    // Methods to set specific booking statuses.
+
+    public void setStatusAccepted() {
         status = BookingStatus.ACCEPTED;
     }
 
@@ -126,18 +163,16 @@ public class Booking {
         status = BookingStatus.CANCELLED;
     }
 
-    public void setStatusPending(){
+    public void setStatusPending() {
         status = BookingStatus.PENDING;
     }
 
-    public void setStatusCompleted(){
+    public void setStatusCompleted() {
         status = BookingStatus.COMPLETED;
     }
 
-    public void setStatusConfirmed(){
+    public void setStatusConfirmed() {
         status = BookingStatus.CONFIRMED;
     }
 
 }
-
-

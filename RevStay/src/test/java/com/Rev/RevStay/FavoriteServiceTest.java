@@ -22,6 +22,28 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit test class for testing favorite hotel-related operations in the `UserService` and `HotelService`.
+ * 
+ * This class contains test cases to verify the functionality of adding, removing, 
+ * and retrieving favorite hotels for a user.
+ * 
+ * Annotations:
+ * - `@ExtendWith(MockitoExtension.class)`: Enables Mockito support for the test class.
+ * - `@Mock`: Marks dependencies to be mocked using Mockito.
+ * - `@InjectMocks`: Injects mocked dependencies into the `UserService` and `HotelService` instances.
+ * - `@BeforeEach`: Sets up the test environment before each test case.
+ * - `@Test`: Marks a method as a test case.
+ * 
+ * Test Cases:
+ * - `testAddHotelToFavorites_Success`: Verifies successful addition of a hotel to the user's favorites.
+ * - `testAddHotelToFavorites_HotelNotFound`: Verifies behavior when the specified hotel is not found.
+ * - `testAddHotelToFavorites_UserNotFound`: Verifies behavior when the specified user is not found.
+ * - `testRemoveHotelFromFavorites_Success`: Verifies successful removal of a hotel from the user's favorites.
+ * - `testRemoveHotelFromFavorites_HotelNotFound`: Verifies behavior when the specified hotel is not found.
+ * - `testRemoveHotelFromFavorites_UserNotFound`: Verifies behavior when the specified user is not found.
+ * - `testFindFavoriteHotelsByUserId`: Verifies retrieval of favorite hotels for a user.
+ */
 @ExtendWith(MockitoExtension.class)
 public class FavoriteServiceTest {
 
@@ -29,7 +51,7 @@ public class FavoriteServiceTest {
     private UserDAO userDAO;
 
     @Mock
-    HotelDAO hotelDAO;
+    private HotelDAO hotelDAO;
 
     @InjectMocks
     private UserService userService;
@@ -127,5 +149,4 @@ public class FavoriteServiceTest {
         assertEquals(expectedHotels.size(), actualHotels.size());
         Mockito.verify(hotelDAO).findFavoriteHotelsByUserId(1);
     }
-
 }

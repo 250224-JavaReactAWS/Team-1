@@ -5,9 +5,35 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
+/**
+ * Entity class representing a hotel in the system.
+ * 
+ * This class maps to the `hotels` table in the database and contains details
+ * about:
+ * - The owner of the hotel.
+ * - The hotel's name, location, description, and amenities.
+ * - The price range of the hotel.
+ * - A list of images associated with the hotel.
+ * - The creation timestamp.
+ * - The rooms associated with the hotel.
+ * 
+ * Annotations:
+ * - `@Entity`: Marks this class as a JPA entity.
+ * - `@Table`: Specifies the table name in the database.
+ * - `@Id`: Marks the primary key of the entity.
+ * - `@GeneratedValue`: Specifies the generation strategy for the primary key.
+ * - `@ManyToOne`: Defines a many-to-one relationship with the `User` entity
+ * (hotel owner).
+ * - `@JoinColumn`: Specifies the foreign key column for the owner relationship.
+ * - `@Column`: Maps fields to database columns and specifies constraints.
+ * - `@ElementCollection`: Maps a collection of elements (e.g., images) to a
+ * separate table.
+ * - `@OneToMany`: Defines a one-to-many relationship with the `Room` entity.
+ */
 @Entity
 @Table(name = "hotels")
 public class Hotel {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int hotelId;
@@ -40,15 +66,22 @@ public class Hotel {
     @OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Room> rooms;
 
-
-    //The contraRelation with users for get the favorite table
-
-
+    /**
+     * Default constructor for the Hotel class.
+     */
     public Hotel() {
     }
 
+    /**
+     * Constructor for creating a hotel with an owner.
+     * 
+     * @param user The owner of the hotel.
+     */
     public Hotel(User user) {
+        this.owner = user;
     }
+
+    // Getters and setters for all fields.
 
     public int getHotelId() {
         return hotelId;
@@ -111,7 +144,8 @@ public class Hotel {
     }
 
     public List<String> getAmenities() {
-        if (amenities == null || amenities.isEmpty()) return new ArrayList<>();
+        if (amenities == null || amenities.isEmpty())
+            return new ArrayList<>();
         return Arrays.asList(amenities.split(","));
     }
 

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface HotelDAO extends JpaRepository<Hotel, Integer> {
-        
+
     @Query("SELECT h FROM Hotel h WHERE h.name = :name")
     Optional<Hotel> findHotelByName(@Param("name") String name);
 

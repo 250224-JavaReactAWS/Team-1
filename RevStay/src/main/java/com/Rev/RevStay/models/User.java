@@ -5,9 +5,29 @@ import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Entity class representing a user in the system.
+ * 
+ * This class maps to the `users` table in the database and contains details
+ * about:
+ * - The user's email, password, full name, and user type.
+ * - The user's favorite hotels.
+ * 
+ * Annotations:
+ * - `@Entity`: Marks this class as a JPA entity.
+ * - `@Table`: Specifies the table name in the database.
+ * - `@Id`: Marks the primary key of the entity.
+ * - `@GeneratedValue`: Specifies the generation strategy for the primary key.
+ * - `@Column`: Maps fields to database columns and specifies constraints.
+ * - `@Enumerated`: Maps the `UserType` enum to a string column in the database.
+ * - `@ManyToMany`: Defines a many-to-many relationship with the `Hotel` entity
+ * for favorite hotels.
+ * - `@JoinTable`: Specifies the join table for the many-to-many relationship.
+ */
 @Entity
 @Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
@@ -25,20 +45,25 @@ public class User {
     @Column(nullable = false)
     private UserType userType;
 
-    //This is the relation of favorites in the table
-    //user and hotel for mark the favorites hotels per user
-
     @ManyToMany
-    @JoinTable(
-            name = "favorites",
-            joinColumns = @JoinColumn(name = "userId"),
-            inverseJoinColumns = @JoinColumn(name = "hotelId")
-    )
+    @JoinTable(name = "favorites", joinColumns = @JoinColumn(name = "userId"), inverseJoinColumns = @JoinColumn(name = "hotelId"))
     private Set<Hotel> favoriteHotels = new HashSet<>();
 
+    /**
+     * Default constructor for the User class.
+     */
+    public User() {
+    }
 
-    public User() {}
-
+    /**
+     * Constructor for creating a user with all fields.
+     * 
+     * @param userId       The user's ID.
+     * @param passwordHash The user's hashed password.
+     * @param email        The user's email.
+     * @param fullName     The user's full name.
+     * @param userType     The user's type (e.g., ADMIN, USER).
+     */
     public User(int userId, String passwordHash, String email, String fullName, UserType userType) {
         this.userId = userId;
         this.passwordHash = passwordHash;
@@ -47,6 +72,13 @@ public class User {
         this.userType = userType;
     }
 
+    /**
+     * Constructor for creating a user with default user type.
+     * 
+     * @param email        The user's email.
+     * @param passwordHash The user's hashed password.
+     * @param fullName     The user's full name.
+     */
     public User(String email, String passwordHash, String fullName) {
         this.email = email;
         this.passwordHash = passwordHash;
@@ -54,13 +86,7 @@ public class User {
         this.userType = UserType.USER;
     }
 
-    public User(int userId2) {
-        // Auto-generated constructor stub
-    }
-
-    public User(String string, String string2) {
-        // Auto-generated constructor stub
-    }
+    // Getters and setters for all fields.
 
     public int getUserId() {
         return userId;
@@ -102,8 +128,11 @@ public class User {
         this.userType = userType;
     }
 
-    public Set<Hotel> getFavoriteHotels() { return favoriteHotels; }
+    public Set<Hotel> getFavoriteHotels() {
+        return favoriteHotels;
+    }
 
-    public void setFavoriteHotels(Set<Hotel> favoriteHotels) { this.favoriteHotels = favoriteHotels; }
-
+    public void setFavoriteHotels(Set<Hotel> favoriteHotels) {
+        this.favoriteHotels = favoriteHotels;
+    }
 }

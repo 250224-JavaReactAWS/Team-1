@@ -20,6 +20,26 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit test class for testing room-related operations in the `RoomService`.
+ * 
+ * This class contains test cases to verify the functionality of registering, updating, 
+ * deleting, and retrieving rooms.
+ * 
+ * Annotations:
+ * - `@Mock`: Marks dependencies to be mocked using Mockito.
+ * - `@InjectMocks`: Injects mocked dependencies into the `RoomService` instance.
+ * - `@BeforeEach`: Sets up the test environment before each test case.
+ * - `@Test`: Marks a method as a test case.
+ * 
+ * Test Cases:
+ * - `testRegisterRoomSuccess`: Verifies successful registration of a room.
+ * - `testRegisterRoomHotelNotFound`: Verifies behavior when the hotel is not found during room registration.
+ * - `testDeleteRoomSuccess`: Verifies successful deletion of a room.
+ * - `testDeleteRoomUnauthorized`: Verifies behavior when an unauthorized user attempts to delete a room.
+ * - `testUpdateRoomSuccess`: Verifies successful update of a room's details.
+ * - `testGetRoomsByHotelId`: Verifies retrieval of rooms by hotel ID.
+ */
 public class RoomServiceTest {
 
     @Mock
@@ -53,12 +73,12 @@ public class RoomServiceTest {
         room.setPrice(BigDecimal.valueOf(150));
         room.setMaxGuests(2);
         room.setRoomType("Double");
+
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
     void testRegisterRoomSuccess() {
-
         when(hotelDAO.findById(hotel.getHotelId())).thenReturn(Optional.of(hotel));
         when(userDAO.findById(owner.getUserId())).thenReturn(Optional.of(owner));
         when(roomDAO.save(any(Room.class))).thenReturn(room);
@@ -72,7 +92,6 @@ public class RoomServiceTest {
 
     @Test
     void testRegisterRoomHotelNotFound() {
-        room.setHotel(hotel);
         when(hotelDAO.findById(hotel.getHotelId())).thenReturn(Optional.empty());
 
         GenericException ex = assertThrows(GenericException.class, () -> roomService.register(room, owner.getUserId()));
@@ -81,7 +100,6 @@ public class RoomServiceTest {
 
     @Test
     void testDeleteRoomSuccess() {
-
         when(roomDAO.findById(room.getRoomId())).thenReturn(Optional.of(room));
         when(userDAO.findById(owner.getUserId())).thenReturn(Optional.of(owner));
 
@@ -129,5 +147,4 @@ public class RoomServiceTest {
         assertEquals(1, result.size());
         assertEquals(room.getRoomId(), result.get(0).getRoomId());
     }
-
 }

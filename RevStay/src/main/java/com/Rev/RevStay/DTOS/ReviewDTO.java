@@ -1,6 +1,27 @@
 package com.Rev.RevStay.DTOS;
 
+/**
+ * Data Transfer Object (DTO) class for transferring review-related data.
+ * 
+ * This class is used to encapsulate review information and transfer it between
+ * different layers of the application (e.g., service and controller layers)
+ * without exposing the full `Review` entity.
+ * 
+ * Fields:
+ * - `reviewId`: The unique identifier of the review.
+ * - `reviewText`: The text content of the review.
+ * - `rating`: The rating provided in the review.
+ * - `userId`: The unique identifier of the user who created the review.
+ * - `userFullName`: The full name of the user who created the review.
+ * - `bookingId`: The unique identifier of the booking associated with the
+ * review.
+ * 
+ * Constructors:
+ * - Default constructor for creating an empty `ReviewDTO`.
+ * - Parameterized constructor for creating a `ReviewDTO` with all fields.
+ */
 public class ReviewDTO {
+
     private int reviewId;
     private String reviewText;
     private int rating;
@@ -8,9 +29,23 @@ public class ReviewDTO {
     private String userFullName;
     private int bookingId;
 
+    /**
+     * Default constructor for the ReviewDTO class.
+     */
     public ReviewDTO() {
     }
 
+    /**
+     * Constructor for creating a ReviewDTO with all fields.
+     * 
+     * @param reviewId     The unique identifier of the review.
+     * @param reviewText   The text content of the review.
+     * @param rating       The rating provided in the review.
+     * @param userId       The unique identifier of the user who created the review.
+     * @param userFullName The full name of the user who created the review.
+     * @param bookingId    The unique identifier of the booking associated with the
+     *                     review.
+     */
     public ReviewDTO(int reviewId, String reviewText, int rating, int userId, String userFullName, int bookingId) {
         this.reviewId = reviewId;
         this.reviewText = reviewText;
@@ -19,6 +54,8 @@ public class ReviewDTO {
         this.userFullName = userFullName;
         this.bookingId = bookingId;
     }
+
+    // Getters and setters for all fields.
 
     public int getId() {
         return reviewId;
@@ -60,7 +97,11 @@ public class ReviewDTO {
         this.bookingId = bookingId;
     }
 
-    public String getUserFullName() { return userFullName; }
+    public String getUserFullName() {
+        return userFullName;
+    }
 
-    public void setUserFullName(String userFullName) { this.userFullName = userFullName; }
+    public void setUserFullName(String userFullName) {
+        this.userFullName = userFullName;
+    }
 }

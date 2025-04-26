@@ -15,50 +15,109 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Service class for managing payment-related operations such as retrieving,
+ * registering,
+ * and updating payments.
+ * 
+ * This class provides methods to:
+ * - Retrieve payments by user ID.
+ * - Retrieve payments by hotel ID.
+ * - Retrieve payments by user and hotel ID.
+ * - Retrieve payments by hotel and payment status.
+ * - Register a new payment.
+ * - Update the status of an existing payment.
+ * 
+ * It uses `PaymentDAO` and `BookingDAO` for database interactions.
+ * 
+ * Exceptions:
+ * - Throws `GenericException` for invalid inputs, unauthorized actions, or when
+ * required entities are not found.
+ * 
+ * Annotations:
+ * - `@Service`: Marks this class as a Spring service component.
+ */
 @Service
 public class PaymentService {
+
     private final PaymentDAO paymentDAO;
     private final BookingDAO bookingDAO;
 
+    /**
+     * Constructor for PaymentService.
+     * 
+     * @param paymentDAO Data access object for payment-related operations.
+     * @param bookingDAO Data access object for booking-related operations.
+     */
     @Autowired
     public PaymentService(PaymentDAO paymentDAO, BookingDAO bookingDAO) {
         this.paymentDAO = paymentDAO;
         this.bookingDAO = bookingDAO;
     }
 
-    // Helper to convert to DTO
-    private PaymentDTO convertToDTO(Payment payment) {
-        return new PaymentDTO(payment);
-    }
-
-    // Get Payments By UserId
+    /**
+     * Retrieves all payments made by a specific user.
+     * 
+     * @param userId The ID of the user whose payments are to be retrieved.
+     * @return A list of PaymentDTOs for the payments made by the specified user.
+     */
     public List<PaymentDTO> getPaymentsByUserId(int userId) {
         return paymentDAO.getPaymentsByUserId(userId).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    // Get Payments By HotelId
+    /**
+     * Retrieves all payments associated with a specific hotel.
+     * 
+     * @param hotelId The ID of the hotel whose payments are to be retrieved.
+     * @return A list of PaymentDTOs for the payments associated with the specified
+     *         hotel.
+     */
     public List<PaymentDTO> getPaymentsByHotelId(int hotelId) {
         return paymentDAO.getPaymentsByHotelId(hotelId).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    // Get payments by User and Hotel Id
+    /**
+     * Retrieves all payments made by a specific user for a specific hotel.
+     * 
+     * @param userId  The ID of the user.
+     * @param hotelId The ID of the hotel.
+     * @return A list of PaymentDTOs for the payments made by the user for the
+     *         hotel.
+     */
     public List<PaymentDTO> getPaymentsByUserAndHotelId(int userId, int hotelId) {
         return paymentDAO.getPaymentsByUserIdAndHotelId(userId, hotelId).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    // Get payments by Hotel and Status
+    /**
+     * Retrieves all payments associated with a specific hotel and payment status.
+     * 
+     * @param hotelId The ID of the hotel.
+     * @param status  The payment status to filter by.
+     * @return A list of PaymentDTOs for the payments matching the criteria.
+     */
     public List<PaymentDTO> getPaymentsByHotelAndStatus(int hotelId, PaymentStatus status) {
         return paymentDAO.getPaymentsByHotelIdAndStatus(hotelId, status).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
-    // Register new Payment
+
+    /**
+     * Registers a new payment for a booking.
+     * 
+     * @param paymentNew The payment to be registered.
+     * @param userId     The ID of the user making the payment.
+     * @param bookId     The ID of the booking associated with the payment.
+     * @return An Optional containing the registered PaymentDTO.
+     * @throws GenericException if the booking does not exist, the user is
+     *                          incorrect,
+     *                          or the booking details are incomplete.
+     */
     public Optional<PaymentDTO> registerPayment(Payment paymentNew, int userId, int bookId) {
         Optional<Booking> bookingOpt = bookingDAO.findById(bookId);
 
@@ -83,8 +142,7 @@ public class PaymentService {
 
         long nights = ChronoUnit.DAYS.between(
                 booking.getCheckIn().toLocalDate(),
-                booking.getCheckOut().toLocalDate()
-        );
+                booking.getCheckOut().toLocalDate());
 
         if (nights <= 0) {
             nights = 1;
@@ -97,12 +155,23 @@ public class PaymentService {
         paymentNew.setBooking(booking);
         paymentNew.setUser(booking.getUser());
 
-
         return Optional.of(convertToDTO(paymentDAO.save(paymentNew)));
     }
 
-    // Update the paymentStatus
-    public Optional<PaymentDTO> updatePaymentStatus(int paymentId, PaymentStatus newStatus, int userId, String role, int bookingId) {
+    /**
+     * Updates the status of an existing payment.
+     * 
+     * @param paymentId The ID of the payment to be updated.
+     * @param newStatus The new payment status.
+     * @param userId    The ID of the user attempting to update the payment.
+     * @param role      The role of the user (e.g., OWNER).
+     * @param bookingId The ID of the booking associated with the payment.
+     * @return An Optional containing the updated PaymentDTO.
+     * @throws GenericException if the payment or booking does not exist, or the
+     *                          user is not authorized.
+     */
+    public Optional<PaymentDTO> updatePaymentStatus(int paymentId, PaymentStatus newStatus, int userId, String role,
+            int bookingId) {
         Optional<Payment> paymentOpt = paymentDAO.findById(paymentId);
         if (paymentOpt.isEmpty()) {
             throw new GenericException("Payment not found");
@@ -121,4 +190,13 @@ public class PaymentService {
         return Optional.of(convertToDTO(paymentDAO.save(payment)));
     }
 
+    /**
+     * Converts a Payment entity to a PaymentDTO.
+     * 
+     * @param payment The Payment entity to be converted.
+     * @return The corresponding PaymentDTO.
+     */
+    private PaymentDTO convertToDTO(Payment payment) {
+        return new PaymentDTO(payment);
+    }
 }

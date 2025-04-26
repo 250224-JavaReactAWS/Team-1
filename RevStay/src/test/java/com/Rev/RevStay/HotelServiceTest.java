@@ -18,6 +18,28 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit test class for testing hotel-related operations in the `HotelService`.
+ * 
+ * This class contains test cases to verify the functionality of creating, updating, 
+ * deleting, and retrieving hotels.
+ * 
+ * Annotations:
+ * - `@Mock`: Marks dependencies to be mocked using Mockito.
+ * - `@InjectMocks`: Injects mocked dependencies into the `HotelService` instance.
+ * - `@BeforeEach`: Sets up the test environment before each test case.
+ * - `@Test`: Marks a method as a test case.
+ * 
+ * Test Cases:
+ * - `testGetAllHotels`: Verifies retrieval of all hotels.
+ * - `testGetById`: Verifies retrieval of a hotel by its ID.
+ * - `testUpdateHotel_Success`: Verifies successful update of a hotel.
+ * - `testUpdateHotel_Failure_OwnerMismatch`: Verifies behavior when the owner ID does not match.
+ * - `testDeleteHotel_Success`: Verifies successful deletion of a hotel.
+ * - `testDeleteHotel_Failure_HotelNotFound`: Verifies behavior when the hotel is not found.
+ * - `testCreateHotel_Success`: Verifies successful creation of a hotel.
+ * - `testCreateHotel_Failure_HotelExists`: Verifies behavior when a hotel with the same name already exists.
+ */
 public class HotelServiceTest {
 
     @Mock

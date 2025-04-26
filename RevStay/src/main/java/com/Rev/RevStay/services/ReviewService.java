@@ -15,6 +15,27 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Service class for managing review-related operations such as retrieving,
+ * registering,
+ * and converting reviews.
+ * 
+ * This class provides methods to:
+ * - Retrieve a review by its ID.
+ * - Retrieve reviews by hotel ID.
+ * - Retrieve reviews by user ID.
+ * - Retrieve a review by both user ID and hotel ID.
+ * - Register a new review.
+ * 
+ * It uses `ReviewDao`, `UserDAO`, and `HotelDAO` for database interactions.
+ * 
+ * Exceptions:
+ * - Throws `GenericException` for invalid inputs or when required entities
+ * (user or hotel) are not found.
+ * 
+ * Annotations:
+ * - `@Service`: Marks this class as a Spring service component.
+ */
 @Service
 public class ReviewService {
 
@@ -22,15 +43,35 @@ public class ReviewService {
     private final UserDAO userDAO;
     private final HotelDAO hotelDAO;
 
-    public ReviewService(ReviewDao reviewDao, UserDAO userDAO, HotelDAO hotelDAO) { this.reviewDao = reviewDao;
+    /**
+     * Constructor for ReviewService.
+     * 
+     * @param reviewDao Data access object for review-related operations.
+     * @param userDAO   Data access object for user-related operations.
+     * @param hotelDAO  Data access object for hotel-related operations.
+     */
+    public ReviewService(ReviewDao reviewDao, UserDAO userDAO, HotelDAO hotelDAO) {
+        this.reviewDao = reviewDao;
         this.userDAO = userDAO;
         this.hotelDAO = hotelDAO;
     }
 
-    //Get Review By ID
-    public Optional<ReviewDTO> reviewById(int reviewId){ return reviewDao.findById(reviewId).map(this::convertToDTO);}
+    /**
+     * Retrieves a review by its ID.
+     * 
+     * @param reviewId The ID of the review to be retrieved.
+     * @return An Optional containing the ReviewDTO for the specified review.
+     */
+    public Optional<ReviewDTO> reviewById(int reviewId) {
+        return reviewDao.findById(reviewId).map(this::convertToDTO);
+    }
 
-    //Get Reviews By HotelId
+    /**
+     * Retrieves all reviews for a specific hotel by its ID.
+     * 
+     * @param hotelId The ID of the hotel whose reviews are to be retrieved.
+     * @return A list of ReviewDTOs for the reviews of the specified hotel.
+     */
     public List<ReviewDTO> getReviewsByHotelId(int hotelId) {
         return reviewDao.getReviewsByHotelId(hotelId)
                 .stream()
@@ -38,7 +79,12 @@ public class ReviewService {
                 .collect(Collectors.toList());
     }
 
-    //Get Reviews By UserId
+    /**
+     * Retrieves all reviews for a specific user by their ID.
+     * 
+     * @param userId The ID of the user whose reviews are to be retrieved.
+     * @return A list of ReviewDTOs for the reviews made by the specified user.
+     */
     public List<ReviewDTO> getReviewsByUserId(int userId) {
         return reviewDao.getReviewsByUserId(userId)
                 .stream()
@@ -46,13 +92,28 @@ public class ReviewService {
                 .collect(Collectors.toList());
     }
 
-    //Get Review By User and Hotel Id
+    /**
+     * Retrieves a review by both user ID and hotel ID.
+     * 
+     * @param hotelId The ID of the hotel.
+     * @param userId  The ID of the user.
+     * @return An Optional containing the ReviewDTO for the specified review.
+     */
     public Optional<ReviewDTO> getReviewByUserAndHotelId(int hotelId, int userId) {
         return Optional.ofNullable(reviewDao.getReviewByHotelIdAndUserId(hotelId, userId))
                 .map(this::convertToDTO);
     }
 
-    //Register new review
+    /**
+     * Registers a new review.
+     * 
+     * @param reviewToBeRegistered The review to be registered.
+     * @param userId               The ID of the user registering the review.
+     * @param hotelId              The ID of the hotel for which the review is being
+     *                             registered.
+     * @return An Optional containing the registered ReviewDTO.
+     * @throws GenericException if the user or hotel does not exist.
+     */
     public Optional<ReviewDTO> registerReview(Review reviewToBeRegistered, int userId, int hotelId) {
         Optional<User> userOpt = userDAO.findById(userId);
         Optional<Hotel> hotelOpt = hotelDAO.findById(hotelId);
@@ -68,6 +129,12 @@ public class ReviewService {
         return Optional.of(convertToDTO(reviewDao.save(reviewToBeRegistered)));
     }
 
+    /**
+     * Converts a Review entity to a ReviewDTO.
+     * 
+     * @param review The Review entity to be converted.
+     * @return The corresponding ReviewDTO.
+     */
     private ReviewDTO convertToDTO(Review review) {
         return new ReviewDTO(
                 review.getReviewId(),
@@ -75,8 +142,7 @@ public class ReviewService {
                 review.getRating(),
                 review.getUser().getUserId(),
                 review.getUser().getFullName(),
-                review.getHotel().getHotelId()
-        );
+                review.getHotel().getHotelId());
     }
 
 }

@@ -17,19 +17,59 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service class for managing hotel-related operations such as retrieving,
+ * creating,
+ * updating, and deleting hotels, as well as filtering hotels based on various
+ * criteria.
+ * 
+ * This class provides methods to:
+ * - Retrieve all hotels.
+ * - Retrieve a hotel by its ID.
+ * - Retrieve hotels favorited by a user.
+ * - Retrieve hotels owned by a user.
+ * - Filter hotels based on location, amenities, and availability.
+ * - Create a new hotel.
+ * - Update an existing hotel.
+ * - Delete a hotel.
+ * - Check if a user has permission to manage a hotel.
+ * 
+ * It uses `HotelDAO`, `UserDAO`, and `BookingDAO` for database interactions.
+ * 
+ * Exceptions:
+ * - Throws `GenericException` or `IllegalArgumentException` for invalid inputs,
+ * unauthorized actions,
+ * or when required entities (hotel or user) are not found.
+ * 
+ * Annotations:
+ * - `@Service`: Marks this class as a Spring service component.
+ */
 @Service
 public class HotelService {
+
     private final HotelDAO hotelDAO;
     private final UserDAO userDAO;
     private final BookingDAO bookingDAO;
 
+    /**
+     * Constructor for HotelService.
+     * 
+     * @param hotelDAO   Data access object for hotel-related operations.
+     * @param userDAO    Data access object for user-related operations.
+     * @param bookingDAO Data access object for booking-related operations.
+     */
     @Autowired
-    public HotelService(HotelDAO hotelDAO, UserDAO userDAO, BookingDAO bookingDAO) { this.hotelDAO = hotelDAO;
+    public HotelService(HotelDAO hotelDAO, UserDAO userDAO, BookingDAO bookingDAO) {
+        this.hotelDAO = hotelDAO;
         this.userDAO = userDAO;
         this.bookingDAO = bookingDAO;
     }
 
-    // Get all hotels
+    /**
+     * Retrieves all hotels.
+     * 
+     * @return A list of HotelDTOs for all hotels.
+     */
     public List<HotelDTO> getAllHotels() {
         return hotelDAO.findAll().stream()
                 .map(this::convertToDTO)
@@ -37,27 +77,46 @@ public class HotelService {
 
     }
 
-    // Get hotel by ID
+    /**
+     * Retrieves a hotel by its ID.
+     * 
+     * @param hotelId The ID of the hotel to be retrieved.
+     * @return An Optional containing the HotelDTO for the specified hotel.
+     */
     public Optional<HotelDTO> getById(int hotelId) {
         return hotelDAO.findById(hotelId).map(this::convertToDTO);
     }
 
-    //Get hotels by favorite by UserId
-    public List<HotelDTO> findFavoriteHotelsByUserId(int userId){
+    /**
+     * Retrieves hotels favorited by a specific user.
+     * 
+     * @param userId The ID of the user.
+     * @return A list of HotelDTOs for the hotels favorited by the user.
+     */
+    public List<HotelDTO> findFavoriteHotelsByUserId(int userId) {
         List<Hotel> favoriteHotels = hotelDAO.findFavoriteHotelsByUserId(userId);
         return favoriteHotels.stream()
                 .map(this::convertToDTO).toList();
     }
 
-    //Get hotels by User Id
-    public List<HotelDTO> findHotelByUserId(int userId){
+    /**
+     * Retrieves hotels owned by a specific user.
+     * 
+     * @param userId The ID of the user.
+     * @return A list of HotelDTOs for the hotels owned by the user.
+     */
+    public List<HotelDTO> findHotelByUserId(int userId) {
         List<Hotel> ownerHotels = hotelDAO.findHotelsByOwnerId(userId);
         return ownerHotels.stream()
                 .map(this::convertToDTO).toList();
     }
 
-    //Get hotels by amenities
-
+    /**
+     * Filters hotels based on location, amenities, and availability.
+     * 
+     * @param request The HotelSearchRequest containing the filter criteria.
+     * @return A list of HotelDTOs for the hotels matching the criteria.
+     */
     public List<HotelDTO> filterHotels(HotelSearchRequest request) {
         String locationQuery = request.getLocation() != null ? request.getLocation().trim().toLowerCase() : "";
         List<String> requiredAmenities = request.getAmenities() != null ? request.getAmenities() : List.of();
@@ -71,7 +130,8 @@ public class HotelService {
                             (hotel.getLocation() != null &&
                                     Arrays.stream(hotel.getLocation().split(","))
                                             .map(this::normalize)
-                                            .anyMatch(part -> normalize(locationQuery).contains(part) || part.contains(normalize(locationQuery))));
+                                            .anyMatch(part -> normalize(locationQuery).contains(part)
+                                                    || part.contains(normalize(locationQuery))));
 
                     // Filter by amenities
                     List<String> hotelAmenities = hotel.getAmenities().stream()
@@ -86,7 +146,8 @@ public class HotelService {
 
                     // Filter by dates if they are provided
                     boolean hasAvailableRoom = hotel.getRooms().stream()
-                            .anyMatch(room -> bookingDAO.isRoomAvailable(hotel.getHotelId(), checkIn, checkOut, room.getRoomId()));
+                            .anyMatch(room -> bookingDAO.isRoomAvailable(hotel.getHotelId(), checkIn, checkOut,
+                                    room.getRoomId()));
 
                     return matchesLocation && matchesAmenities && hasAvailableRoom;
                 })
@@ -95,13 +156,48 @@ public class HotelService {
     }
 
     private String normalize(String input) {
-        if (input == null) return "";
+        if (input == null)
+            return "";
         String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
         return normalized.replaceAll("\\p{M}", "").toLowerCase().trim();
     }
 
+    /**
+     * Creates a new hotel.
+     * 
+     * @param hotel  The hotel to be created.
+     * @param userId The ID of the user creating the hotel.
+     * @return An Optional containing the created HotelDTO.
+     * @throws GenericException if a hotel with the same name already exists or the
+     *                          user is not found.
+     */
+    public Optional<HotelDTO> createHotel(Hotel hotel, int userId) {
+        Optional<Hotel> potentialHotel = hotelDAO.findHotelByName(hotel.getName());
 
-    // Update an existing hotel
+        if (potentialHotel.isPresent()) {
+            throw new GenericException("Hotel with name: " + hotel.getName() + " already exists!");
+        }
+
+        Optional<User> owner = userDAO.findById(userId);
+        if (owner.isPresent()) {
+            hotel.setOwner(owner.get());
+        } else {
+            throw new IllegalArgumentException("No owner found with id: " + userId);
+        }
+
+        return Optional.of(convertToDTO(hotelDAO.save(hotel)));
+    }
+
+    /**
+     * Updates an existing hotel.
+     * 
+     * @param hotelId      The ID of the hotel to be updated.
+     * @param ownerId      The ID of the owner attempting to update the hotel.
+     * @param updatedHotel The updated hotel details.
+     * @return The updated HotelDTO.
+     * @throws IllegalArgumentException if the hotel or owner does not exist, or the
+     *                                  owner is not authorized.
+     */
     public HotelDTO updateHotel(int hotelId, int ownerId, Hotel updatedHotel) {
         Optional<Hotel> existingHotelOpt = hotelDAO.findById(hotelId);
         Optional<User> ownerOpt = userDAO.findById(ownerId);
@@ -128,8 +224,14 @@ public class HotelService {
         return convertToDTO(savedHotel);
     }
 
-
-    // Delete a hotel by ID
+    /**
+     * Deletes a hotel by its ID.
+     * 
+     * @param hotelId The ID of the hotel to be deleted.
+     * @param ownerId The ID of the owner attempting to delete the hotel.
+     * @throws IllegalArgumentException if the hotel or owner does not exist, or the
+     *                                  owner is not authorized.
+     */
     public void deleteHotel(int hotelId, int ownerId) {
         Optional<Hotel> existingHotel = hotelDAO.findById(hotelId);
         Optional<User> owner = userDAO.findById(ownerId);
@@ -145,23 +247,13 @@ public class HotelService {
         }
     }
 
-    public Optional<HotelDTO> createHotel(Hotel hotel, int userId) {
-        Optional<Hotel> potentialHotel = hotelDAO.findHotelByName(hotel.getName());
-
-        if (potentialHotel.isPresent()) {
-            throw new GenericException("Hotel with name: " + hotel.getName() + " already exists!");
-        }
-
-        Optional<User> owner = userDAO.findById(userId);
-        if (owner.isPresent()) {
-            hotel.setOwner(owner.get());
-        } else {
-            throw new IllegalArgumentException("No owner found with id: " + userId);
-        }
-
-        return Optional.of(convertToDTO(hotelDAO.save(hotel)));
-    }
-
+    /**
+     * Checks if a user has permission to manage a hotel.
+     * 
+     * @param hotelId The ID of the hotel.
+     * @param userId  The ID of the user.
+     * @return True if the user has permission, false otherwise.
+     */
     public boolean hasPermission(int hotelId, int userId) {
         Optional<Hotel> hotelOpt = hotelDAO.findById(hotelId);
         Optional<User> userOpt = userDAO.findById(userId);
@@ -177,6 +269,12 @@ public class HotelService {
         return hotel.getOwner().getUserId() == userId || "OWNER".equals(user.getUserType());
     }
 
+    /**
+     * Converts a Hotel entity to a HotelDTO.
+     * 
+     * @param hotel The Hotel entity to be converted.
+     * @return The corresponding HotelDTO.
+     */
     private HotelDTO convertToDTO(Hotel hotel) {
         return new HotelDTO(
                 hotel.getHotelId(),
@@ -187,7 +285,6 @@ public class HotelService {
                 hotel.getPriceRange(),
                 hotel.getImages(),
                 hotel.getOwner().getEmail(),
-                hotel.getOwner().getFullName()
-        );
+                hotel.getOwner().getFullName());
     }
 }

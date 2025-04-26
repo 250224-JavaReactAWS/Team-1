@@ -18,6 +18,25 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit test class for testing payment-related operations in the `PaymentService`.
+ * 
+ * This class contains test cases to verify the functionality of retrieving, registering, 
+ * and updating payments.
+ * 
+ * Annotations:
+ * - `@Mock`: Marks dependencies to be mocked using Mockito.
+ * - `@InjectMocks`: Injects mocked dependencies into the `PaymentService` instance.
+ * - `@BeforeEach`: Sets up the test environment before each test case.
+ * - `@Test`: Marks a method as a test case.
+ * 
+ * Test Cases:
+ * - `testGetPaymentsByUserId`: Verifies retrieval of payments by user ID.
+ * - `testGetPaymentsByHotelId`: Verifies retrieval of payments by hotel ID.
+ * - `testRegisterPayment_BookingNotFound`: Verifies behavior when the booking is not found during payment registration.
+ * - `testUpdatePaymentStatus_Success`: Verifies successful update of a payment's status.
+ * - `testUpdatePaymentStatus_PaymentNotFound`: Verifies behavior when the payment is not found during status update.
+ */
 class PaymentServiceTest {
 
     @Mock
@@ -37,6 +56,8 @@ class PaymentServiceTest {
 
     @BeforeEach
     void setUp() {
+        MockitoAnnotations.openMocks(this);
+
         user = new User();
         user.setUserId(1);
 
@@ -60,12 +81,10 @@ class PaymentServiceTest {
         payment.setPaymentId(1);
         payment.setBooking(booking);
         payment.setUser(user);
-        MockitoAnnotations.openMocks(this);
     }
 
     @Test
     void testGetPaymentsByUserId() {
-
         when(paymentDAO.getPaymentsByUserId(1)).thenReturn(List.of(payment));
 
         List<PaymentDTO> result = paymentService.getPaymentsByUserId(1);
@@ -82,19 +101,6 @@ class PaymentServiceTest {
 
         assertEquals(1, result.size());
     }
-
-    // @Test
-    // void testRegisterPayment_Success() {
-    // when(bookingDAO.findById(20)).thenReturn(Optional.of(booking));
-    // when(paymentDAO.save(any(Payment.class))).thenAnswer(invocation ->
-    // invocation.getArgument(0));
-
-    // Optional<PaymentDTO> result = paymentService.registerPayment(payment, 1, 20);
-
-    // assertTrue(result.isPresent());
-    // assertEquals(PaymentStatus.PENDING, result.get().getPaymentStatus());
-    // assertEquals(BigDecimal.valueOf(400), result.get().getAmount());
-    // }
 
     @Test
     void testRegisterPayment_BookingNotFound() {
@@ -123,5 +129,4 @@ class PaymentServiceTest {
         assertThrows(GenericException.class,
                 () -> paymentService.updatePaymentStatus(1, PaymentStatus.COMPLETED, 1, "OWNER", 20));
     }
-
 }

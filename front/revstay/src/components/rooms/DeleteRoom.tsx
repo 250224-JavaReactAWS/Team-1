@@ -10,6 +10,51 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
+/**
+ * `DeleteRoom` is a React functional component for deleting a room.
+ * 
+ * This component allows hotel owners to delete a specific room after confirming their intent. 
+ * It ensures that the user provides explicit confirmation before proceeding with the deletion.
+ * 
+ * State:
+ * - `confirmationText` (string): Stores the user's input for confirming the deletion.
+ * 
+ * Props:
+ * - None.
+ * 
+ * Room Object Structure (passed via `location.state`):
+ * - `roomId` (number): The unique identifier for the room.
+ * - `roomType` (string): The type of the room (e.g., Single, Double).
+ * - `description` (string): A brief description of the room.
+ * - `price` (number): The price of the room.
+ * - `maxGuests` (number): The maximum number of guests allowed in the room.
+ * - `hotelId` (number): The ID of the hotel to which the room belongs.
+ * 
+ * Methods:
+ * - `handleDeleteRoom`: Deletes the room after validating the confirmation input.
+ * - `handleEditRoom`: Redirects the user to the room edit page.
+ * 
+ * API Endpoint:
+ * - DELETE `http://52.90.96.54:8080/rooms/{roomId}`: Deletes the specified room.
+ * 
+ * UI Elements:
+ * - `Box`: A Material-UI container for layout and styling.
+ * - `Typography`: Displays the page title, room details, and confirmation instructions.
+ * - `Card`: Displays the room details in a styled card format.
+ * - `TextField`: Input field for typing the confirmation text.
+ * - `Button`: A button to confirm the deletion or navigate to the edit page.
+ * 
+ * Behavior:
+ * - If no room data is passed via `location.state`, the user is redirected back to the previous page.
+ * - The user must type "DELETE" exactly to confirm the deletion.
+ * - If the deletion is successful, the user is redirected to the hotel's room list page.
+ * - If the deletion fails, an error message is displayed.
+ * 
+ * Example Usage:
+ * ```tsx
+ * <DeleteRoom />
+ * ```
+ */
 const DeleteRoom: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,7 +75,9 @@ const DeleteRoom: React.FC = () => {
     }
 
     axios
-      .delete(`http://52.90.96.54:8080/rooms/${room.roomId}`, { withCredentials: true })
+      .delete(`http://52.90.96.54:8080/rooms/${room.roomId}`, {
+        withCredentials: true,
+      })
       .then(() => {
         alert("Room deleted successfully!");
         navigate(`/rooms/hotel/${room.hotelId}`); // Redirect to the room list
@@ -74,7 +121,8 @@ const DeleteRoom: React.FC = () => {
         </CardContent>
       </Card>
       <Typography variant="body1" gutterBottom>
-        To confirm deletion, please type <strong>"DELETE"</strong> in the box below:
+        To confirm deletion, please type <strong>"DELETE"</strong> in the box
+        below:
       </Typography>
       <TextField
         fullWidth
@@ -92,7 +140,12 @@ const DeleteRoom: React.FC = () => {
       >
         Delete Room
       </Button>
-      <Typography variant="body2" color="text.secondary" align="center" sx={{ marginTop: 2 }}>
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        align="center"
+        sx={{ marginTop: 2 }}
+      >
         If you want to edit this room instead,{" "}
         <Button variant="text" onClick={handleEditRoom}>
           click here

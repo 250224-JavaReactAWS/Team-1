@@ -12,6 +12,55 @@ import {
   InputLabel,
 } from "@mui/material";
 
+/**
+ * `AddRoom` is a React functional component for adding a new room to a hotel.
+ * 
+ * This component provides a form for hotel owners to input room details such as room type, 
+ * description, price, and maximum guest capacity. It ensures that the user is authorized 
+ * to add rooms to the selected hotel.
+ * 
+ * State:
+ * - `isOwner` (boolean): Indicates whether the user is authorized to add rooms.
+ * - `roomData` (object): Stores the input values for the room details.
+ *   - `roomType` (string): The type of the room (e.g., Single, Double).
+ *   - `description` (string): A brief description of the room.
+ *   - `price` (number): The price of the room.
+ *   - `maxGuests` (number): The maximum number of guests allowed in the room.
+ * - `errors` (object): Stores validation error messages for the form fields.
+ * - `hotelId` (number | null): The ID of the selected hotel.
+ * - `ownedHotels` (array): A list of hotels owned by the user.
+ * 
+ * Props:
+ * - None.
+ * 
+ * Methods:
+ * - `handleInputChange`: Updates the `roomData` state when the user types in the form fields.
+ * - `validateForm`: Validates the form fields and sets error messages if validation fails.
+ * - `handleSubmit`: Handles the form submission, validates the input, and sends the data to the backend API.
+ * 
+ * API Endpoints:
+ * - GET `http://52.90.96.54:8080/hotels/owner`: Fetches the list of hotels owned by the user.
+ * - POST `http://52.90.96.54:8080/rooms`: Adds a new room to the selected hotel.
+ * 
+ * UI Elements:
+ * - `Box`: A Material-UI container for layout and styling.
+ * - `Typography`: Displays the form title and loading messages.
+ * - `FormControl`: A Material-UI component for managing form controls.
+ * - `Select`: A dropdown for selecting the hotel to which the room will be added.
+ * - `TextField`: Input fields for room details such as type, description, price, and capacity.
+ * - `Button`: A button to submit the form.
+ * 
+ * Behavior:
+ * - If the user is not authorized, they are redirected to the home page.
+ * - The user must fill in all required fields before submitting the form.
+ * - If the room is added successfully, the user is redirected to the hotel's room list page.
+ * - If the room addition fails, an error message is displayed.
+ * 
+ * Example Usage:
+ * ```tsx
+ * <AddRoom />
+ * ```
+ */
 const AddRoom: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -31,7 +80,9 @@ const AddRoom: React.FC = () => {
     maxGuests: "",
   });
   const [hotelId, setHotelId] = useState<number | null>(preselectedHotelId);
-  const [ownedHotels, setOwnedHotels] = useState<{ hotelId: number; name: string }[]>([]);
+  const [ownedHotels, setOwnedHotels] = useState<
+    { hotelId: number; name: string }[]
+  >([]);
 
   useEffect(() => {
     axios

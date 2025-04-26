@@ -20,6 +20,26 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit test class for testing review-related operations in the `ReviewService`.
+ * 
+ * This class contains test cases to verify the functionality of retrieving, creating, 
+ * and managing reviews.
+ * 
+ * Annotations:
+ * - `@Mock`: Marks dependencies to be mocked using Mockito.
+ * - `@InjectMocks`: Injects mocked dependencies into the `ReviewService` instance.
+ * - `@BeforeEach`: Sets up the test environment before each test case.
+ * - `@Test`: Marks a method as a test case.
+ * 
+ * Test Cases:
+ * - `testReviewById`: Verifies retrieval of a review by its ID.
+ * - `testGetReviewsByHotelId`: Verifies retrieval of reviews for a specific hotel.
+ * - `testGetReviewsByUserId`: Verifies retrieval of reviews for a specific user.
+ * - `testGetReviewByUserAndHotelId`: Verifies retrieval of a review by both user ID and hotel ID.
+ * - `testRegisterReviewSuccess`: Verifies successful creation of a review.
+ * - `testRegisterReviewFailure`: Verifies behavior when creating a review fails due to missing user or hotel.
+ */
 class ReviewServiceTest {
 
     @Mock
@@ -40,6 +60,8 @@ class ReviewServiceTest {
 
     @BeforeEach
     void setUp() {
+        MockitoAnnotations.openMocks(this);
+
         user = new User();
         user.setUserId(1);
         user.setFullName("Test User");
@@ -54,12 +76,10 @@ class ReviewServiceTest {
         review.setUser(user);
         review.setHotel(hotel);
         review.setCreatedAt(LocalDateTime.now());
-        MockitoAnnotations.openMocks(this);
     }
 
     @Test
     void testReviewById() {
-
         when(reviewDao.findById(100)).thenReturn(Optional.of(review));
 
         Optional<ReviewDTO> result = reviewService.reviewById(100);

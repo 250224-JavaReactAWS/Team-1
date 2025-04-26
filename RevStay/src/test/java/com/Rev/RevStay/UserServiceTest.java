@@ -17,6 +17,27 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit test class for testing user-related operations in the `UserService`.
+ * 
+ * This class contains test cases to verify the functionality of user registration, 
+ * login, and validation of user credentials.
+ * 
+ * Annotations:
+ * - `@Mock`: Marks dependencies to be mocked using Mockito.
+ * - `@InjectMocks`: Injects mocked dependencies into the `UserService` instance.
+ * - `@BeforeEach`: Sets up the test environment before each test case.
+ * - `@Test`: Marks a method as a test case.
+ * 
+ * Test Cases:
+ * - `testRegister_Success`: Verifies successful user registration.
+ * - `testRegister_EmailAlreadyTaken`: Verifies behavior when the email is already taken.
+ * - `testRegister_InvalidEmail`: Verifies behavior when the email format is invalid.
+ * - `testRegister_InvalidPassword`: Verifies behavior when the password does not meet requirements.
+ * - `testLogin_Success`: Verifies successful user login with correct credentials.
+ * - `testLogin_UserNotFound`: Verifies behavior when the user is not found during login.
+ * - `testLogin_IncorrectPassword`: Verifies behavior when the password is incorrect during login.
+ */
 public class UserServiceTest {
 
     @Mock
@@ -43,7 +64,6 @@ public class UserServiceTest {
 
     @Test
     public void testRegister_Success() {
-
         when(userDAO.findUserByEmail(user.getEmail())).thenReturn(Optional.empty());
         when(userDAO.save(any(User.class))).thenReturn(user);
 
@@ -56,7 +76,6 @@ public class UserServiceTest {
 
     @Test
     public void testRegister_EmailAlreadyTaken() {
-
         when(userDAO.findUserByEmail(user.getEmail())).thenReturn(Optional.of(user));
 
         GenericException exception = assertThrows(GenericException.class, () -> userService.register(user));
@@ -81,7 +100,7 @@ public class UserServiceTest {
 
         GenericException exception = assertThrows(GenericException.class, () -> userService.register(user));
         assertEquals(
-                "Invalid Password. Must be at least 8 charactersand need to contain at least one uppercase and lowercase letter ",
+                "Invalid Password. Must be at least 8 characters and need to contain at least one uppercase and lowercase letter ",
                 exception.getMessage());
     }
 
@@ -111,7 +130,12 @@ public class UserServiceTest {
         when(userDAO.findUserByEmail("test@example.com")).thenReturn(Optional.empty());
 
         GenericException exception = assertThrows(GenericException.class,
-                () -> userService.login(new User("test@example.com", "Password1")));
+                () -> {
+                    User loginAttempt = new User();
+                    loginAttempt.setEmail("test@example.com");
+                    loginAttempt.setPasswordHash("Password1");
+                    userService.login(loginAttempt);
+                });
         assertEquals("User not found with the Email", exception.getMessage());
     }
 
