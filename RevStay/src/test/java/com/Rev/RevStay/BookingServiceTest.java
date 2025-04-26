@@ -2,6 +2,7 @@ package com.Rev.RevStay;
 
 import com.Rev.RevStay.DTOS.BookingDTO;
 import com.Rev.RevStay.exceptions.GenericException;
+import com.Rev.RevStay.exceptions.RoomNotAvailableException;
 import com.Rev.RevStay.models.Booking;
 import com.Rev.RevStay.models.BookingStatus;
 import com.Rev.RevStay.models.Hotel;
@@ -130,7 +131,7 @@ public class BookingServiceTest {
         when(userDAO.findById(anyInt())).thenReturn(Optional.of(user));
         when(bookingDAO.isRoomAvailable(anyInt(), any(), any(), anyInt())).thenReturn(false);
 
-        assertThrows(IllegalStateException.class, () -> bookingService.makeReservation(booking, 1));
+        assertThrows(RoomNotAvailableException.class, () -> bookingService.makeReservation(booking, 1));
         verify(bookingDAO, never()).save(any(Booking.class));
     }
 
